@@ -1,0 +1,17 @@
+package org.kbalazs.smart_scrum_poker_backend_native;
+
+import org.kbalazs.smart_scrum_poker_backend_native.config.ApplicationProperties;
+import org.kbalazs.smart_scrum_poker_backend_native.config.LogbackConfig;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication(scanBasePackages = "org.kbalazs")
+public class SmartScrumPokerBackendNativeApplication
+{
+    public static void main(String[] args)
+    {
+        SpringApplication springApplication = new SpringApplication(SmartScrumPokerBackendNativeApplication.class);
+        springApplication.addInitializers(new LogbackConfig(new ApplicationProperties()));
+        springApplication.run(args);
+    }
+}

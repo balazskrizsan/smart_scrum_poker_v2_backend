@@ -1,0 +1,41 @@
+//
+//public class SeniorJavaDevOpportunity {
+//
+//    private final String company = "Top-tier financial services - Interactive Brokers";
+//    private final String location = "Budapest (Hybrid: 3x Office / 2x HO)";
+//    private final String role = "Senior Java Developer";
+//
+//    public void whatYouDo() {
+//        System.out.println("📈 Help build and maintain a high-availability trading platform");
+//        System.out.println("🌐 Work on real-time Web APIs for clients and internal apps");
+//        System.out.println("🛠️ Use Java 11–21, Spring, Vert.x, WebSocket, REST, JUnit");
+//        System.out.println("📋 Write clean code, tests & docs – 70% legacy vs 30% modern");
+//    }
+//
+//    public void whatYouBring() {
+//        System.out.println("✅ Degree in IT or similar");
+//        System.out.println("✅ 7+ years of backend experience, mainly in Java");
+//        System.out.println("✅ Fluent English (written & spoken)");
+//        System.out.println("✅ Independent, analytical, precise mindset");
+//    }
+//
+//    public void whatYouGet() {
+//        System.out.println("💰 Outstanding salary + yearly raise + annual bonus (50% in stock)");
+//        System.out.println("🚇 Monthly BKK pass | 🏋 AYCM XL card | 🏥 Health insurance");
+//        System.out.println("🍽️ Daily meal support (5100 HUF) | 🪑 Ergonomic, modern office");
+//    }
+//
+//    public void callToAction() {
+//        System.out.println("➡️ Sounds like your kind of challenge?");
+//        System.out.println("📬 Drop me your number and I’ll tell you everything you need!");
+//    }
+//
+//    public static void main(String[] args) {
+//        SeniorJavaDevOpportunity job = new SeniorJavaDevOpportunity();
+//        System.out.println("🚀 New Opportunity: Senior Java Developer – High-Impact Platform");
+//        job.whatYouDo();
+//        job.whatYouBring();
+//        job.whatYouGet();
+//        job.callToAction();
+//    }
+//}

@@ -1,0 +1,2 @@
+package org.kbalazs.smart_scrum_poker_backend_native.helpers;public class TestException {
+}
