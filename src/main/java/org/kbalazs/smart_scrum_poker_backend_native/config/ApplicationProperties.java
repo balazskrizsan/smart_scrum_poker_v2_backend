@@ -61,4 +61,10 @@ public class ApplicationProperties
 
     @Value("${logback.logstash.full_host}")
     private String logbackLogstashFullHost;
+
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private String oauth2JwtIssuerUri;
+
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String oauth2JwtJwkSetUri;
 }

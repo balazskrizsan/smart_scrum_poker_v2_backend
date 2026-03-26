@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -29,6 +30,7 @@ public class StartListener
 
     @MessageMapping("/poker/start")
     @SendToUser("/queue/reply")
+    @PreAuthorize("hasAuthority('SCOPE_poker.start')")
     public ResponseEntity<ResponseData<StartResponse>> startListener(@Payload StartRequest request)
         throws PokerException, ApiException, AccountException
     {
@@ -36,11 +38,9 @@ public class StartListener
 
         StartPoker startPoker = RequestMapperService.mapToEntity(request);
 
-        StartPokerResponse startPokerResponse = startService.start(startPoker.poker(), startPoker.tickets());
-
         return new ResponseEntityBuilder<StartResponse>()
             .socketDestination(SocketDestination.POKER_START)
-            .data(new StartResponse(startPokerResponse.poker()))
+//            .data(new StartResponse(startPokerResponse.poker()))
             .build();
     }
 }
