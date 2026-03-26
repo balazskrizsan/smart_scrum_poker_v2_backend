@@ -30,7 +30,7 @@ public class StartListener
 
     @MessageMapping("/poker/start")
     @SendToUser("/queue/reply")
-    @PreAuthorize("hasAuthority('SCOPE_poker.start')")
+    @PreAuthorize("hasAuthority('poker.start')")
     public ResponseEntity<ResponseData<StartResponse>> startListener(@Payload StartRequest request)
         throws PokerException, ApiException, AccountException
     {

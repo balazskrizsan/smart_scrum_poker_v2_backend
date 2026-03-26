@@ -5,6 +5,7 @@ import com.nimbusds.jose.proc.DefaultJOSEObjectTypeVerifier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,6 +25,7 @@ import java.security.cert.X509Certificate;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig
 {
@@ -41,9 +43,7 @@ public class SecurityConfig
     {
         http
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
-            );
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
         return http.build();
     }
@@ -75,11 +75,10 @@ public class SecurityConfig
         HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
         HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
 
-        return NimbusJwtDecoder
-            .withJwkSetUri(applicationProperties.getOauth2JwtJwkSetUri())
-            .jwtProcessorCustomizer(customizer -> {
-                customizer.setJWSTypeVerifier(new DefaultJOSEObjectTypeVerifier<>(new JOSEObjectType("at+jwt")));
-            })
+        return NimbusJwtDecoder.withJwkSetUri(applicationProperties.getOauth2JwtJwkSetUri())
+            .jwtProcessorCustomizer(customizer ->
+                customizer.setJWSTypeVerifier(new DefaultJOSEObjectTypeVerifier<>(new JOSEObjectType("at+jwt")))
+            )
             .build();
     }
 
@@ -87,8 +86,8 @@ public class SecurityConfig
     public JwtAuthenticationConverter jwtAuthenticationConverter()
     {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+        grantedAuthoritiesConverter.setAuthorityPrefix("");
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("scope");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
