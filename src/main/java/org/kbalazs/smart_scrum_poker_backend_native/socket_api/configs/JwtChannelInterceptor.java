@@ -1,5 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.configs;
 
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -25,47 +26,51 @@ public class JwtChannelInterceptor implements ChannelInterceptor
     private final JwtAuthenticationConverter jwtAuthenticationConverter;
 
     @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel)
+    public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel)
     {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-        if (accessor != null)
+        if (accessor == null)
         {
-            if (StompCommand.CONNECT.equals(accessor.getCommand()))
-            {
-                String authHeader = accessor.getFirstNativeHeader("Authorization");
+            return message;
+        }
 
-                if (authHeader != null && authHeader.startsWith("Bearer "))
-                {
-                    String token = authHeader.substring(7);
-
-                    try
-                    {
-                        Jwt jwt = jwtDecoder.decode(token);
-                        Authentication authentication = jwtAuthenticationConverter.convert(jwt);
-
-                        if (authentication != null)
-                        {
-                            accessor.setUser(authentication);
-                            accessor.setHeader("simpUser", authentication);
-                            log.debug("JWT authentication successful for user: {}", authentication.getName());
-                        }
-                    } catch (JwtException e)
-                    {
-                        log.error("JWT authentication failed: {}", e.getMessage());
-                        throw new SecurityException("Invalid JWT token", e);
-                    }
-                }
-                else
-                {
-                    log.warn("No valid Authorization header found for STOMP CONNECT");
-                }
-            }
-            else if (accessor.getUser() != null)
+        if (!StompCommand.CONNECT.equals(accessor.getCommand()))
+        {
+            if (accessor.getUser() != null)
             {
                 Authentication authentication = (Authentication) accessor.getUser();
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
+            return message;
+        }
+
+        String authHeader = accessor.getFirstNativeHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer "))
+        {
+            log.warn("No valid Authorization header found for STOMP CONNECT");
+
+            return message;
+        }
+
+        String token = authHeader.substring(7);
+
+        try
+        {
+            Jwt jwt = jwtDecoder.decode(token);
+
+            Authentication authentication = jwtAuthenticationConverter.convert(jwt);
+            accessor.setUser(authentication);
+            accessor.setHeader("simpUser", authentication);
+
+            log.info("JWT authentication successful for user: {}", authentication.getName());
+        } catch (JwtException e)
+        {
+            log.error("JWT authentication failed: {}", e.getMessage());
+
+            throw new SecurityException("Invalid JWT token", e);
         }
 
         return message;
