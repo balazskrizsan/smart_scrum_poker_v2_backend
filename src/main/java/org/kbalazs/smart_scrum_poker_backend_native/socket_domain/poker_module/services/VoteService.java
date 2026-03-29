@@ -4,9 +4,9 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUser;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.InsecureUserService;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.enums.SizeEnum;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.StoryPointException;
@@ -28,13 +28,13 @@ import java.util.stream.Stream;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VoteService
 {
-    InsecureUserService insecureUserService;
+    IdsUserService idsUserService;
     StoryPointCalculatorService storyPointCalculatorService;
     VoteRepository voteRepository;
 
-    public InsecureUser vote(@NonNull Vote vote) throws StoryPointException, AccountException
+    public IdsUser vote(@NonNull Vote vote) throws StoryPointException, AccountException
     {
-        InsecureUser insecureUser = insecureUserService.findByIdSecure(vote.createdBy());
+        IdsUser idsUser = idsUserService.findByIdSecure(vote.createdBy());
 
         Vote calculatedVote = new Vote(
             vote.id(),
@@ -59,7 +59,7 @@ public class VoteService
 
         voteRepository.create(calculatedVote);
 
-        return insecureUser;
+        return idsUser;
     }
 
     // @todo: rename to search

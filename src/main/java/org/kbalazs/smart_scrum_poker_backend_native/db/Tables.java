@@ -5,18 +5,18 @@ package org.kbalazs.smart_scrum_poker_backend_native.db;
 
 
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.FlywaySchemaHistory;
-import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InGamePlayers;
-import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InsecureUser;
-import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InsecureUserSessions;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUser;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUserSessions;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InPokerIdsUsers;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Poker;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Vote;
 
 
 /**
- * Convenience access to all tables in public
+ * Convenience access to all tables in public.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**
@@ -25,19 +25,19 @@ public class Tables {
     public static final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 
     /**
-     * The table <code>public.in_game_players</code>.
+     * The table <code>public.ids_user</code>.
      */
-    public static final InGamePlayers IN_GAME_PLAYERS = InGamePlayers.IN_GAME_PLAYERS;
+    public static final IdsUser IDS_USER = IdsUser.IDS_USER;
 
     /**
-     * The table <code>public.insecure_user</code>.
+     * The table <code>public.ids_user_sessions</code>.
      */
-    public static final InsecureUser INSECURE_USER = InsecureUser.INSECURE_USER;
+    public static final IdsUserSessions IDS_USER_SESSIONS = IdsUserSessions.IDS_USER_SESSIONS;
 
     /**
-     * The table <code>public.insecure_user_sessions</code>.
+     * The table <code>public.in_poker_ids_users</code>.
      */
-    public static final InsecureUserSessions INSECURE_USER_SESSIONS = InsecureUserSessions.INSECURE_USER_SESSIONS;
+    public static final InPokerIdsUsers IN_POKER_IDS_USERS = InPokerIdsUsers.IN_POKER_IDS_USERS;
 
     /**
      * The table <code>public.poker</code>.

@@ -16,10 +16,10 @@ public class V000001__init extends AbstractBaseJooqMigration
         DSLContext dslContext = getDslContext(context);
 
         dslContext.createTable("ids_user")
-            .column("id", BIGINT.nullable(false).identity(true))
+            .column("id", UUID.nullable(false))
             .column("created_at", TIMESTAMP.nullable(false))
             .constraints(
-                constraint("insecure_user__pk___id").primaryKey("id")
+                constraint("insecure_user__unique___id").unique("id")
             )
             .execute();
 
@@ -28,7 +28,7 @@ public class V000001__init extends AbstractBaseJooqMigration
             .column("public_id", UUID.nullable(false))
             .column("name", VARCHAR.nullable(false))
             .column("created_at", TIMESTAMP.nullable(false))
-            .column("created_by", BIGINT.nullable(false))
+            .column("created_by", UUID.nullable(false))
             .constraints(
                 constraint("poker__pk___id").primaryKey("id"),
                 constraint("poker__unique___public_id").unique("public_id"),
@@ -64,7 +64,7 @@ public class V000001__init extends AbstractBaseJooqMigration
             .column("risk", SMALLINT.nullable(false))
             .column("calculated_point", SMALLINT.nullable(false))
             .column("created_at", TIMESTAMP.nullable(false))
-            .column("created_by", BIGINT.nullable(false))
+            .column("created_by", UUID.nullable(false))
             .constraints(
                 constraint("vote__pk___id").primaryKey("id"),
                 constraint("vote__unique___ticket_id___created_by").unique("ticket_id", "created_by"),
@@ -80,7 +80,7 @@ public class V000001__init extends AbstractBaseJooqMigration
             .execute();
 
         dslContext.createTable("in_poker_ids_users")
-            .column("ids_user_id", BIGINT.nullable(false))
+            .column("ids_user_id", UUID.nullable(false))
             .column("poker_id", BIGINT.nullable(false))
             .column("created_at", TIMESTAMP.nullable(false))
             .constraints(
@@ -98,7 +98,7 @@ public class V000001__init extends AbstractBaseJooqMigration
             .execute();
 
         dslContext.createTable("ids_user_sessions")
-            .column("ids_user_id", BIGINT.nullable(false))
+            .column("ids_user_id", UUID.nullable(false))
             .column("session_id", UUID.nullable(false))
             .column("created_at", TIMESTAMP.nullable(false))
             .constraints(

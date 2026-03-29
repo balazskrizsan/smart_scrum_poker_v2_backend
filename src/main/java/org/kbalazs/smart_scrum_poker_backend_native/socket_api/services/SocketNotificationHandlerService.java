@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.SessionResponse;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUser;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.InsecureUserService;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.PokerService;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class SocketNotificationHandlerService
 {
     private final PokerService pokerService;
     private final NotificationService notificationService;
-    private final InsecureUserService insecureUserService;
+    private final IdsUserService idsUserService;
 
     public void notifyPokerGameWithNewSession(@NonNull UUID insecureUserIdSecure) throws AccountException
     {
@@ -54,7 +54,7 @@ public class SocketNotificationHandlerService
     )
         throws AccountException
     {
-        InsecureUser user = insecureUserService.findByIdSecure(insecureUserIdSecure);
+        IdsUser user = idsUserService.findByIdSecure(insecureUserIdSecure);
         Map<UUID, Poker> pokers = pokerService.searchWatchedPokers(insecureUserIdSecure);
         log.info(logMessage, insecureUserIdSecure, pokers.keySet());
 

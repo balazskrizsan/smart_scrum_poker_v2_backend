@@ -9,7 +9,7 @@ import org.jooq.Configuration;
 import org.kbalazs.smart_scrum_poker_backend_native.common.servies.Slf4jLongTermLoggerService;
 import org.kbalazs.smart_scrum_poker_backend_native.domain_common.services.JooqService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.InsecureUserService;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.services.UuidService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket;
@@ -26,7 +26,7 @@ import java.util.List;
 public class StartService
 {
     PokerService pokerService;
-    InsecureUserService insecureUserService;
+    IdsUserService idsUserService;
     UuidService uuidService;
     TicketService ticketService;
     JooqService jooqService;
@@ -35,7 +35,7 @@ public class StartService
     public StartPokerResponse start(@NonNull Poker poker, @NonNull List<Ticket> tickets)
     throws PokerException, AccountException
     {
-        insecureUserService.findByIdSecure(poker.createdBy());
+        idsUserService.findByIdSecure(poker.createdBy());
 
         var newPoker = jooqService.getDbContext().transactionResult(
             (Configuration config) -> transactionalCreate(poker, tickets)

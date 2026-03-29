@@ -46,7 +46,7 @@ public class GameStateListener
             "/queue/reply-" + pokerIdSecure,
             new ResponseEntityBuilder<VoteNewJoinerResponse>()
                 .socketDestination(SocketDestination.SEND_POKER_VOTE_NEW_JOINER)
-                .data(new VoteNewJoinerResponse(gameStateResponse.currentInsecureUser()))
+                .data(new VoteNewJoinerResponse(gameStateResponse.currentIdsUser()))
                 .build()
         );
 

@@ -2,7 +2,14 @@ package org.kbalazs.smart_scrum_poker_backend_native.socket_api.configs;
 
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.kbalazs.smart_scrum_poker_backend_native.common.factories.LocalDateTimeFactory;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.exceptions.SocketException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.SocketConnectionHandlerService;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -17,13 +24,21 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
+import static lombok.AccessLevel.PRIVATE;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = PRIVATE)
 public class JwtChannelInterceptor implements ChannelInterceptor
 {
-    private final JwtDecoder jwtDecoder;
-    private final JwtAuthenticationConverter jwtAuthenticationConverter;
+    JwtDecoder jwtDecoder;
+    JwtAuthenticationConverter jwtAuthenticationConverter;
+    IdsUserService idsUserService;
+    SocketConnectionHandlerService socketConnectionHandlerService;
+    LocalDateTimeFactory localDateTimeFactory;
 
     @Override
     public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel)
@@ -37,11 +52,7 @@ public class JwtChannelInterceptor implements ChannelInterceptor
 
         if (!StompCommand.CONNECT.equals(accessor.getCommand()))
         {
-            if (accessor.getUser() != null)
-            {
-                Authentication authentication = (Authentication) accessor.getUser();
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            setSecurityContext(accessor);
 
             return message;
         }
@@ -59,14 +70,9 @@ public class JwtChannelInterceptor implements ChannelInterceptor
 
         try
         {
-            Jwt jwt = jwtDecoder.decode(token);
-
-            Authentication authentication = jwtAuthenticationConverter.convert(jwt);
-            accessor.setUser(authentication);
-            accessor.setHeader("simpUser", authentication);
-
-            log.info("JWT authentication successful for user: {}", authentication.getName());
-        } catch (JwtException e)
+            preSendLogic(message, token, accessor);
+        }
+        catch (JwtException e)
         {
             log.error("JWT authentication failed: {}", e.getMessage());
 
@@ -74,5 +80,46 @@ public class JwtChannelInterceptor implements ChannelInterceptor
         }
 
         return message;
+    }
+
+    private void preSendLogic(Message<?> message, String token, StompHeaderAccessor accessor)
+    {
+        Jwt jwt = jwtDecoder.decode(token);
+
+        Authentication authentication = jwtAuthenticationConverter.convert(jwt);
+        accessor.setUser(authentication);
+        accessor.setHeader("simpUser", authentication);
+
+        log.info("JWT authentication successful for user: {}", authentication.getName());
+        createIdsUserIfNotExists(message, authentication);
+    }
+
+    private static void setSecurityContext(@Nonnull StompHeaderAccessor accessor)
+    {
+        if (accessor.getUser() != null)
+        {
+            Authentication authentication = (Authentication) accessor.getUser();
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+    }
+
+    private void createIdsUserIfNotExists(@Nonnull Message<?> message, @Nonnull Authentication authentication)
+    {
+        try
+        {
+            idsUserService.createIfNotExists(
+                new IdsUser(
+                    UUID.fromString(authentication.getName()),
+                    localDateTimeFactory.create()
+                ),
+                socketConnectionHandlerService.getSessionId(message.getHeaders())
+            );
+        }
+        catch (SocketException | AccountException e)
+        {
+            log.error("Failed to create insecure user: {}", e.getMessage());
+
+            throw new SecurityException("Failed to create user", e);
+        }
     }
 }

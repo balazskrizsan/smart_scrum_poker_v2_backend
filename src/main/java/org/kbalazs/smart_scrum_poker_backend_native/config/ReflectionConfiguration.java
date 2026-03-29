@@ -16,14 +16,14 @@ import static org.springframework.aot.hint.MemberCategory.PUBLIC_FIELDS;
     ch.qos.logback.classic.LoggerContext.class,
     ch.qos.logback.core.spi.ContextAwareBase.class,
     org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.FlywaySchemaHistoryRecord.class,
-    org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InGamePlayersRecord.class,
-    org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InsecureUserRecord.class,
-    org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InsecureUserSessionsRecord.class,
+    org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserRecord.class,
+    org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserSessionsRecord.class,
+    org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InPokerIdsUsersRecord.class,
     org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.PokerRecord.class,
     org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.TicketRecord.class,
     org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.VoteRecord.class,
     org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData.class,
-    org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUser.class,
+    org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUserSession.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects.ConnectResponse.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects.DisconnectResponse.class,
@@ -66,14 +66,14 @@ public class ReflectionConfiguration
                 .registerType(ch.qos.logback.classic.LoggerContext.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(ch.qos.logback.core.spi.ContextAwareBase.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.FlywaySchemaHistoryRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
-                .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InGamePlayersRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
-                .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InsecureUserRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
-                .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InsecureUserSessionsRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
+                .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
+                .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserSessionsRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
+                .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InPokerIdsUsersRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.PokerRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.TicketRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.VoteRecord.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
-                .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUser.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
+                .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUserSession.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects.ConnectResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects.DisconnectResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)

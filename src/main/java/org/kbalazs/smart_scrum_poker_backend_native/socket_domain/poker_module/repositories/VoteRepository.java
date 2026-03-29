@@ -13,29 +13,28 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.VOTE;
+
 @Repository
-public class VoteRepository extends AbstractRepository
-{
-    public void create(@NonNull Vote vote)
-    {
+public class VoteRepository extends AbstractRepository {
+    public void create(@NonNull Vote vote) {
         DSLContext ctx = getDSLContext();
 
-        ctx.insertInto(voteTable)
-            .set(ctx.newRecord(voteTable, vote))
+        ctx.insertInto(VOTE)
+            .set(ctx.newRecord(VOTE, vote))
             .onDuplicateKeyUpdate()
-            .set(voteTable.UNCERTAINTY, vote.uncertainty())
-            .set(voteTable.COMPLEXITY, vote.complexity())
-            .set(voteTable.EFFORT, vote.effort())
-            .set(voteTable.RISK, vote.risk())
-            .set(voteTable.CALCULATED_POINT, vote.calculatedPoint())
+            .set(VOTE.UNCERTAINTY, vote.uncertainty())
+            .set(VOTE.COMPLEXITY, vote.complexity())
+            .set(VOTE.EFFORT, vote.effort())
+            .set(VOTE.RISK, vote.risk())
+            .set(VOTE.CALCULATED_POINT, vote.calculatedPoint())
             .execute();
     }
 
-    public Map<Long, Map<UUID, Vote>> getVotesWithTicketGroupByTicketIds(@NonNull List<Long> ticketIds)
-    {
+    public Map<Long, Map<UUID, Vote>> getVotesWithTicketGroupByTicketIds(@NonNull List<Long> ticketIds) {
         return getDSLContext()
-            .selectFrom(voteTable)
-            .where(voteTable.TICKET_ID.in(ticketIds))
+            .selectFrom(VOTE)
+            .where(VOTE.TICKET_ID.in(ticketIds))
             .collect(
                 Collectors.groupingBy(
                     VoteRecord::getTicketId,
@@ -47,11 +46,10 @@ public class VoteRepository extends AbstractRepository
             );
     }
 
-    public void deleteByTicketId(@NonNull Long ticketId)
-    {
+    public void deleteByTicketId(@NonNull Long ticketId) {
         getDSLContext()
-            .deleteFrom(voteTable)
-            .where(voteTable.TICKET_ID.eq(ticketId))
+            .deleteFrom(VOTE)
+            .where(VOTE.TICKET_ID.eq(ticketId))
             .execute();
     }
 }

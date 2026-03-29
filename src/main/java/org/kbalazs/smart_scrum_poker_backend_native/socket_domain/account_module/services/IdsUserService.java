@@ -1,0 +1,54 @@
+package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUserSession;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.repositories.IdsUserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+import static lombok.AccessLevel.PRIVATE;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(makeFinal = true, level = PRIVATE)
+public class IdsUserService
+{
+    IdsUserRepository idsUserRepository;
+    InsecureUserSessionsService insecureUserSessionsService;
+
+    public IdsUser createIfNotExists(@NonNull IdsUser idsUser, UUID sessionId)
+        throws AccountException
+    {
+        IdsUser newUser = idsUserRepository.createIfNotExist(idsUser);
+
+        insecureUserSessionsService.add(new InsecureUserSession(newUser.id(), sessionId, idsUser.createdAt()));
+
+        log.info("New insecure user created: {}", newUser); // TODO: test, monitor
+
+        return newUser;
+    }
+
+    public IdsUser findByIdSecure(@NonNull UUID idSecure)
+        throws AccountException
+    {
+        return idsUserRepository.getById(idSecure);
+    }
+
+    public List<IdsUser> findByIdSecureList(@NonNull List<UUID> idSecureList)
+    {
+        return idsUserRepository.findByIdSecureList(idSecureList);
+    }
+
+    public List<IdsUser> searchUsersWithActiveSession(@NonNull List<UUID> idSecures)
+    {
+        return idsUserRepository.searchUsersWithActiveSession(idSecures);
+    }
+}

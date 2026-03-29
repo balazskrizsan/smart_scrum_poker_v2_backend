@@ -1,7 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.repositories;
 
 import lombok.NonNull;
-import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.PokerRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.domain_common.repositories.AbstractRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
@@ -14,16 +13,16 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IN_POKER_IDS_USERS;
+import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.POKER;
+
 @Repository
-public class PokerRepository extends AbstractRepository
-{
-    public Poker create(@NonNull Poker poker) throws PokerException
-    {
-        PokerRecord pokerRecord = getDSLContext().newRecord(pokersTable, poker);
+public class PokerRepository extends AbstractRepository {
+    public Poker create(@NonNull Poker poker) throws PokerException {
+        PokerRecord pokerRecord = getDSLContext().newRecord(POKER, poker);
         pokerRecord.store();
 
-        if (pokerRecord.getId() == null)
-        {
+        if (pokerRecord.getId() == null) {
             throw new PokerException("Poker creation failed.");
         }
 
@@ -31,39 +30,35 @@ public class PokerRepository extends AbstractRepository
     }
 
     // @todo: test not found
-    public Poker findByIdSecure(@NonNull UUID pokerIdSecure) throws PokerException
-    {
+    public Poker findByIdSecure(@NonNull UUID pokerIdSecure) throws PokerException {
         PokerRecord record = getDSLContext()
-            .selectFrom(pokersTable)
-            .where(pokersTable.ID_SECURE.eq(pokerIdSecure))
+            .selectFrom(POKER)
+//            .where(POKER.PUBLIC_ID.eq(pokerIdSecure))
             .fetchOne();
 
-        if (null == record)
-        {
+        if (null == record) {
             throw new PokerException("Poker not found: id#" + pokerIdSecure);
         }
 
         return record.into(Poker.class);
     }
 
-    public Map<UUID, Poker> searchWatchedPokers(@NonNull UUID insecureUserIdSecure)
-    {
+    public Map<UUID, Poker> searchWatchedPokers(@NonNull UUID insecureUserIdSecure) {
         return getDSLContext()
-            .select(pokersTable.fields())
-            .from(pokersTable)
-            .leftJoin(inGamePlayersTable)
-            .on(inGamePlayersTable.POKER_ID_SECURE.eq(pokersTable.ID_SECURE))
-            .where(inGamePlayersTable.INSECURE_USER_ID_SECURE.eq(insecureUserIdSecure))
+            .select(POKER.fields())
+            .from(POKER)
+            .leftJoin(IN_POKER_IDS_USERS)
+            .on(IN_POKER_IDS_USERS.POKER_ID.eq(POKER.ID))
+//            .where(IN_POKER_IDS_USERS.IDS_USER_ID.eq(insecureUserIdSecure))
             .fetchInto(Poker.class)
             .stream()
             .collect(Collectors.toMap(Poker::idSecure, Function.identity()));
     }
 
-    public List<Poker> searchByInsecureUserId(@NonNull UUID insecureUserIdSecure)
-    {
+    public List<Poker> searchByInsecureUserId(@NonNull UUID insecureUserIdSecure) {
         return getDSLContext()
-            .selectFrom(pokersTable)
-            .where(pokersTable.CREATED_BY.eq(insecureUserIdSecure))
+            .selectFrom(POKER)
+//            .where(POKER.CREATED_BY.eq(insecureUserIdSecure))
             .fetchInto(Poker.class);
     }
 }

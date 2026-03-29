@@ -3,13 +3,15 @@ package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_modul
 import lombok.NonNull;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
-import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InsecureUserSessionsRecord;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserSessionsRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.domain_common.repositories.AbstractRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUserSession;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.SessionException;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
+
+import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IDS_USER_SESSIONS;
 
 @Repository
 public class InsecureUserSessionsRepository extends AbstractRepository
@@ -18,10 +20,10 @@ public class InsecureUserSessionsRepository extends AbstractRepository
     {
         DSLContext ctx = getDSLContext();
         Record1<UUID> returning = ctx
-            .insertInto(insecureUserSessionsTable)
-            .set(ctx.newRecord(insecureUserSessionsTable, insecureUserSession))
+            .insertInto(IDS_USER_SESSIONS)
+            .set(ctx.newRecord(IDS_USER_SESSIONS, insecureUserSession))
             .onDuplicateKeyIgnore()
-            .returningResult(insecureUserSessionsTable.SESSION_ID)
+            .returningResult(IDS_USER_SESSIONS.SESSION_ID)
             .fetchOne();
 
         return null != returning;
@@ -32,24 +34,25 @@ public class InsecureUserSessionsRepository extends AbstractRepository
         var ctx = getDSLContext();
 
         return ctx.fetchCount(
-            ctx.selectFrom(insecureUserSessionsTable)
-                .where(insecureUserSessionsTable.INSECURE_USER_ID_SECURE.eq(uuidInsecureUserIdSecure))
+            ctx.selectFrom(IDS_USER_SESSIONS)
+//                .where(IDS_USER_SESSIONS.IDS_USER_ID.eq(uuidInsecureUserIdSecure))
         );
     }
 
     public void removeBySessionId(UUID sessionId)
     {
         getDSLContext()
-            .deleteFrom(insecureUserSessionsTable)
-            .where(insecureUserSessionsTable.SESSION_ID.eq(sessionId))
+            .deleteFrom(IDS_USER_SESSIONS)
+            .where(IDS_USER_SESSIONS.SESSION_ID.eq(sessionId))
             .execute();
     }
 
-    public InsecureUserSession getInsecureUserSession(UUID sessionId) throws SessionException
+    public InsecureUserSession getInsecureUserSession(UUID sessionId)
+        throws SessionException
     {
-        InsecureUserSessionsRecord insecureUserSessionRecord = getDSLContext()
-            .selectFrom(insecureUserSessionsTable)
-            .where(insecureUserSessionsTable.SESSION_ID.eq(sessionId))
+        IdsUserSessionsRecord insecureUserSessionRecord = getDSLContext()
+            .selectFrom(IDS_USER_SESSIONS)
+            .where(IDS_USER_SESSIONS.SESSION_ID.eq(sessionId))
             .fetchOne();
 
         // @todo: test
