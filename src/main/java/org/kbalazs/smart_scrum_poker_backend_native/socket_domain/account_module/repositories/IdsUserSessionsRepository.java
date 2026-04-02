@@ -5,7 +5,7 @@ import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserSessionsRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.domain_common.repositories.AbstractRepository;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUserSession;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUserSession;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.SessionException;
 import org.springframework.stereotype.Repository;
 
@@ -14,14 +14,14 @@ import java.util.UUID;
 import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IDS_USER_SESSIONS;
 
 @Repository
-public class InsecureUserSessionsRepository extends AbstractRepository
+public class IdsUserSessionsRepository extends AbstractRepository
 {
-    public boolean create(@NonNull InsecureUserSession insecureUserSession)
+    public boolean create(@NonNull IdsUserSession idsUserSession)
     {
         DSLContext ctx = getDSLContext();
         Record1<UUID> returning = ctx
             .insertInto(IDS_USER_SESSIONS)
-            .set(ctx.newRecord(IDS_USER_SESSIONS, insecureUserSession))
+            .set(ctx.newRecord(IDS_USER_SESSIONS, idsUserSession))
             .onDuplicateKeyIgnore()
             .returningResult(IDS_USER_SESSIONS.SESSION_ID)
             .fetchOne();
@@ -29,13 +29,13 @@ public class InsecureUserSessionsRepository extends AbstractRepository
         return null != returning;
     }
 
-    public int countByIdSecure(UUID uuidInsecureUserIdSecure)
+    public int countByIdSecure(UUID idsUserId)
     {
         var ctx = getDSLContext();
 
         return ctx.fetchCount(
             ctx.selectFrom(IDS_USER_SESSIONS)
-//                .where(IDS_USER_SESSIONS.IDS_USER_ID.eq(uuidInsecureUserIdSecure))
+                .where(IDS_USER_SESSIONS.IDS_USER_ID.eq(idsUserId))
         );
     }
 
@@ -47,7 +47,7 @@ public class InsecureUserSessionsRepository extends AbstractRepository
             .execute();
     }
 
-    public InsecureUserSession getInsecureUserSession(UUID sessionId)
+    public IdsUserSession getInsecureUserSession(UUID sessionId)
         throws SessionException
     {
         IdsUserSessionsRecord insecureUserSessionRecord = getDSLContext()
@@ -61,6 +61,6 @@ public class InsecureUserSessionsRepository extends AbstractRepository
             throw new SessionException("Session not found: session_id#" + sessionId);
         }
 
-        return insecureUserSessionRecord.into(InsecureUserSession.class);
+        return insecureUserSessionRecord.into(IdsUserSession.class);
     }
 }

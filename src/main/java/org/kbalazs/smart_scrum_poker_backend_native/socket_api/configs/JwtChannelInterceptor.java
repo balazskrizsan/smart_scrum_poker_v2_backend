@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.common.factories.LocalDateTimeFactory;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_api.exceptions.SocketException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.SocketConnectionHandlerService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
@@ -58,16 +57,14 @@ public class JwtChannelInterceptor implements ChannelInterceptor
         }
 
         String authHeader = accessor.getFirstNativeHeader("Authorization");
-
         if (authHeader == null || !authHeader.startsWith("Bearer "))
         {
-            log.warn("No valid Authorization header found for STOMP CONNECT");
+            log.info("No valid Authorization header found for STOMP CONNECT");
 
             return message;
         }
 
         String token = authHeader.substring(7);
-
         try
         {
             preSendLogic(message, token, accessor);
@@ -89,8 +86,10 @@ public class JwtChannelInterceptor implements ChannelInterceptor
         Authentication authentication = jwtAuthenticationConverter.convert(jwt);
         accessor.setUser(authentication);
         accessor.setHeader("simpUser", authentication);
+        accessor.addNativeHeader("idsUserId", authentication.getName());
 
-        log.info("JWT authentication successful for user: {}", authentication.getName());
+        log.info("JWT authentication successful for IdsUserId: {}", authentication.getName());
+
         createIdsUserIfNotExists(message, authentication);
     }
 
@@ -108,18 +107,12 @@ public class JwtChannelInterceptor implements ChannelInterceptor
         try
         {
             idsUserService.createIfNotExists(
-                new IdsUser(
-                    UUID.fromString(authentication.getName()),
-                    localDateTimeFactory.create()
-                ),
-                socketConnectionHandlerService.getSessionId(message.getHeaders())
+                new IdsUser(UUID.fromString(authentication.getName()), localDateTimeFactory.create())
             );
         }
-        catch (SocketException | AccountException e)
+        catch (AccountException e)
         {
-            log.error("Failed to create insecure user: {}", e.getMessage());
-
-            throw new SecurityException("Failed to create user", e);
+            log.error("Failed to create IdsUser: {}", e.getMessage(), e);
         }
     }
 }

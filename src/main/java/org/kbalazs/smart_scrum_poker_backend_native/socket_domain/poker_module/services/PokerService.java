@@ -31,13 +31,13 @@ public class PokerService
         return pokerRepository.findByIdSecure(pokerIdSecure);
     }
 
-    public Map<UUID, Poker> searchWatchedPokers(@NonNull UUID insecureUserIdSecure)
+    public Map<UUID, Poker> searchWatchedPokers(@NonNull UUID idsUserId)
     {
-        return pokerRepository.searchWatchedPokers(insecureUserIdSecure);
+        return pokerRepository.searchWatchedPokers(idsUserId);
     }
 
-    public List<Poker> searchByInsecureUserId(@NonNull UUID insecureUserIdSecure)
+    public List<Poker> searchByInsecureUserId(@NonNull UUID idsUserId)
     {
-        return pokerRepository.searchByInsecureUserId(insecureUserIdSecure);
+        return pokerRepository.searchByInsecureUserId(idsUserId);
     }
 }

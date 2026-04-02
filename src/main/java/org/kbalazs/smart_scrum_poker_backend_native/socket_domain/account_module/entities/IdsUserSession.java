@@ -5,8 +5,8 @@ import lombok.NonNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record InsecureUserSession(
-    @NonNull UUID insecureUserIdSecure,
+public record IdsUserSession(
+    UUID idsUserId,
     @NonNull UUID sessionId,
     @NonNull LocalDateTime createdAt
 )

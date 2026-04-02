@@ -43,22 +43,22 @@ public class PokerRepository extends AbstractRepository {
         return record.into(Poker.class);
     }
 
-    public Map<UUID, Poker> searchWatchedPokers(@NonNull UUID insecureUserIdSecure) {
+    public Map<UUID, Poker> searchWatchedPokers(@NonNull UUID idsUserId) {
         return getDSLContext()
             .select(POKER.fields())
             .from(POKER)
             .leftJoin(IN_POKER_IDS_USERS)
             .on(IN_POKER_IDS_USERS.POKER_ID.eq(POKER.ID))
-//            .where(IN_POKER_IDS_USERS.IDS_USER_ID.eq(insecureUserIdSecure))
+//            .where(IN_POKER_IDS_USERS.IDS_USER_ID.eq(idsUserId))
             .fetchInto(Poker.class)
             .stream()
             .collect(Collectors.toMap(Poker::idSecure, Function.identity()));
     }
 
-    public List<Poker> searchByInsecureUserId(@NonNull UUID insecureUserIdSecure) {
+    public List<Poker> searchByInsecureUserId(@NonNull UUID idsUserId) {
         return getDSLContext()
             .selectFrom(POKER)
-//            .where(POKER.CREATED_BY.eq(insecureUserIdSecure))
+//            .where(POKER.CREATED_BY.eq(idsUserId))
             .fetchInto(Poker.class);
     }
 }

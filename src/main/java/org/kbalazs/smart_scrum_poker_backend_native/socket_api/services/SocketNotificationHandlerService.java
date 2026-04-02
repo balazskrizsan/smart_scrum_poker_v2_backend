@@ -28,35 +28,35 @@ public class SocketNotificationHandlerService
     private final NotificationService notificationService;
     private final IdsUserService idsUserService;
 
-    public void notifyPokerGameWithNewSession(@NonNull UUID insecureUserIdSecure) throws AccountException
+    public void notifyPokerGameWithNewSession(@NonNull UUID idsUserId) throws AccountException
     {
         notifyPokerGame(
-            insecureUserIdSecure,
+            idsUserId,
             SESSION_CREATED_OR_UPDATED,
             "Notify poker game closed session: {}, pokers: {}"
         );
     }
 
     // @todo test
-    public void notifyPokerGameWithLeavingSession(@NonNull UUID insecureUserIdSecure) throws AccountException
+    public void notifyPokerGameWithLeavingSession(@NonNull UUID idsUserId) throws AccountException
     {
         notifyPokerGame(
-            insecureUserIdSecure,
+            idsUserId,
             SESSION_CLOSED,
             "Notify poker game with new session: {}, pokers: {}"
         );
     }
 
     private void notifyPokerGame(
-        @NonNull UUID insecureUserIdSecure,
+        @NonNull UUID idsUserId,
         @NonNull SocketDestination socketDestination,
         @NonNull String logMessage
     )
         throws AccountException
     {
-        IdsUser user = idsUserService.findByIdSecure(insecureUserIdSecure);
-        Map<UUID, Poker> pokers = pokerService.searchWatchedPokers(insecureUserIdSecure);
-        log.info(logMessage, insecureUserIdSecure, pokers.keySet());
+        IdsUser user = idsUserService.findByIdSecure(idsUserId);
+        Map<UUID, Poker> pokers = pokerService.searchWatchedPokers(idsUserId);
+        log.info(logMessage, idsUserId, pokers.keySet());
 
         pokers.keySet().forEach(pokerIdSecure -> {
             try

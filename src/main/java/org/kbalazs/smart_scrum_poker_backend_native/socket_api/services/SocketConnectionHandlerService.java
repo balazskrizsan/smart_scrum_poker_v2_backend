@@ -29,19 +29,19 @@ public class SocketConnectionHandlerService
         }
     }
 
-    public UUID getInsecureUserIdSecure(@NonNull MessageHeaders headers) throws SocketException
+    public @NonNull UUID getIdsUserId(@NonNull MessageHeaders headers) throws SocketException
     {
         try
         {
-            String insecureUserIdSecure = Objects.requireNonNull(getNativeHeaders(headers))
-                .get("insecureUserIdSecure")
+            String idsUserId = Objects.requireNonNull(getNativeHeaders(headers))
+                .get("idsUserId")
                 .getFirst();
 
-            return UUID.fromString(insecureUserIdSecure);
+            return UUID.fromString(idsUserId);
         }
         catch (NullPointerException e)
         {
-            throw new SocketException("insecureUserIdSecure not found");
+            throw new SocketException("idsUserId not found");
         }
     }
 

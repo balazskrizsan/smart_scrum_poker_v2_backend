@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.InsecureUserSession;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.repositories.IdsUserRepository;
 import org.springframework.stereotype.Service;
@@ -22,16 +21,13 @@ import static lombok.AccessLevel.PRIVATE;
 public class IdsUserService
 {
     IdsUserRepository idsUserRepository;
-    InsecureUserSessionsService insecureUserSessionsService;
 
-    public IdsUser createIfNotExists(@NonNull IdsUser idsUser, UUID sessionId)
+    public @NonNull IdsUser createIfNotExists(@NonNull IdsUser idsUser)
         throws AccountException
     {
         IdsUser newUser = idsUserRepository.createIfNotExist(idsUser);
 
-        insecureUserSessionsService.add(new InsecureUserSession(newUser.id(), sessionId, idsUser.createdAt()));
-
-        log.info("New insecure user created: {}", newUser); // TODO: test, monitor
+        log.info("New IdsUser created: {}", newUser); // TODO: test, monitor
 
         return newUser;
     }

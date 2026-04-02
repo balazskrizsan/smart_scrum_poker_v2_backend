@@ -42,7 +42,7 @@ public class SocketDisconnectListener
         if (response.shouldSendNotification())
         {
             socketNotificationHandlerService.notifyPokerGameWithLeavingSession(
-                response.insecureUserSession().insecureUserIdSecure()
+                response.idsUserSession().idsUserId()
             );
         }
     }

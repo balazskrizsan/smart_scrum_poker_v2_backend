@@ -40,7 +40,7 @@ public class SocketConnectListener
         if (response.shouldSendNotification())
         {
             socketNotificationHandlerService.notifyPokerGameWithNewSession(
-                response.insecureUserSession().insecureUserIdSecure()
+                response.idsUserSession().idsUserId()
             );
         }
     }

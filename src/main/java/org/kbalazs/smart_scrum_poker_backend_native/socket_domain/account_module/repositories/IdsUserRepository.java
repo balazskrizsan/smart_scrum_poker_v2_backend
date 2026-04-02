@@ -17,7 +17,7 @@ import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IDS_USER_SE
 @Repository
 public class IdsUserRepository extends AbstractRepository
 {
-    public IdsUser createIfNotExist(@NonNull IdsUser newIdsUser)
+    public @NonNull IdsUser createIfNotExist(@NonNull IdsUser newIdsUser)
         throws AccountException
     {
         Optional<IdsUser> idsUser = findById(newIdsUser.id());
@@ -37,7 +37,7 @@ public class IdsUserRepository extends AbstractRepository
         return user.into(IdsUser.class);
     }
 
-    public Optional<IdsUser> findById(@NonNull UUID id)
+    public @NonNull Optional<IdsUser> findById(@NonNull UUID id)
     {
         IdsUser user = getDSLContext()
             .selectFrom(IDS_USER)
@@ -47,7 +47,7 @@ public class IdsUserRepository extends AbstractRepository
         return Optional.ofNullable(user);
     }
 
-    public IdsUser getById(@NonNull UUID id)
+    public @NonNull IdsUser getById(@NonNull UUID id)
         throws AccountException
     {
         IdsUserRecord user = getDSLContext()

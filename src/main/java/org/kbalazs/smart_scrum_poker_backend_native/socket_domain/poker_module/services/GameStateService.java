@@ -47,7 +47,7 @@ public class GameStateService
         );
 
         List<InGamePlayer> inGamePlayers = inGamePlayersService.searchUserSecureIdsByPokerIdSecure(pokerIdSecure);
-        List<UUID> inGameUsersIdSecures = inGamePlayers.stream().map(InGamePlayer::insecureUserIdSecure).toList();
+        List<UUID> inGameUsersIdSecures = inGamePlayers.stream().map(InGamePlayer::idsUserId).toList();
 
         List<IdsUser> idsUsers = idsUserService.findByIdSecureList(inGameUsersIdSecures);
 
