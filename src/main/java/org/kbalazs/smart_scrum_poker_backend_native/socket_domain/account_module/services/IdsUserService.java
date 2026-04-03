@@ -32,7 +32,7 @@ public class IdsUserService
         return newUser;
     }
 
-    public IdsUser findByIdSecure(@NonNull UUID idSecure)
+    public IdsUser getById(@NonNull UUID idSecure)
         throws AccountException
     {
         return idsUserRepository.getById(idSecure);

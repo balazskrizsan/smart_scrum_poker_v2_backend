@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.Configuration;
 import org.kbalazs.smart_scrum_poker_backend_native.common.servies.Slf4jLongTermLoggerService;
 import org.kbalazs.smart_scrum_poker_backend_native.domain_common.services.JooqService;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.services.UuidService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
@@ -33,10 +32,7 @@ public class StartService
     Slf4jLongTermLoggerService slf4jLongTermLoggerService;
 
     public StartPokerResponse start(@NonNull Poker poker, @NonNull List<Ticket> tickets)
-    throws PokerException, AccountException
     {
-        idsUserService.findByIdSecure(poker.createdBy());
-
         var newPoker = jooqService.getDbContext().transactionResult(
             (Configuration config) -> transactionalCreate(poker, tickets)
         );
@@ -46,7 +42,8 @@ public class StartService
         return new StartPokerResponse(newPoker);
     }
 
-    private Poker transactionalCreate(@NonNull Poker poker, @NonNull List<Ticket> tickets) throws PokerException
+    private Poker transactionalCreate(@NonNull Poker poker, @NonNull List<Ticket> tickets)
+        throws PokerException
     {
         try
         {
@@ -60,7 +57,7 @@ public class StartService
 
             ticketService.createAll(
                 tickets.stream()
-                    .map(t -> new Ticket(null, null, newPoker.id(), t.name(), t.isActive()))
+                    .map(t -> new Ticket(null, uuidService.getRandom(), newPoker.id(), t.name(), t.isActive()))
                     .toList()
             );
 

@@ -19,7 +19,7 @@ public class TicketRepository extends AbstractRepository
     {
         getDSLContext()
             .insertInto(TICKET, TICKET.PUBLIC_ID, TICKET.POKER_ID, TICKET.NAME)
-            .valuesOfRows(tickets.stream().map(r -> row(r.idSecure(), r.pokerId(), r.name())).toList())
+            .valuesOfRows(tickets.stream().map(r -> row(r.publicId(), r.pokerId(), r.name())).toList())
             .execute();
     }
 

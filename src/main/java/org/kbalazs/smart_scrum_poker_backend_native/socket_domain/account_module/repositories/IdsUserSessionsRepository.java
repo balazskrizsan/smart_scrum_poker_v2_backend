@@ -50,17 +50,16 @@ public class IdsUserSessionsRepository extends AbstractRepository
     public IdsUserSession getInsecureUserSession(UUID sessionId)
         throws SessionException
     {
-        IdsUserSessionsRecord insecureUserSessionRecord = getDSLContext()
+        IdsUserSessionsRecord idsUserSessionRecord = getDSLContext()
             .selectFrom(IDS_USER_SESSIONS)
             .where(IDS_USER_SESSIONS.SESSION_ID.eq(sessionId))
             .fetchOne();
 
-        // @todo: test
-        if (null == insecureUserSessionRecord)
+        if (null == idsUserSessionRecord)
         {
             throw new SessionException("Session not found: session_id#" + sessionId);
         }
 
-        return insecureUserSessionRecord.into(IdsUserSession.class);
+        return idsUserSessionRecord.into(IdsUserSession.class);
     }
 }

@@ -15,20 +15,21 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.v
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.UUID;
 
 public class RequestMapperService {
     public static LocalDateTime getNow() {
         return new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public static StartPoker mapToEntity(@NonNull StartRequest request) {
+    public static StartPoker mapToEntity(@NonNull StartRequest request, UUID idsUserId) {
         return new StartPoker(
             new Poker(
                 null,
                 null,
                 request.sprintTitle(),
                 getNow(),
-                request.starterInsecureUserId()
+                idsUserId
             ),
             request.ticketNames().stream().map(tn -> new Ticket(null, null, null, tn, false)).toList()
         );

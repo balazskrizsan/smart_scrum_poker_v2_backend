@@ -40,7 +40,7 @@ public class V000001__init extends AbstractBaseJooqMigration
             .execute();
 
         dslContext.createTable("ticket")
-            .column("id", BIGINT.nullable(false))
+            .column("id", BIGINT.nullable(false).identity(true))
             .column("public_id", UUID.nullable(false))
             .column("poker_id", BIGINT.nullable(false))
             .column("name", VARCHAR.nullable(false))

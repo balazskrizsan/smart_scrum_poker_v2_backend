@@ -37,7 +37,7 @@ public class GameStateService
         UUID pokerIdSecure = gameStateRequest.pokerIdSecure();
         UUID insecureUserId = gameStateRequest.insecureUserId();
 
-        IdsUser currentIdsUser = idsUserService.findByIdSecure(insecureUserId);
+        IdsUser currentIdsUser = idsUserService.getById(insecureUserId);
         Poker poker = pokerService.findByIdSecure(pokerIdSecure);
 
         List<Ticket> tickets = ticketService.searchByPokerId(poker.id());
@@ -56,7 +56,7 @@ public class GameStateService
         Map<Long, Map<UUID, Vote>> votes = voteService.getVotesWithTicketGroupByTicketIds(ticketIdList);
         Map<Long, VotesWithVoteStat> votesWithVoteStatList = voteService.getStatByTicketIds(ticketIdList);
 
-        IdsUser owner = idsUserService.findByIdSecure(poker.createdBy());
+        IdsUser owner = idsUserService.getById(poker.createdBy());
 
         List<IdsUser> usersWithSession = idsUserService.searchUsersWithActiveSession(inGameUsersIdSecures);
 

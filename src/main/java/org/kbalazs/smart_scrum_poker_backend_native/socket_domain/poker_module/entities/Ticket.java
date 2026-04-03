@@ -4,6 +4,6 @@ import lombok.NonNull;
 
 import java.util.UUID;
 
-public record Ticket(Long id, UUID idSecure, Long pokerId, @NonNull String name, boolean isActive)
+public record Ticket(Long id, UUID publicId, Long pokerId, @NonNull String name, boolean isActive)
 {
 }

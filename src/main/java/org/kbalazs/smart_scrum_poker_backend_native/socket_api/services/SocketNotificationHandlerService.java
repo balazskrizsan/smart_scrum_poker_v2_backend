@@ -54,7 +54,7 @@ public class SocketNotificationHandlerService
     )
         throws AccountException
     {
-        IdsUser user = idsUserService.findByIdSecure(idsUserId);
+        IdsUser user = idsUserService.getById(idsUserId);
         Map<UUID, Poker> pokers = pokerService.searchWatchedPokers(idsUserId);
         log.info(logMessage, idsUserId, pokers.keySet());
 

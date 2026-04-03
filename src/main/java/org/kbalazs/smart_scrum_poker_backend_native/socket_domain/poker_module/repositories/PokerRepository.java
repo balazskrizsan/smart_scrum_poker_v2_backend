@@ -52,7 +52,7 @@ public class PokerRepository extends AbstractRepository {
 //            .where(IN_POKER_IDS_USERS.IDS_USER_ID.eq(idsUserId))
             .fetchInto(Poker.class)
             .stream()
-            .collect(Collectors.toMap(Poker::idSecure, Function.identity()));
+            .collect(Collectors.toMap(Poker::publicId, Function.identity()));
     }
 
     public List<Poker> searchByInsecureUserId(@NonNull UUID idsUserId) {

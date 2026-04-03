@@ -1,10 +1,13 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.api.builders.ResponseEntityBuilder;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData;
+import org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StartResponse;
@@ -21,12 +24,16 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
+import java.util.UUID;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class StartListener
 {
-    private final StartService startService;
+    StartService startService;
+    SecurityContextFactory securityContextFactory;
 
     @MessageMapping("/poker/start")
     @SendToUser("/queue/reply")
@@ -36,11 +43,15 @@ public class StartListener
     {
         log.info("StartListener:/poker/start: {}", request);
 
-        StartPoker startPoker = RequestMapperService.mapToEntity(request);
+        UUID idsUserId = securityContextFactory.getCurrentUserId();
+
+        StartPoker startPoker = RequestMapperService.mapToEntity(request, idsUserId);
+
+        StartPokerResponse startPokerResponse = startService.start(startPoker.poker(), startPoker.tickets());
 
         return new ResponseEntityBuilder<StartResponse>()
             .socketDestination(SocketDestination.POKER_START)
-//            .data(new StartResponse(startPokerResponse.poker()))
+            .data(new StartResponse(startPokerResponse.poker()))
             .build();
     }
 }

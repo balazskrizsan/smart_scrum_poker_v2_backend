@@ -34,7 +34,7 @@ public class VoteService
 
     public IdsUser vote(@NonNull Vote vote) throws StoryPointException, AccountException
     {
-        IdsUser idsUser = idsUserService.findByIdSecure(vote.createdBy());
+        IdsUser idsUser = idsUserService.getById(vote.createdBy());
 
         Vote calculatedVote = new Vote(
             vote.id(),

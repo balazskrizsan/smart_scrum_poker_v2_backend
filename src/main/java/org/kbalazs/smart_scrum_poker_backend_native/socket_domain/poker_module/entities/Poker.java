@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record Poker(
     Long id,
-    UUID idSecure,
+    UUID publicId,
     @NonNull String name,
     @NonNull LocalDateTime createdAt,
     @NonNull UUID createdBy
