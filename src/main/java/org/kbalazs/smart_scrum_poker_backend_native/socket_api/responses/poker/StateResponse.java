@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public record GameStateResponse(
+public record StateResponse(
     Poker poker,
     List<Ticket> tickets,
     List<IdsUser> inGameIdsUsers,

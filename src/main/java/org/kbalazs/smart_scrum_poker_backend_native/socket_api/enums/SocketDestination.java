@@ -5,7 +5,7 @@ public enum SocketDestination
     SESSION_CREATED_OR_UPDATED("/app/session.created_or_updated"),
     SESSION_CLOSED("/app/session.closed"),
     POKER_START("/app/poker/start"),
-    POKER_GAME_STATE("/app/poker/game.state"),
+    POKER_STATE("/app/poker/state"),
     POKER_ROUND_START("/app/poker/vote.start"),
     POKER_TICKET_CLOSE("/app/poker/ticket.close"),
     SEND__POKER__TICKET_OPEN("/app/poker/ticket.open"),

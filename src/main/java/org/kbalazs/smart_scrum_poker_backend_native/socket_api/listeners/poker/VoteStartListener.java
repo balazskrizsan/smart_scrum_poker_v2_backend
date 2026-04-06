@@ -23,9 +23,9 @@ public class VoteStartListener
     private final VoteStartStopService voteStartStopService;
     private final NotificationService notificationService;
 
-    @MessageMapping("/poker/vote.start/{pokerIdSecure}/{ticketId}")
+    @MessageMapping("/poker/vote.start/{pokerPublicId}/{ticketId}")
     public void voteStartListener(
-        @DestinationVariable("pokerIdSecure") UUID pokerIdSecure,
+        @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )
         throws ApiException, PokerException

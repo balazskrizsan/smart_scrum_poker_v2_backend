@@ -29,15 +29,14 @@ public class PokerRepository extends AbstractRepository {
         return pokerRecord.into(Poker.class);
     }
 
-    // @todo: test not found
-    public Poker findByIdSecure(@NonNull UUID pokerIdSecure) throws PokerException {
+    public Poker findByPublicId(@NonNull UUID pokerPublicId) throws PokerException {
         PokerRecord record = getDSLContext()
             .selectFrom(POKER)
-//            .where(POKER.PUBLIC_ID.eq(pokerIdSecure))
+            .where(POKER.PUBLIC_ID.eq(pokerPublicId))
             .fetchOne();
 
         if (null == record) {
-            throw new PokerException("Poker not found: id#" + pokerIdSecure);
+            throw new PokerException("Poker not found: id#" + pokerPublicId);
         }
 
         return record.into(Poker.class);

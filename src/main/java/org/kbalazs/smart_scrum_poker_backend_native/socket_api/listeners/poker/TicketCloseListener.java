@@ -20,9 +20,9 @@ public class TicketCloseListener
 {
     private final NotificationService notificationService;
 
-    @MessageMapping("/poker/ticket.close/{pokerIdSecure}/{ticketId}")
+    @MessageMapping("/poker/ticket.close/{pokerPublicId}/{ticketId}")
     public void ticketCloseListener(
-        @DestinationVariable("pokerIdSecure") UUID pokerIdSecure,
+        @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )
     throws ApiException

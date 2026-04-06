@@ -1,5 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.config;
 
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.InPokerIdsUser;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -27,24 +28,24 @@ import static org.springframework.aot.hint.MemberCategory.PUBLIC_FIELDS;
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUserSession.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects.ConnectResponse.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects.DisconnectResponse.class,
-    org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.InGamePlayer.class,
+    InPokerIdsUser.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.AddTicket.class,
-    org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.GameStateRequest.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StartPoker.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StartPokerResponse.class,
+    org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StateRequest.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoterLeaving.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoteStat.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VotesWithVoteStat.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoteValues.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.AddTicketResponse.class,
-    org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.GameStateResponse.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.MyPokersResponse.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.RoundStartResponse.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.SessionResponse.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StartResponse.class,
+    org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StateResponse.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.TicketClosed.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.TicketDeleteResponse.class,
     org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.TicketOpened.class,
@@ -77,24 +78,24 @@ public class ReflectionConfiguration
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUserSession.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects.ConnectResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects.DisconnectResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
-                .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.InGamePlayer.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
+                .registerType(InPokerIdsUser.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.AddTicket.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
-                .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.GameStateRequest.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StartPoker.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StartPokerResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
+                .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StateRequest.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoterLeaving.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoteStat.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VotesWithVoteStat.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoteValues.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.AddTicketResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
-                .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.GameStateResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.MyPokersResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.RoundStartResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.SessionResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StartResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
+                .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StateResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.TicketClosed.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.TicketDeleteResponse.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)
                 .registerType(org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.TicketOpened.class, PUBLIC_FIELDS, INVOKE_PUBLIC_METHODS, INVOKE_PUBLIC_CONSTRUCTORS)

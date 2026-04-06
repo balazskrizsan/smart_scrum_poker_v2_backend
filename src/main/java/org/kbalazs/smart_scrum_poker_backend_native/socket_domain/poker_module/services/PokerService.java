@@ -26,9 +26,9 @@ public class PokerService
         return pokerRepository.create(poker);
     }
 
-    public Poker findByIdSecure(@NonNull UUID pokerIdSecure) throws PokerException
+    public Poker findByPublicId(@NonNull UUID pokerIdSecure) throws PokerException
     {
-        return pokerRepository.findByIdSecure(pokerIdSecure);
+        return pokerRepository.findByPublicId(pokerIdSecure);
     }
 
     public Map<UUID, Poker> searchWatchedPokers(@NonNull UUID idsUserId)

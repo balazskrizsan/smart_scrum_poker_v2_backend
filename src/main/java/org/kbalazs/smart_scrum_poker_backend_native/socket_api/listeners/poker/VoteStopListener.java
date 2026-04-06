@@ -24,9 +24,9 @@ public class VoteStopListener
     private final SimpMessagingTemplate template;
     private final VoteStartStopService voteStartStopService;
 
-    @MessageMapping("/poker/vote.stop/{pokerIdSecure}/{ticketId}")
+    @MessageMapping("/poker/vote.stop/{pokerPublicId}/{ticketId}")
     public void voteStopListener(
-        @DestinationVariable("pokerIdSecure") UUID pokerIdSecure,
+        @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )
         throws ApiException, PokerException

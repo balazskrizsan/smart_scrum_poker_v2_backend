@@ -21,14 +21,14 @@ public class VoteStartStopService
 
     public void start(@NonNull UUID pokerIdSecure, long ticketId) throws PokerException
     {
-        pokerService.findByIdSecure(pokerIdSecure);
+        pokerService.findByPublicId(pokerIdSecure);
         voteService.deleteVotesByTicketId(ticketId);
         ticketService.activate(ticketId);
     }
 
     public VotesWithVoteStat stop(@NonNull UUID pokerIdSecure, long ticketId) throws PokerException
     {
-        pokerService.findByIdSecure(pokerIdSecure);
+        pokerService.findByPublicId(pokerIdSecure);
         ticketService.deactivate(ticketId);
 
         return voteService.getStatByTicketId(ticketId);

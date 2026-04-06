@@ -28,10 +28,10 @@ public class VoteListener {
     private final VoteService voteService;
     private final NotificationService notificationService;
 
-    @MessageMapping("/poker/vote/{pokerIdSecure}/{ticketId}")
+    @MessageMapping("/poker/vote/{pokerPublicId}/{ticketId}")
     public void voteListener(
         @Payload VoteRequest voteRequest,
-        @NonNull @DestinationVariable("pokerIdSecure") UUID pokerIdSecure,
+        @NonNull @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @NonNull @DestinationVariable("ticketId") Long ticketId
     )
         throws ApiException, StoryPointException, AccountException

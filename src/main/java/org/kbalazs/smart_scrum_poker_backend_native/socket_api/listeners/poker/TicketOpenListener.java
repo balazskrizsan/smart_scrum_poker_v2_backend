@@ -21,9 +21,9 @@ public class TicketOpenListener
     private final NotificationService notificationService;
 
     // @todo: test
-    @MessageMapping("/poker/ticket.open/{pokerIdSecure}/{ticketId}")
+    @MessageMapping("/poker/ticket.open/{pokerPublicId}/{ticketId}")
     public void ticketCloseListener(
-        @DestinationVariable("pokerIdSecure") UUID pokerIdSecure,
+        @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )
     throws ApiException

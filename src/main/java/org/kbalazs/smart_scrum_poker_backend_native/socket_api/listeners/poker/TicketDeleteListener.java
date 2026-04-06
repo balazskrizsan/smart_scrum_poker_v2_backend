@@ -25,9 +25,9 @@ public class TicketDeleteListener
     NotificationService notificationService;
     TicketService ticketService;
 
-    @MessageMapping("/poker/ticket.delete/{pokerIdSecure}/{ticketId}")
+    @MessageMapping("/poker/ticket.delete/{pokerPublicId}/{ticketId}")
     public void ticketCloseListener(
-        @DestinationVariable("pokerIdSecure") UUID pokerIdSecure,
+        @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )
         throws ApiException

@@ -57,7 +57,7 @@ public class TicketService
     public Ticket addOne(@NonNull AddTicket addTicket) throws PokerException
     {
         // TODO: check if requester is the owner
-        Poker poker = pokerService.findByIdSecure(addTicket.pokerIdSecure());
+        Poker poker = pokerService.findByPublicId(addTicket.pokerIdSecure());
 
         return ticketRepository.addOne(
             new Ticket(null, uuidService.getRandom(), poker.id(), addTicket.ticketName(), false)

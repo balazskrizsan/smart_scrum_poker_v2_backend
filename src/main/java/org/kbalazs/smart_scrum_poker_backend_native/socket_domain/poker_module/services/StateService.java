@@ -4,16 +4,17 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.GameStateResponse;
+import org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StateResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.InGamePlayer;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.InPokerIdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.PokerException;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.GameStateRequest;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StateRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VotesWithVoteStat;
 import org.springframework.stereotype.Service;
 
@@ -24,30 +25,29 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class GameStateService
+public class StateService
 {
     PokerService pokerService;
     IdsUserService idsUserService;
-    InGamePlayersService inGamePlayersService;
+    InPokerIdsUsersService inPokerIdsUsersService;
     TicketService ticketService;
     VoteService voteService;
+    SecurityContextFactory securityContextFactory;
 
-    public GameStateResponse get(@NonNull GameStateRequest gameStateRequest) throws PokerException, AccountException
+    public StateResponse get(@NonNull StateRequest stateRequest) throws PokerException, AccountException
     {
-        UUID pokerIdSecure = gameStateRequest.pokerIdSecure();
-        UUID insecureUserId = gameStateRequest.insecureUserId();
+        UUID pokerPublicId = stateRequest.pokerPublicId();
+        UUID currentIdsUserId = securityContextFactory.getCurrentUserId();
 
-        IdsUser currentIdsUser = idsUserService.getById(insecureUserId);
-        Poker poker = pokerService.findByIdSecure(pokerIdSecure);
+        IdsUser currentIdsUser = idsUserService.getById(currentIdsUserId);
+        Poker poker = pokerService.findByPublicId(pokerPublicId);
 
         List<Ticket> tickets = ticketService.searchByPokerId(poker.id());
 
-        inGamePlayersService.onDuplicateKeyIgnoreAdd(
-            new InGamePlayer(insecureUserId, pokerIdSecure, gameStateRequest.now())
-        );
+        inPokerIdsUsersService.onDuplicateKeyIgnoreAdd(new InPokerIdsUser(currentIdsUserId, poker.id()));
 
-        List<InGamePlayer> inGamePlayers = inGamePlayersService.searchUserSecureIdsByPokerIdSecure(pokerIdSecure);
-        List<UUID> inGameUsersIdSecures = inGamePlayers.stream().map(InGamePlayer::idsUserId).toList();
+        List<InPokerIdsUser> inPokerIdsUsers = inPokerIdsUsersService.searchUserSecureIdsByPokerIdSecure(pokerPublicId);
+        List<UUID> inGameUsersIdSecures = inPokerIdsUsers.stream().map(InPokerIdsUser::idsUserId).toList();
 
         List<IdsUser> idsUsers = idsUserService.findByIdSecureList(inGameUsersIdSecures);
 
@@ -60,7 +60,7 @@ public class GameStateService
 
         List<IdsUser> usersWithSession = idsUserService.searchUsersWithActiveSession(inGameUsersIdSecures);
 
-        return new GameStateResponse(
+        return new StateResponse(
             poker,
             tickets,
             idsUsers,
