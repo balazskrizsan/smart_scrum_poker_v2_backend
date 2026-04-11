@@ -36,20 +36,18 @@ public class StateService
 
     public StateResponse get(@NonNull StateRequest stateRequest) throws PokerException, AccountException
     {
-        UUID pokerPublicId = stateRequest.pokerPublicId();
         UUID currentIdsUserId = securityContextFactory.getCurrentUserId();
-
         IdsUser currentIdsUser = idsUserService.getById(currentIdsUserId);
-        Poker poker = pokerService.findByPublicId(pokerPublicId);
+        Poker poker = pokerService.findByPublicId(stateRequest.pokerPublicId());
 
         List<Ticket> tickets = ticketService.searchByPokerId(poker.id());
 
         inPokerIdsUsersService.onDuplicateKeyIgnoreAdd(new InPokerIdsUser(currentIdsUserId, poker.id()));
 
-        List<InPokerIdsUser> inPokerIdsUsers = inPokerIdsUsersService.searchUserSecureIdsByPokerIdSecure(pokerPublicId);
-        List<UUID> inGameUsersIdSecures = inPokerIdsUsers.stream().map(InPokerIdsUser::idsUserId).toList();
+        List<InPokerIdsUser> inPokerIdsUsers = inPokerIdsUsersService.searchIdsUseIdsByPokerId(poker.id());
+        List<UUID> inPokerIdsUserIds = inPokerIdsUsers.stream().map(InPokerIdsUser::idsUserId).toList();
 
-        List<IdsUser> idsUsers = idsUserService.findByIdSecureList(inGameUsersIdSecures);
+        List<IdsUser> idsUsers = idsUserService.findByIdSecureList(inPokerIdsUserIds);
 
         List<Long> ticketIdList = tickets.stream().map(Ticket::id).toList();
 
@@ -58,7 +56,8 @@ public class StateService
 
         IdsUser owner = idsUserService.getById(poker.createdBy());
 
-        List<IdsUser> usersWithSession = idsUserService.searchUsersWithActiveSession(inGameUsersIdSecures);
+        List<IdsUser> usersWithSession = idsUserService.searchUsersWithActiveSession(inPokerIdsUserIds);
+        idsUserService.findProfileByIdsUserIdList(inPokerIdsUserIds);
 
         return new StateResponse(
             poker,

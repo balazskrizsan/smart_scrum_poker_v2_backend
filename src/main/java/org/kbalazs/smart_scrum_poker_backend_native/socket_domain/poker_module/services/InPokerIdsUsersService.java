@@ -9,7 +9,6 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.r
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +22,8 @@ public class InPokerIdsUsersService
         inPokerIdsUsersRepository.onDuplicateKeyIgnoreAdd(inPokerIdsUser);
     }
 
-    public List<InPokerIdsUser> searchUserSecureIdsByPokerIdSecure(UUID pokerIdSecure)
+    public @NonNull List<InPokerIdsUser> searchIdsUseIdsByPokerId(long pokerId)
     {
-        return inPokerIdsUsersRepository.searchUserSecureIdsByPokerIdSecure(pokerIdSecure);
+        return inPokerIdsUsersRepository.searchIdsUseIdsByPokerId(pokerId);
     }
 }

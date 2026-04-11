@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.repositories.IdsUserApiRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.repositories.IdsUserRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class IdsUserService
 {
     IdsUserRepository idsUserRepository;
+    IdsUserApiRepository idsUserApiRepository;
 
     public @NonNull IdsUser createIfNotExists(@NonNull IdsUser idsUser)
         throws AccountException
@@ -43,8 +45,13 @@ public class IdsUserService
         return idsUserRepository.findByIdSecureList(idSecureList);
     }
 
-    public List<IdsUser> searchUsersWithActiveSession(@NonNull List<UUID> idSecures)
+    public @NonNull List<IdsUser> searchUsersWithActiveSession(@NonNull List<UUID> idSecures)
     {
         return idsUserRepository.searchUsersWithActiveSession(idSecures);
+    }
+
+    public @NonNull void findProfileByIdsUserIdList(@NonNull List<UUID> inPokerIdsUserIds)
+    {
+        idsUserApiRepository.findProfileByIdsUserIdList(inPokerIdsUserIds);
     }
 }
