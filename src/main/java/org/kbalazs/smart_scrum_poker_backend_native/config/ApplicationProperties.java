@@ -67,4 +67,7 @@ public class ApplicationProperties
 
     @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
     private String oauth2JwtJwkSetUri;
+
+    @Value("${ids.api.base-url}")
+    private String idsApiBaseUrl;
 }

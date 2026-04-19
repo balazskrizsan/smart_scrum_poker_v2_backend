@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.repositories.IdsUserApiRepository;
@@ -50,8 +51,10 @@ public class IdsUserService
         return idsUserRepository.searchUsersWithActiveSession(idSecures);
     }
 
-    public @NonNull void findProfileByIdsUserIdList(@NonNull List<UUID> inPokerIdsUserIds)
+    public @NonNull List<UserProfile> findProfileByIdsUserIdList(
+        @NonNull List<UUID> inPokerIdsUserIds
+    )
     {
-        idsUserApiRepository.findProfileByIdsUserIdList(inPokerIdsUserIds);
+        return idsUserApiRepository.findProfileByIdsUserIdList(inPokerIdsUserIds);
     }
 }

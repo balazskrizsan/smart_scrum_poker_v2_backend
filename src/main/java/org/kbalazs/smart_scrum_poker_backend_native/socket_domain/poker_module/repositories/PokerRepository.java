@@ -48,7 +48,7 @@ public class PokerRepository extends AbstractRepository {
             .from(POKER)
             .leftJoin(IN_POKER_IDS_USERS)
             .on(IN_POKER_IDS_USERS.POKER_ID.eq(POKER.ID))
-//            .where(IN_POKER_IDS_USERS.IDS_USER_ID.eq(idsUserId))
+            .where(IN_POKER_IDS_USERS.IDS_USER_ID.eq(idsUserId))
             .fetchInto(Poker.class)
             .stream()
             .collect(Collectors.toMap(Poker::publicId, Function.identity()));

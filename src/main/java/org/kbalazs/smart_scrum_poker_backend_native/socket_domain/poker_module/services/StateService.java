@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StateResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.InPokerIdsUser;
@@ -57,12 +58,12 @@ public class StateService
         IdsUser owner = idsUserService.getById(poker.createdBy());
 
         List<IdsUser> usersWithSession = idsUserService.searchUsersWithActiveSession(inPokerIdsUserIds);
-        idsUserService.findProfileByIdsUserIdList(inPokerIdsUserIds);
+        List<UserProfile> userProfiles = idsUserService.findProfileByIdsUserIdList(inPokerIdsUserIds);
 
         return new StateResponse(
             poker,
             tickets,
-            idsUsers,
+            userProfiles,
             votes,
             owner,
             currentIdsUser,
