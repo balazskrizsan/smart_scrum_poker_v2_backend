@@ -24,18 +24,17 @@ public class MyPokersListener
     private final SimpMessagingTemplate template;
     private final PokerService pokerService;
 
-    @MessageMapping("/poker/my.tickets")
+    @MessageMapping("/poker/my.pokers")
     @SendToUser("/queue/reply")
-    public ResponseEntity<ResponseData<MyPokersResponse>> gameStateListener(
-        @Payload MyPokersRequest myPokersRequest
-    ) throws ApiException
+    public ResponseEntity<ResponseData<MyPokersResponse>> gameStateListener(@Payload MyPokersRequest myPokersRequest)
+        throws ApiException
     {
-        log.info("/poker/my.tickets");
+        log.info("/poker/my.pokers");
 
         return new ResponseEntityBuilder<MyPokersResponse>()
-            .socketDestination(SocketDestination.SEND__POKER__MY_TICKETS)
+            .socketDestination(SocketDestination.SEND__POKER__MY_POKERS)
             .data(new MyPokersResponse(
-                pokerService.searchByInsecureUserId(myPokersRequest.userIdInsecure())
+                pokerService.searchByIdsUserId(myPokersRequest.idsUserId())
             ))
             .build();
     }

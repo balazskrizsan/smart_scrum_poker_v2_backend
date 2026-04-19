@@ -54,10 +54,10 @@ public class PokerRepository extends AbstractRepository {
             .collect(Collectors.toMap(Poker::publicId, Function.identity()));
     }
 
-    public List<Poker> searchByInsecureUserId(@NonNull UUID idsUserId) {
+    public List<Poker> searchIdsUserId(@NonNull UUID idsUserId) {
         return getDSLContext()
             .selectFrom(POKER)
-//            .where(POKER.CREATED_BY.eq(idsUserId))
+            .where(POKER.CREATED_BY.eq(idsUserId))
             .fetchInto(Poker.class);
     }
 }

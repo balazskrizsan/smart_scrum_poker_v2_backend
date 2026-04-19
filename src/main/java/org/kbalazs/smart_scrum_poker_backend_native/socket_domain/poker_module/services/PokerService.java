@@ -36,8 +36,8 @@ public class PokerService
         return pokerRepository.searchWatchedPokers(idsUserId);
     }
 
-    public List<Poker> searchByInsecureUserId(@NonNull UUID idsUserId)
+    public List<Poker> searchByIdsUserId(@NonNull UUID idsUserId)
     {
-        return pokerRepository.searchByInsecureUserId(idsUserId);
+        return pokerRepository.searchIdsUserId(idsUserId);
     }
 }

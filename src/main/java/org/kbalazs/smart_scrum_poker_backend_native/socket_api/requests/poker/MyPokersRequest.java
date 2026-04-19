@@ -4,6 +4,6 @@ import lombok.NonNull;
 
 import java.util.UUID;
 
-public record MyPokersRequest(@NonNull UUID userIdInsecure)
+public record MyPokersRequest(@NonNull UUID idsUserId)
 {
 }
