@@ -8,7 +8,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.Vo
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.VoteResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.NotificationService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.RequestMapperService;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.StoryPointException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.VoteService;
@@ -24,7 +24,8 @@ import static org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.Sock
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class VoteListener {
+public class VoteListener
+{
     private final VoteService voteService;
     private final NotificationService notificationService;
 
@@ -38,8 +39,8 @@ public class VoteListener {
     {
         log.info("VoteListener:/poker/vote/{}/{}: {}", pokerIdSecure, ticketId, voteRequest);
 
-        IdsUser idsUser = voteService.vote(RequestMapperService.mapToEntity(voteRequest));
+        UserProfile userProfile = voteService.vote(RequestMapperService.mapToEntity(voteRequest));
 
-        notificationService.notifyPokerGame(pokerIdSecure, new VoteResponse(idsUser), SEND_POKER_VOTE);
+        notificationService.notifyPokerGame(pokerIdSecure, new VoteResponse(userProfile), SEND_POKER_VOTE);
     }
 }

@@ -51,10 +51,13 @@ public class IdsUserService
         return idsUserRepository.searchUsersWithActiveSession(idSecures);
     }
 
-    public @NonNull List<UserProfile> findProfileByIdsUserIdList(
-        @NonNull List<UUID> inPokerIdsUserIds
-    )
+    public @NonNull UserProfile findProfileByIdsUserId(@NonNull UUID idsUserId)
     {
-        return idsUserApiRepository.findProfileByIdsUserIdList(inPokerIdsUserIds);
+        return idsUserApiRepository.findProfileByIdsUserId(idsUserId);
+    }
+
+    public @NonNull List<UserProfile> findProfileByIdsUserIdList(@NonNull List<UUID> idsUserIdList)
+    {
+        return idsUserApiRepository.findProfileByIdsUserIdList(idsUserIdList);
     }
 }

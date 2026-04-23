@@ -48,8 +48,6 @@ public class StateService
         List<InPokerIdsUser> inPokerIdsUsers = inPokerIdsUsersService.searchIdsUseIdsByPokerId(poker.id());
         List<UUID> inPokerIdsUserIds = inPokerIdsUsers.stream().map(InPokerIdsUser::idsUserId).toList();
 
-        List<IdsUser> idsUsers = idsUserService.findByIdSecureList(inPokerIdsUserIds);
-
         List<Long> ticketIdList = tickets.stream().map(Ticket::id).toList();
 
         Map<Long, Map<UUID, Vote>> votes = voteService.getVotesWithTicketGroupByTicketIds(ticketIdList);

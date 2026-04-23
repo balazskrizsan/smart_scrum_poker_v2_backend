@@ -28,7 +28,11 @@ abstract public class AbstractIdsApiRepository
         this.restClient = restClient;
     }
 
-    public @NonNull <REQ, RES> List<RES> getOrThrow(@NonNull final String uri, REQ request)
+    public @NonNull <REQ, RES> List<RES> getOrThrow(
+        @NonNull final String uri,
+        REQ request,
+        @NonNull ParameterizedTypeReference<List<RES>> typeReference
+    )
     {
         return Objects.requireNonNull(
             restClient.post()
@@ -36,9 +40,7 @@ abstract public class AbstractIdsApiRepository
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
                 .body(request)
                 .retrieve()
-                .body(new ParameterizedTypeReference<>()
-                {
-                })
+                .body(typeReference)
         );
     }
 }

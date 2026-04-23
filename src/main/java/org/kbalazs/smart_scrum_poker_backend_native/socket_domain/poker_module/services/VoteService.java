@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote;
@@ -32,17 +32,12 @@ public class VoteService
     StoryPointCalculatorService storyPointCalculatorService;
     VoteRepository voteRepository;
 
-    public IdsUser vote(@NonNull Vote vote) throws StoryPointException, AccountException
+    public UserProfile vote(@NonNull Vote vote)
+        throws StoryPointException, AccountException
     {
-        IdsUser idsUser = idsUserService.getById(vote.createdBy());
+        UserProfile idsUser = idsUserService.findProfileByIdsUserId(vote.createdBy());
 
-        Vote calculatedVote = new Vote(
-            vote.id(),
-            vote.ticketId(),
-            vote.uncertainty(),
-            vote.complexity(),
-            vote.effort(),
-            vote.risk(),
+        Vote calculatedVote = vote.withCalculatedPoint(
             storyPointCalculatorService.calculate(
                 new VoteValues(
                     false,
@@ -52,9 +47,7 @@ public class VoteService
                     SizeEnum.of(vote.effort()),
                     SizeEnum.of(vote.risk())
                 )
-            ),
-            vote.createdAt(),
-            vote.createdBy()
+            )
         );
 
         voteRepository.create(calculatedVote);
@@ -95,12 +88,13 @@ public class VoteService
 
         Map<Long, VotesWithVoteStat> votesWithVoteStats = new HashMap<>();
 
-        votes.forEach((key, voteMap) -> {
+        votes.forEach((key, voteMap) ->
+            {
             if (voteMap != null) // @todo: test
             {
                 votesWithVoteStats.put(key, calculateStat(voteMap));
             }
-        });
+            });
 
         return votesWithVoteStats;
     }
