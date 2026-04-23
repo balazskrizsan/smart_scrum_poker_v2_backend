@@ -2,6 +2,7 @@ package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest;
@@ -19,28 +20,23 @@ import org.springframework.stereotype.Controller;
 
 import java.util.UUID;
 
+import static lombok.AccessLevel.PRIVATE;
 import static org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination.SEND_POKER_VOTE;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = PRIVATE)
 public class VoteListener
 {
-    private final VoteService voteService;
-    private final NotificationService notificationService;
+    VoteService voteService;
+    NotificationService notificationService;
 
-    @MessageMapping("/poker/vote/{pokerPublicId}/{ticketId}")
-    public void voteListener(
-        @Payload VoteRequest voteRequest,
-        @NonNull @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
-        @NonNull @DestinationVariable("ticketId") Long ticketId
-    )
+    @MessageMapping("/poker/vote/{pokerPublicId}/{ticketId}") // @todo: check if params required
+    public void voteListener(@Payload VoteRequest voteRequest)
         throws ApiException, StoryPointException, AccountException
     {
-        log.info("VoteListener:/poker/vote/{}/{}: {}", pokerIdSecure, ticketId, voteRequest);
-
         UserProfile userProfile = voteService.vote(RequestMapperService.mapToEntity(voteRequest));
 
-        notificationService.notifyPokerGame(pokerIdSecure, new VoteResponse(userProfile), SEND_POKER_VOTE);
+        notificationService.notifyPokerGame(voteRequest.pokerIdSecure(), new VoteResponse(userProfile), SEND_POKER_VOTE);
     }
 }

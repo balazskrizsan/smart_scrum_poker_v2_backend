@@ -1,6 +1,8 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.api.builders.ResponseEntityBuilder;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
@@ -19,10 +21,11 @@ import java.util.UUID;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VoteStopListener
 {
-    private final SimpMessagingTemplate template;
-    private final VoteStartStopService voteStartStopService;
+    SimpMessagingTemplate template;
+    VoteStartStopService voteStartStopService;
 
     @MessageMapping("/poker/vote.stop/{pokerPublicId}/{ticketId}")
     public void voteStopListener(
@@ -31,8 +34,6 @@ public class VoteStopListener
     )
         throws ApiException, PokerException
     {
-        log.info("VoteStopListener:/poker/vote.stop/{}/{}", pokerIdSecure, ticketId);
-
         VotesWithVoteStat votesWithVoteStat = voteStartStopService.stop(pokerIdSecure, ticketId);
 
         template.convertAndSend(

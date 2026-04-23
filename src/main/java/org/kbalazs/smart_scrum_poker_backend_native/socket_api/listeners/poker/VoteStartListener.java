@@ -1,6 +1,8 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.RoundStartResponse;
@@ -18,10 +20,11 @@ import static org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.Sock
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VoteStartListener
 {
-    private final VoteStartStopService voteStartStopService;
-    private final NotificationService notificationService;
+    VoteStartStopService voteStartStopService;
+    NotificationService notificationService;
 
     @MessageMapping("/poker/vote.start/{pokerPublicId}/{ticketId}")
     public void voteStartListener(
@@ -30,8 +33,6 @@ public class VoteStartListener
     )
         throws ApiException, PokerException
     {
-        log.info("VoteStartListener:/poker/vote.start/{}/{}", pokerIdSecure, ticketId);
-
         voteStartStopService.start(pokerIdSecure, ticketId);
 
         notificationService.notifyPokerGame(pokerIdSecure, new RoundStartResponse(ticketId), POKER_ROUND_START);

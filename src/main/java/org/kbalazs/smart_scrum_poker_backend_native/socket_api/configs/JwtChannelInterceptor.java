@@ -9,6 +9,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.SocketCo
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
+import org.springframework.lang.Nullable;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -40,6 +41,7 @@ public class JwtChannelInterceptor implements ChannelInterceptor
     LocalDateTimeFactory localDateTimeFactory;
 
     @Override
+    @Nullable
     public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel)
     {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);

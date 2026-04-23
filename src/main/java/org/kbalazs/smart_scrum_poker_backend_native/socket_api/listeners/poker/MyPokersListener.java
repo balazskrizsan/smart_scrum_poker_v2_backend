@@ -1,7 +1,7 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.api.builders.ResponseEntityBuilder;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData;
@@ -16,21 +16,21 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
-@Slf4j
+import static lombok.AccessLevel.PRIVATE;
+
 @Controller
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = PRIVATE)
 public class MyPokersListener
 {
-    private final SimpMessagingTemplate template;
-    private final PokerService pokerService;
+    SimpMessagingTemplate template;
+    PokerService pokerService;
 
     @MessageMapping("/poker/my.pokers")
     @SendToUser("/queue/reply")
     public ResponseEntity<ResponseData<MyPokersResponse>> gameStateListener(@Payload MyPokersRequest myPokersRequest)
         throws ApiException
     {
-        log.info("/poker/my.pokers");
-
         return new ResponseEntityBuilder<MyPokersResponse>()
             .socketDestination(SocketDestination.SEND__POKER__MY_POKERS)
             .data(new MyPokersResponse(

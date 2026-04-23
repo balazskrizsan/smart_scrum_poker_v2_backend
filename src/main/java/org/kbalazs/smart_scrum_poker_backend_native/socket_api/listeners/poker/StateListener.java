@@ -1,7 +1,7 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.api.builders.ResponseEntityBuilder;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData;
@@ -22,21 +22,23 @@ import org.springframework.stereotype.Controller;
 
 import java.util.UUID;
 
-@Slf4j
+import static lombok.AccessLevel.PRIVATE;
+
 @Controller
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = PRIVATE)
 public class StateListener
 {
-    private final SimpMessagingTemplate template;
-    private final StateService stateService;
+    SimpMessagingTemplate template;
+    StateService stateService;
 
     @MessageMapping("/poker/state/{pokerPublicId}")
     @SendToUser(value = "/queue/reply")
     public ResponseEntity<ResponseData<StateResponse>> gameStateListener(
         @DestinationVariable("pokerPublicId") UUID pokerPublicId
-    ) throws ApiException, PokerException, AccountException
+    )
+        throws ApiException, PokerException, AccountException
     {
-        log.info("Listener:/poker/state/{}", pokerPublicId);
         StateResponse stateResponse = stateService.get(
             new StateRequest(pokerPublicId, RequestMapperService.getNow())
         );
