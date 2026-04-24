@@ -61,15 +61,14 @@ public class VoteService
         return voteRepository.getVotesWithTicketGroupByTicketIds(ticketIds);
     }
 
-    // @todo: test
-    public Map<UUID, Vote> searchVotesWithTicketGroupByTicketId(long ticketId)
+    public @NonNull Map<UUID, Vote> searchVotesWithTicketGroupByTicketId(long ticketId)
     {
         Map<Long, Map<UUID, Vote>> result = voteRepository.getVotesWithTicketGroupByTicketIds(List.of(ticketId));
 
-        return null == result ? Map.of() : result.get(ticketId);
+        return result.isEmpty() ? Map.of() : result.get(ticketId);
     }
 
-    public VotesWithVoteStat getStatByTicketId(long ticketId)
+    public @NonNull VotesWithVoteStat getStatByTicketId(long ticketId)
     {
         Map<UUID, Vote> votes = searchVotesWithTicketGroupByTicketId(ticketId);
 
@@ -101,6 +100,11 @@ public class VoteService
 
     private @NonNull VotesWithVoteStat calculateStat(@NonNull Map<UUID, Vote> votes)
     {
+        if (votes.isEmpty())
+        {
+            return new VotesWithVoteStat(votes, new VoteStat(null, null, null));
+        }
+
         Supplier<Stream<Vote>> valueStreamSupplier = () -> votes.values().stream();
         Supplier<Stream<Short>> calculatedPointStreamSupplier = () ->
             valueStreamSupplier.get().map(Vote::calculatedPoint);

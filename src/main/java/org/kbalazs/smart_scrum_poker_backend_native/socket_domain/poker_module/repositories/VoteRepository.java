@@ -31,7 +31,7 @@ public class VoteRepository extends AbstractRepository {
             .execute();
     }
 
-    public Map<Long, Map<UUID, Vote>> getVotesWithTicketGroupByTicketIds(@NonNull List<Long> ticketIds) {
+    public @NonNull Map<Long, Map<UUID, Vote>> getVotesWithTicketGroupByTicketIds(@NonNull List<Long> ticketIds) {
         return getDSLContext()
             .selectFrom(VOTE)
             .where(VOTE.TICKET_ID.in(ticketIds))
