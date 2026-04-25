@@ -24,7 +24,6 @@ public class SocketDisconnectListener
     SocketNotificationHandlerService socketNotificationHandlerService;
     SocketDisconnectedService socketDisconnectedService;
 
-    // @todo: test
     @EventListener
     public void socketDisconnectListener(@NonNull SessionDisconnectEvent event)
         throws AccountException, SessionException

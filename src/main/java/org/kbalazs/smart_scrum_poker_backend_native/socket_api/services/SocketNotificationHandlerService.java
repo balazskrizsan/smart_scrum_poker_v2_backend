@@ -37,7 +37,6 @@ public class SocketNotificationHandlerService
         );
     }
 
-    // @todo test
     public void notifyPokerGameWithLeavingSession(@NonNull UUID idsUserId) throws AccountException
     {
         notifyPokerGame(
