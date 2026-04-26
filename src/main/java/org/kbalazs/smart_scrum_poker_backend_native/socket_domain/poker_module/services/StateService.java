@@ -39,6 +39,7 @@ public class StateService
     {
         UUID currentIdsUserId = securityContextFactory.getCurrentUserId();
         IdsUser currentIdsUser = idsUserService.getById(currentIdsUserId);
+        UserProfile currentUserProfile = idsUserService.findProfileByIdsUserId(currentIdsUserId);
         Poker poker = pokerService.findByPublicId(stateRequest.pokerPublicId());
 
         List<Ticket> tickets = ticketService.searchByPokerId(poker.id());
@@ -64,9 +65,10 @@ public class StateService
             userProfiles,
             votes,
             owner,
-            currentIdsUser,
             usersWithSession,
-            votesWithVoteStatList // @todo: select only finished votes
+            votesWithVoteStatList, // @todo: select only finished votes
+            currentIdsUser,
+            currentUserProfile
         );
     }
 }

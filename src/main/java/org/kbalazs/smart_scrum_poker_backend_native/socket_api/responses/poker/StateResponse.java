@@ -17,9 +17,10 @@ public record StateResponse(
     List<UserProfile> userProfiles,
     Map<Long, Map<UUID, Vote>> votes, // @todo: remove
     IdsUser owner,
-    IdsUser currentIdsUser,
     List<IdsUser> idsUsersWithSession,
-    Map<Long, VotesWithVoteStat> votesWithVoteStatList
+    Map<Long, VotesWithVoteStat> votesWithVoteStatList,
+    IdsUser currentIdsUser,
+    UserProfile currentUserProfile
 )
 {
 }

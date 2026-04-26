@@ -47,7 +47,7 @@ public class StateListener
             "/queue/reply-" + pokerPublicId,
             new ResponseEntityBuilder<VoteNewJoinerResponse>()
                 .socketDestination(SocketDestination.SEND_POKER_VOTE_NEW_JOINER)
-                .data(new VoteNewJoinerResponse(stateResponse.currentIdsUser()))
+                .data(new VoteNewJoinerResponse(stateResponse.currentUserProfile()))
                 .build()
         );
 
