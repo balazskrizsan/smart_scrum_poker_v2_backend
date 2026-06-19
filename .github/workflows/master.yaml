@@ -95,4 +95,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: kbalazsworks/smart_scrum_poker_backend_native:${{ env.RELEASE_VERSION }}, kbalazsworks/smart_scrum_poker_backend_native:latest, kbalazsworks/smart_scrum_poker_backend_native:commit_sha_short_${{ env.COMMIT_SHA_SHORT }}
+          tags: kbalazsworks/smart_scrum_poker_v2_backend:${{ env.RELEASE_VERSION }}, kbalazsworks/smart_scrum_poker_v2_backend:latest, kbalazsworks/smart_scrum_poker_v2_backend:commit_sha_short_${{ env.COMMIT_SHA_SHORT }}
