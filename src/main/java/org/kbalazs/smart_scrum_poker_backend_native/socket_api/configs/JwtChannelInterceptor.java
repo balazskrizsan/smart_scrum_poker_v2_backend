@@ -34,6 +34,12 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(makeFinal = true, level = PRIVATE)
 public class JwtChannelInterceptor implements ChannelInterceptor
 {
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String SIMP_USER_HEADER = "simpUser";
+    private static final String IDS_USER_ID_HEADER = "idsUserId";
+    private static final int BEARER_PREFIX_LENGTH = BEARER_PREFIX.length();
+
     JwtDecoder jwtDecoder;
     JwtAuthenticationConverter jwtAuthenticationConverter;
     IdsUserService idsUserService;
@@ -45,7 +51,6 @@ public class JwtChannelInterceptor implements ChannelInterceptor
     public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel)
     {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-
         if (accessor == null)
         {
             return message;
@@ -54,45 +59,56 @@ public class JwtChannelInterceptor implements ChannelInterceptor
         if (!StompCommand.CONNECT.equals(accessor.getCommand()))
         {
             setSecurityContext(accessor);
-
             return message;
         }
 
-        String authHeader = accessor.getFirstNativeHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer "))
+        String token = extractBearerToken(accessor);
+        if (token == null)
         {
             log.info("No valid Authorization header found for STOMP CONNECT");
-
             return message;
         }
 
-        String token = authHeader.substring(7);
         try
         {
-            preSendLogic(message, token, accessor);
+            authenticateAndSetUser(message, token, accessor);
         }
         catch (JwtException e)
         {
             log.error("JWT authentication failed: {}", e.getMessage());
-
             throw new SecurityException("Invalid JWT token", e);
         }
 
         return message;
     }
 
-    private void preSendLogic(Message<?> message, String token, StompHeaderAccessor accessor)
+    private void authenticateAndSetUser(Message<?> message, String token, StompHeaderAccessor accessor)
     {
         Jwt jwt = jwtDecoder.decode(token);
-
         Authentication authentication = jwtAuthenticationConverter.convert(jwt);
-        accessor.setUser(authentication);
-        accessor.setHeader("simpUser", authentication);
-        accessor.addNativeHeader("idsUserId", authentication.getName());
 
+        setUserOnAccessor(accessor, authentication);
         log.info("JWT authentication successful for IdsUserId: {}", authentication.getName());
 
         createIdsUserIfNotExists(message, authentication);
+    }
+
+    private void setUserOnAccessor(StompHeaderAccessor accessor, Authentication authentication)
+    {
+        accessor.setUser(authentication);
+        accessor.setHeader(SIMP_USER_HEADER, authentication);
+        accessor.addNativeHeader(IDS_USER_ID_HEADER, authentication.getName());
+    }
+
+    @Nullable
+    private String extractBearerToken(StompHeaderAccessor accessor)
+    {
+        String authHeader = accessor.getFirstNativeHeader(AUTHORIZATION_HEADER);
+        if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX))
+        {
+            return null;
+        }
+        return authHeader.substring(BEARER_PREFIX_LENGTH);
     }
 
     private static void setSecurityContext(@Nonnull StompHeaderAccessor accessor)
