@@ -69,7 +69,7 @@ jobs:
           SOCKET_IS_ENABLED_SOCKET_CONNECT_AND_DISCONNECT_LISTENERS: false
           NATIVE_REFLECTION_CONFIGURATION_GENERATOR_ENABLED: false
           SOCKET_MESSAGE_BROKER_STATS_LOGGING_PERIOD_SECONDS: 6000
-        run: mvn native:compile -Pnative -Dspring.profiles.active=native
+        run: mvn native:compile -Pnative -DskipTests -Dspring.profiles.active=native
 
       - uses: scacap/action-surefire-report@v1
         if: success() || failure()
