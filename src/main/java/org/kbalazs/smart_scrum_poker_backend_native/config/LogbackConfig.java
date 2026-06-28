@@ -27,9 +27,11 @@ public class LogbackConfig {
     @PostConstruct
     public void setupLogger() {
         String currentEnv = applicationProperties.getServerEnv();
+        String currentApp = applicationProperties.getSpringApplicationName();
         log.info(
-            "LogbackConfig setup / logstash enabled: {}, env: {}, url: {}",
+            "LogbackConfig setup / logstash enabled: {}, app: {} env: {}, url: {}",
             applicationProperties.isLogbackLogstashEnabled(),
+            currentApp,
             currentEnv,
             applicationProperties.getLogbackLogstashFullHost()
         );
@@ -56,9 +58,16 @@ public class LogbackConfig {
         ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
         appender.setContext(context);
 
+        String pattern;
+        if (applicationProperties.isLogbackLogColorsEnabled()) {
+            pattern = "%highlight(%d [%thread]) %green([env=%X{env}] [long_term=%X{long_term}]) %highlight(%-5level) %cyan(%logger{35}) - %msg%n";
+        } else {
+            pattern = "%d [%thread] [env=%X{env}] [long_term=%X{long_term}] %-5level %logger{35} - %msg%n";
+        }
+
         PatternLayoutEncoder encoder = new PatternLayoutEncoder();
         encoder.setContext(context);
-        encoder.setPattern("%highlight(%d [%thread]) %green([env=%X{env}] [long_term=%X{long_term}]) %highlight(%-5level) %cyan(%logger{35}) - %msg%n");
+        encoder.setPattern(pattern);
         encoder.setCharset(java.nio.charset.StandardCharsets.UTF_8);
         encoder.start();
 
@@ -73,11 +82,22 @@ public class LogbackConfig {
 
         LogstashTcpSocketAppender appender = new LogstashTcpSocketAppender();
         appender.setContext(context);
-        appender.addDestination(applicationProperties.getLogbackLogstashFullHost());
-
-        appender.setEncoder(new LogstashEncoder());
-        appender.start();
+        try {
+            appender.addDestination(applicationProperties.getLogbackLogstashFullHost());
+            appender.setEncoder(getLogstashEncoder(context));
+            appender.start();
+        } catch (Exception e) {
+            log.error("Logstash connection error", e);
+        }
 
         return appender;
+    }
+
+    private LogstashEncoder getLogstashEncoder(@NonNull LoggerContext context) {
+        LogstashEncoder encoder = new LogstashEncoder();
+        encoder.setContext(context);
+        encoder.setIncludeMdcKeyNames(java.util.List.of("env", "long_term"));
+        encoder.start();
+        return encoder;
     }
 }
