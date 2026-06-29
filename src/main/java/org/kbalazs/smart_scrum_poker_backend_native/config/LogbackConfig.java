@@ -58,26 +58,32 @@ public class LogbackConfig {
         ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
         appender.setContext(context);
 
-        String pattern;
-        if (applicationProperties.isLogbackLogColorsEnabled()) {
-            pattern = "%highlight(%d [%thread]) %green([env=%X{env}] [long_term=%X{long_term}]) %highlight(%-5level) %cyan(%logger{35}) - %msg%n";
+        String logType = applicationProperties.getLogbackLogType();
+        if ("TEXT".equals(logType) || "COLOR_TEXT".equals(logType)) {
+            String pattern;
+            if ("COLOR_TEXT".equals(logType)) {
+                pattern = "%highlight(%d [%thread]) %green([env=%X{env}] [long_term=%X{long_term}]) %highlight(%-5level) %cyan(%logger{35}) - %msg%n";
+            } else {
+                pattern = "%d [%thread] [env=%X{env}] [long_term=%X{long_term}] %-5level %logger{35} - %msg%n";
+            }
+
+            PatternLayoutEncoder encoder = new PatternLayoutEncoder();
+            encoder.setContext(context);
+            encoder.setPattern(pattern);
+            encoder.setCharset(java.nio.charset.StandardCharsets.UTF_8);
+            encoder.start();
+
+            appender.setEncoder(encoder);
+            appender.start();
         } else {
-            pattern = "%d [%thread] [env=%X{env}] [long_term=%X{long_term}] %-5level %logger{35} - %msg%n";
+            appender.setEncoder(getLogstashEncoder(context));
+            appender.start();
         }
-
-        PatternLayoutEncoder encoder = new PatternLayoutEncoder();
-        encoder.setContext(context);
-        encoder.setPattern(pattern);
-        encoder.setCharset(java.nio.charset.StandardCharsets.UTF_8);
-        encoder.start();
-
-        appender.setEncoder(encoder);
-        appender.start();
 
         return appender;
     }
 
-    private LogstashTcpSocketAppender getLogstashTcpSocketAppender(@NonNull LoggerContext context) {
+    private @NonNull LogstashTcpSocketAppender getLogstashTcpSocketAppender(@NonNull LoggerContext context) {
         log.info("LogbackConfig logstash created");
 
         LogstashTcpSocketAppender appender = new LogstashTcpSocketAppender();
@@ -93,11 +99,12 @@ public class LogbackConfig {
         return appender;
     }
 
-    private LogstashEncoder getLogstashEncoder(@NonNull LoggerContext context) {
+    private @NonNull LogstashEncoder getLogstashEncoder(@NonNull LoggerContext context) {
         LogstashEncoder encoder = new LogstashEncoder();
         encoder.setContext(context);
         encoder.setIncludeMdcKeyNames(java.util.List.of("env", "long_term"));
         encoder.start();
+
         return encoder;
     }
 }

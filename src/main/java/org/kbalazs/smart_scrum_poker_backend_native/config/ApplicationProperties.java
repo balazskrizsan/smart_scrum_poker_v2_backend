@@ -65,8 +65,8 @@ public class ApplicationProperties
     @Value("${logback.logstash.full_host}")
     private String logbackLogstashFullHost;
 
-    @Value("${logback.log.colors.enabled}")
-    private boolean logbackLogColorsEnabled;
+    @Value("${logback.log-type}")
+    private String logbackLogType;
 
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String oauth2JwtIssuerUri;
