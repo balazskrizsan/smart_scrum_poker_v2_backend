@@ -38,7 +38,7 @@ public class LogbackConfig {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         context.reset();
-        context.addTurboFilter(new LogbackMdcTurboFilter(currentEnv, logBackState));
+        context.addTurboFilter(new LogbackMdcTurboFilter(currentEnv, currentApp, logBackState));
 
         ch.qos.logback.classic.Logger rootLogger = context.getLogger(Logger.ROOT_LOGGER_NAME);
         rootLogger.detachAndStopAllAppenders();
@@ -62,9 +62,9 @@ public class LogbackConfig {
         if ("TEXT".equals(logType) || "COLOR_TEXT".equals(logType)) {
             String pattern;
             if ("COLOR_TEXT".equals(logType)) {
-                pattern = "%highlight(%d [%thread]) %green([env=%X{env}] [long_term=%X{long_term}]) %highlight(%-5level) %cyan(%logger{35}) - %msg%n";
+                pattern = "%highlight(%d [%thread]) %green([env=%X{env}] [app=%X{app}] [long_term=%X{long_term}]) %highlight(%-5level) %cyan(%logger{35}) - %msg%n";
             } else {
-                pattern = "%d [%thread] [env=%X{env}] [long_term=%X{long_term}] %-5level %logger{35} - %msg%n";
+                pattern = "%d [%thread] [env=%X{env}] [app=%X{app}] [long_term=%X{long_term}] %-5level %logger{35} - %msg%n";
             }
 
             PatternLayoutEncoder encoder = new PatternLayoutEncoder();
@@ -102,7 +102,7 @@ public class LogbackConfig {
     private @NonNull LogstashEncoder getLogstashEncoder(@NonNull LoggerContext context) {
         LogstashEncoder encoder = new LogstashEncoder();
         encoder.setContext(context);
-        encoder.setIncludeMdcKeyNames(java.util.List.of("env", "long_term"));
+        encoder.setIncludeMdcKeyNames(java.util.List.of("env", "app", "long_term"));
         encoder.start();
 
         return encoder;

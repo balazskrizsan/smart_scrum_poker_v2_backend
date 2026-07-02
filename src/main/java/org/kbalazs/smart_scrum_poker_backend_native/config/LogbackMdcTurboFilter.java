@@ -15,10 +15,12 @@ import org.slf4j.Marker;
 public class LogbackMdcTurboFilter extends TurboFilter
 {
     String serverEnv;
+    String appName;
     LogBackState logBackState;
 
     public static final String LONG_TERM_MDC_NAME = "long_term";
     public static final String ENV_MDC_NAME = "env";
+    public static final String APP_MDC_NAME = "app";
 
     @Override
     public FilterReply decide(Marker marker, Logger logger, Level level, String s, Object[] objects, Throwable throwable)
@@ -26,6 +28,11 @@ public class LogbackMdcTurboFilter extends TurboFilter
         if (MDC.get(ENV_MDC_NAME) == null)
         {
             MDC.put(ENV_MDC_NAME, serverEnv);
+        }
+
+        if (MDC.get(APP_MDC_NAME) == null)
+        {
+            MDC.put(APP_MDC_NAME, appName);
         }
 
         MDC.put(LONG_TERM_MDC_NAME, String.valueOf(logBackState.getThreadLocalLongTermLogState().get()));
