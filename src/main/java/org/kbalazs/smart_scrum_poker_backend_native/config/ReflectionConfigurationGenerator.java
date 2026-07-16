@@ -45,7 +45,13 @@ public class ReflectionConfigurationGenerator
                     "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.value_objects",
                     "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities",
                     "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects",
-                    "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker"
+                    "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.dtos",
+                    "org.kbalazs.smart_scrum_poker_backend_native.exceptions",
+                    "org.kbalazs.smart_scrum_poker_backend_native.listeners.poker",
+                    "org.kbalazs.smart_scrum_poker_backend_native.listeners.poker",
+                    "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker",
+                    "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.account",
+                    "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker"
                 ),
                 List.of(
                     ResponseEntity.class,
