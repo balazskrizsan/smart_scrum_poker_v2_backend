@@ -69,6 +69,9 @@ jobs:
           SOCKET_IS_ENABLED_SOCKET_CONNECT_AND_DISCONNECT_LISTENERS: false
           NATIVE_REFLECTION_CONFIGURATION_GENERATOR_ENABLED: false
           SOCKET_MESSAGE_BROKER_STATS_LOGGING_PERIOD_SECONDS: 6000
+          IDS_API_BASE_URL: https://localhost:4040
+          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
+          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
         run: mvn native:compile -Pnative -DskipTests -Dspring.profiles.active=native
 
       - uses: scacap/action-surefire-report@v1
