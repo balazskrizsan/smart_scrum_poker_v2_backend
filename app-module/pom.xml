@@ -178,11 +178,15 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>org.kbalazs.smart_scrum_poker_backend_native.SmartScrumPokerBackendNativeApplication</mainClass>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>org.kbalazs.smart_scrum_poker_backend_native.SmartScrumPokerBackendNativeApplication</mainClass>
                     <buildArgs>
                         <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
                         <buildArg>-H:IncludeResources=logback-spring.xml</buildArg>
