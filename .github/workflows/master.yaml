@@ -72,7 +72,7 @@ jobs:
           IDS_API_BASE_URL: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
-        run: mvn native:compile -Pnative -DskipTests -Dspring.profiles.active=native
+        run: mvn -pl app-module -am native:compile -Pnative -DskipTests -Dspring.profiles.active=native
 
       - uses: scacap/action-surefire-report@v1
         if: success() || failure()
