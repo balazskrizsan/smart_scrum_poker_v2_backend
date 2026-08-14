@@ -186,6 +186,7 @@
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
                 <configuration>
+                    <imageName>smart_scrum_poker_backend_native</imageName>
                     <mainClass>org.kbalazs.smart_scrum_poker_backend_native.SmartScrumPokerBackendNativeApplication</mainClass>
                     <buildArgs>
                         <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>

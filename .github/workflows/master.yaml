@@ -91,10 +91,14 @@ jobs:
           pwd
           echo "===========> ls -hal:"
           ls -hal
-          echo "===========> ls -hal /src:"
-          ls -hal ./src
-          echo "===========> ls -hal /target:"
-          ls -hal ./target
+          echo "===========> ls -hal app-module/src:"
+          ls -hal ./app-module/src
+          echo "===========> ls -hal app-module/target:"
+          ls -hal ./app-module/target
+          echo "===========> ls -hal db-module/src:"
+          ls -hal ./db-module/src
+          echo "===========> ls -hal db-module/target:"
+          ls -hal ./db-module/target
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
