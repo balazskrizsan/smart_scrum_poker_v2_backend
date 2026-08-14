@@ -10,8 +10,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>app-module</module>
         <module>db-module</module>
+        <module>app-module</module>
     </modules>
 
     <properties>
