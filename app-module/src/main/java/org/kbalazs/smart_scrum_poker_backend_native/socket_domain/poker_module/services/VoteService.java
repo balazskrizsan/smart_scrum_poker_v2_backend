@@ -1,5 +1,7 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -7,9 +9,14 @@ import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.enums.SizeEnum;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.StoryPointException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.repositories.PokerRepository;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.repositories.StoryPointConfigRepository;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.repositories.TicketRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.repositories.VoteRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoteStat;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoteValues;
@@ -31,28 +38,53 @@ public class VoteService
     IdsUserService idsUserService;
     StoryPointCalculatorService storyPointCalculatorService;
     VoteRepository voteRepository;
+    StoryPointConfigRepository storyPointConfigRepository;
+    PokerRepository pokerRepository;
+    TicketRepository ticketRepository;
+    ObjectMapper objectMapper;
 
     public UserProfile vote(@NonNull Vote vote)
         throws StoryPointException, AccountException
     {
         UserProfile idsUser = idsUserService.findProfileByIdsUserId(vote.createdBy());
 
-        Vote calculatedVote = vote.withCalculatedPoint(
-            storyPointCalculatorService.calculate(
-                new VoteValues(
-                    false,
-                    false,
-                    SizeEnum.of(vote.uncertainty()),
-                    SizeEnum.of(vote.complexity()),
-                    SizeEnum.of(vote.effort()),
-                    SizeEnum.of(vote.risk())
-                )
-            )
-        );
+        Ticket ticket = ticketRepository.findById(vote.ticketId())
+            .orElseThrow(() -> new StoryPointException("Ticket not found: " + vote.ticketId()));
 
-        voteRepository.create(calculatedVote);
+        Poker poker = pokerRepository.findById(ticket.pokerId())
+            .orElseThrow(() -> new StoryPointException("Poker not found for ticket: " + vote.ticketId()));
 
-        return idsUser;
+        StoryPointConfig config = poker.storyPointConfigId() != null
+            ? storyPointConfigRepository.findById(poker.storyPointConfigId())
+                .orElseThrow(() -> new StoryPointException("Story point config not found: " + poker.storyPointConfigId()))
+            : storyPointConfigRepository.findDefaultConfig()
+                .orElseThrow(() -> new StoryPointException("Default story point config not found"));
+
+        try
+        {
+            // Parse vote values JSON
+            Map<String, String> dimensionValues = objectMapper.readValue(
+                vote.voteValues(),
+                new TypeReference<Map<String, String>>() {}
+            );
+
+            Vote calculatedVote = vote
+                .withStoryPointConfigId(config.id())
+                .withCalculatedPoint(
+                    storyPointCalculatorService.calculate(
+                        new VoteValues(false, false, dimensionValues),
+                        config
+                    )
+                );
+
+            voteRepository.create(calculatedVote);
+
+            return idsUser;
+        }
+        catch (Exception e)
+        {
+            throw new StoryPointException("Error processing vote: " + e.getMessage(), e);
+        }
     }
 
     // @todo: rename to search

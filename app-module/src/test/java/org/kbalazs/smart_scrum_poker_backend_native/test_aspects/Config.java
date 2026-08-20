@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class Config
 {
     @Bean
-    public SqlPresetAspect getSqlPresetAspectBean() {
+    public SqlPresetAspect getSqlPresetAspectBean()
+    {
         return Aspects.aspectOf(SqlPresetAspect.class);
     }
 }

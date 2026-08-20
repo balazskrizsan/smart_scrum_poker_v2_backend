@@ -29,20 +29,26 @@ public class RequestMapperService {
                 null,
                 request.sprintTitle(),
                 getNow(),
-                idsUserId
+                idsUserId,
+                null
             ),
             request.ticketNames().stream().map(tn -> new Ticket(null, null, null, tn, false)).toList()
         );
     }
 
     public static Vote mapToEntity(@NonNull final VoteRequest voteRequest) {
-        return new Vote(
-            null,
-            voteRequest.ticketId(),
+        String voteValuesJson = String.format(
+            "{\"uncertainty\":%d,\"complexity\":%d,\"effort\":%d,\"risk\":%d}",
             voteRequest.voteUncertainty(),
             voteRequest.voteComplexity(),
             voteRequest.voteEffort(),
-            voteRequest.voteRisk(),
+            voteRequest.voteRisk()
+        );
+        return new Vote(
+            null,
+            voteRequest.ticketId(),
+            null,
+            voteValuesJson,
             null,
             getNow(),
             voteRequest.userIdSecure()
