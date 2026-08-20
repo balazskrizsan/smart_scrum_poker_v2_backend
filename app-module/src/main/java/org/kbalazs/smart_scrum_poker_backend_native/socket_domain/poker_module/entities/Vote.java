@@ -9,10 +9,9 @@ import java.util.UUID;
 public record Vote(
     Long id,
     Long ticketId,
-    short uncertainty,
-    short complexity,
-    short effort,
-    short risk,
+    @With
+    Long storyPointConfigId,
+    @NonNull String voteValues,
     @With
     Short calculatedPoint,
     @NonNull LocalDateTime createdAt,

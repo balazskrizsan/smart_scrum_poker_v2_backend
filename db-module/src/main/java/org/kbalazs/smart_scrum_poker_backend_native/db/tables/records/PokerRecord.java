@@ -90,6 +90,20 @@ public class PokerRecord extends UpdatableRecordImpl<PokerRecord> {
         return (UUID) get(4);
     }
 
+    /**
+     * Setter for <code>public.poker.story_point_config_id</code>.
+     */
+    public void setStoryPointConfigId(Long value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>public.poker.story_point_config_id</code>.
+     */
+    public Long getStoryPointConfigId() {
+        return (Long) get(5);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -113,7 +127,7 @@ public class PokerRecord extends UpdatableRecordImpl<PokerRecord> {
     /**
      * Create a detached, initialised PokerRecord
      */
-    public PokerRecord(Long id, UUID publicId, String name, LocalDateTime createdAt, UUID createdBy) {
+    public PokerRecord(Long id, UUID publicId, String name, LocalDateTime createdAt, UUID createdBy, Long storyPointConfigId) {
         super(Poker.POKER);
 
         setId(id);
@@ -121,6 +135,7 @@ public class PokerRecord extends UpdatableRecordImpl<PokerRecord> {
         setName(name);
         setCreatedAt(createdAt);
         setCreatedBy(createdBy);
+        setStoryPointConfigId(storyPointConfigId);
         resetChangedOnNotNull();
     }
 }

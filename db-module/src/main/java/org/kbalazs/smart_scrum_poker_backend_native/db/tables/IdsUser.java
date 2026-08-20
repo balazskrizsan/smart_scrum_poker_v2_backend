@@ -35,6 +35,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.db.Public;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUserSessions.IdsUserSessionsPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InPokerIdsUsers.InPokerIdsUsersPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Poker.PokerPath;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.StoryPointConfig.StoryPointConfigPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Ticket.TicketPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Vote.VotePath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserRecord;
@@ -179,6 +180,19 @@ public class IdsUser extends TableImpl<IdsUserRecord> {
             _poker = new PokerPath(this, null, Keys.POKER__POKER__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE.getInverseKey());
 
         return _poker;
+    }
+
+    private transient StoryPointConfigPath _storyPointConfig;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.story_point_config</code> table
+     */
+    public StoryPointConfigPath storyPointConfig() {
+        if (_storyPointConfig == null)
+            _storyPointConfig = new StoryPointConfigPath(this, null, Keys.STORY_POINT_CONFIG__STORY_POINT_CONFIG__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_.getInverseKey());
+
+        return _storyPointConfig;
     }
 
     private transient VotePath _vote;

@@ -1,65 +1,110 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AccessLevel;
 import lombok.NonNull;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.enums.SizeEnum;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.StoryPointException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.repositories.StoryPointConfigRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoteValues;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StoryPointCalculatorService
 {
-    private static final NavigableMap<Integer, Integer> POINTS_MAP = new TreeMap<>()
-    {{
-        put(4, 1);    // 1 1 1 1 = 4
-        put(5, 2);    // 1 1 1 2 = 5
-        put(7, 3);    // 1 1 2 2 = 6 | 1 1 1 3 = 6 | 1 1 2 3 = 7 | 1 2 2 2 = 7
-        put(9, 5);    // 2 2 2 2 = 8 | 3 2 2 2 = 9
-        put(11, 8);   // 3 3 2 2 = 10 | 3 3 3 2 = 11 | 3 3 3 1 = 10
-        put(12, 13);  // 3 3 3 3 = 12
-        put(20, 20);  // 1 1 1 10 = 14 | 3 3 3 10 = 19
-        put(30, 50);  // 1 1 10 10 = 22 | 3 3 10 10 = 26
-        put(Integer.MAX_VALUE, 100); // all the rest
-    }};
+    StoryPointConfigRepository storyPointConfigRepository;
+    ObjectMapper objectMapper;
 
-    public Short calculate(@NonNull final VoteValues voteValues) throws StoryPointException
+    public Short calculate(@NonNull final VoteValues voteValues, @NonNull final StoryPointConfig config) throws StoryPointException
     {
-        validateVoteValues(voteValues);
-
         if (voteValues.questionMark() || voteValues.coffeeMug())
         {
             return 0;
         }
 
-        int total = voteValues.uncertainty().val()  // s=1/m=2/l=3/xxl=4
-                    + voteValues.complexity().val() // s=1/m=2/l=3/xxl=4
-                    + voteValues.effort().val()     // s=1/m=2/l=3/xxl=4
-                    + voteValues.risk().val();      // s=1/m=2/l=3/xxl=4
-
-        return POINTS_MAP.ceilingEntry(total).getValue().shortValue();
-    }
-
-    private void validateVoteValues(@NonNull final VoteValues voteValues) throws StoryPointException
-    {
-        validateSingleValue("uncertainty", voteValues.uncertainty());
-        validateSingleValue("complexity", voteValues.complexity());
-        validateSingleValue("effort", voteValues.effort());
-        validateSingleValue("voteRisk", voteValues.risk());
-    }
-
-    private void validateSingleValue(final @NonNull String fieldName, @NonNull final SizeEnum size) throws
-        StoryPointException
-    {
-        List<SizeEnum> allowedValues = Arrays.stream(SizeEnum.values()).toList();
-
-        if (!allowedValues.contains(size))
+        try
         {
-            throw new StoryPointException("Size validation error: " + fieldName + " is invalid: " + size.val());
+            // Parse dimensions config
+            List<Map<String, Object>> dimensionsConfig = objectMapper.readValue(
+                config.dimensionsConfig(),
+                new TypeReference<List<Map<String, Object>>>() {}
+            );
+
+            // Parse sizes config
+            List<Map<String, Object>> sizesConfig = objectMapper.readValue(
+                config.sizesConfig(),
+                new TypeReference<List<Map<String, Object>>>() {}
+            );
+
+            // Create size name to value mapping
+            Map<String, Integer> sizeNameToValue = sizesConfig.stream()
+                .collect(
+                    java.util.stream.Collectors.toMap(
+                        dim -> (String) dim.get("name"),
+                        dim -> ((Number) dim.get("value")).intValue()
+                    )
+                );
+
+            // Calculate total based on dimension values
+            int total = 0;
+            for (Map<String, Object> dimension : dimensionsConfig)
+            {
+                String dimensionName = (String) dimension.get("name");
+                @SuppressWarnings("unchecked")
+                Map<String, Integer> sizeValues = (Map<String, Integer>) dimension.get("sizeValues");
+
+                String selectedSize = voteValues.dimensionValues().get(dimensionName);
+                if (selectedSize != null && sizeValues != null)
+                {
+                    total += sizeValues.getOrDefault(selectedSize, 0);
+                }
+            }
+
+            // Parse points mapping and find matching range
+            List<Map<String, Object>> pointsMapping = objectMapper.readValue(
+                config.pointsMapping(),
+                new TypeReference<List<Map<String, Object>>>() {}
+            );
+
+            for (Map<String, Object> mapping : pointsMapping)
+            {
+                @SuppressWarnings("unchecked")
+                List<Integer> range = (List<Integer>) mapping.get("totalRange");
+                int minRange = range.get(0);
+                int maxRange = range.get(1);
+
+                if (total >= minRange && total <= maxRange)
+                {
+                    return ((Number) mapping.get("points")).shortValue();
+                }
+            }
+
+            // Default fallback
+            return 100;
         }
+        catch (Exception e)
+        {
+            throw new StoryPointException("Error calculating story points: " + e.getMessage(), e);
+        }
+    }
+
+    public Short calculate(@NonNull final VoteValues voteValues) throws StoryPointException
+    {
+        return calculate(voteValues, getDefaultConfig());
+    }
+
+    private StoryPointConfig getDefaultConfig() throws StoryPointException
+    {
+        return storyPointConfigRepository.findDefaultConfig()
+            .orElseThrow(() -> new StoryPointException("Default story point config not found"));
     }
 }

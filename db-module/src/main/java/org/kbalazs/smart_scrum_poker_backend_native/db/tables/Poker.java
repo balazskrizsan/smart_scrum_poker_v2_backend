@@ -35,6 +35,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.db.Keys;
 import org.kbalazs.smart_scrum_poker_backend_native.db.Public;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUser.IdsUserPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InPokerIdsUsers.InPokerIdsUsersPath;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.StoryPointConfig.StoryPointConfigPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Ticket.TicketPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.PokerRecord;
 
@@ -84,6 +85,11 @@ public class Poker extends TableImpl<PokerRecord> {
      * The column <code>public.poker.created_by</code>.
      */
     public final TableField<PokerRecord, UUID> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.UUID.nullable(false), this, "");
+
+    /**
+     * The column <code>public.poker.story_point_config_id</code>.
+     */
+    public final TableField<PokerRecord, Long> STORY_POINT_CONFIG_ID = createField(DSL.name("story_point_config_id"), SQLDataType.BIGINT, this, "");
 
     private Poker(Name alias, Table<PokerRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -169,7 +175,7 @@ public class Poker extends TableImpl<PokerRecord> {
 
     @Override
     public List<ForeignKey<PokerRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.POKER__POKER__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE);
+        return Arrays.asList(Keys.POKER__POKER__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE, Keys.POKER__POKER__FK___STORY_POINT_CONFIG_ID___STORY_POINT_CONFIG__ID___ON);
     }
 
     private transient IdsUserPath _idsUser;
@@ -182,6 +188,19 @@ public class Poker extends TableImpl<PokerRecord> {
             _idsUser = new IdsUserPath(this, Keys.POKER__POKER__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE, null);
 
         return _idsUser;
+    }
+
+    private transient StoryPointConfigPath _storyPointConfig;
+
+    /**
+     * Get the implicit join path to the <code>public.story_point_config</code>
+     * table.
+     */
+    public StoryPointConfigPath storyPointConfig() {
+        if (_storyPointConfig == null)
+            _storyPointConfig = new StoryPointConfigPath(this, Keys.POKER__POKER__FK___STORY_POINT_CONFIG_ID___STORY_POINT_CONFIG__ID___ON, null);
+
+        return _storyPointConfig;
     }
 
     private transient InPokerIdsUsersPath _inPokerIdsUsers;

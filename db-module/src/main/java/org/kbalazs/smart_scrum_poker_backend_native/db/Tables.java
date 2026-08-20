@@ -9,6 +9,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUserSessions;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InPokerIdsUsers;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Poker;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Vote;
 
@@ -43,6 +44,11 @@ public class Tables {
      * The table <code>public.poker</code>.
      */
     public static final Poker POKER = Poker.POKER;
+
+    /**
+     * The table <code>public.story_point_config</code>.
+     */
+    public static final StoryPointConfig STORY_POINT_CONFIG = StoryPointConfig.STORY_POINT_CONFIG;
 
     /**
      * The table <code>public.ticket</code>.
