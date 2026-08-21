@@ -30,8 +30,12 @@ public class VoteListener
     public void voteListener(@Payload VoteRequest voteRequest)
         throws ApiException, StoryPointException, AccountException
     {
-        UserProfile userProfile = voteService.vote(RequestMapperService.mapToEntity(voteRequest));
+        var voteWithCalculatedPoint = voteService.vote(RequestMapperService.mapToEntity(voteRequest));
 
-        notificationService.notifyPokerGame(voteRequest.pokerIdSecure(), new VoteResponse(userProfile), SEND_POKER_VOTE);
+        notificationService.notifyPokerGame(
+            voteRequest.pokerIdSecure(),
+            new VoteResponse(voteWithCalculatedPoint.userProfile(), voteWithCalculatedPoint.calculatedPoint()),
+            SEND_POKER_VOTE
+        );
     }
 }

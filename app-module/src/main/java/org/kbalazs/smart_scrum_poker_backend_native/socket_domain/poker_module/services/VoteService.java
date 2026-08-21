@@ -43,7 +43,7 @@ public class VoteService
     TicketRepository ticketRepository;
     ObjectMapper objectMapper;
 
-    public UserProfile vote(@NonNull Vote vote)
+    public VoteWithCalculatedPoint vote(@NonNull Vote vote)
         throws StoryPointException, AccountException
     {
         UserProfile idsUser = idsUserService.findProfileByIdsUserId(vote.createdBy());
@@ -68,18 +68,18 @@ public class VoteService
                 new TypeReference<Map<String, String>>() {}
             );
 
+            short calculatedPoint = storyPointCalculatorService.calculate(
+                new VoteValues(false, false, dimensionValues),
+                config
+            );
+
             Vote calculatedVote = vote
                 .withStoryPointConfigId(config.id())
-                .withCalculatedPoint(
-                    storyPointCalculatorService.calculate(
-                        new VoteValues(false, false, dimensionValues),
-                        config
-                    )
-                );
+                .withCalculatedPoint(calculatedPoint);
 
             voteRepository.create(calculatedVote);
 
-            return idsUser;
+            return new VoteWithCalculatedPoint(idsUser, calculatedPoint);
         }
         catch (Exception e)
         {
@@ -146,5 +146,9 @@ public class VoteService
         short max = calculatedPointStreamSupplier.get().max(Short::compare).orElseThrow();
 
         return new VotesWithVoteStat(votes, new VoteStat(avg, min, max));
+    }
+
+    public record VoteWithCalculatedPoint(UserProfile userProfile, short calculatedPoint)
+    {
     }
 }

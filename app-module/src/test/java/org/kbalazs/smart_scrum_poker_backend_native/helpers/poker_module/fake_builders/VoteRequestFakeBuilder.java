@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Accessors(fluent = true)
@@ -18,10 +20,15 @@ public class VoteRequestFakeBuilder
     UUID userIdSecure = VoteFakeBuilder.defaultCreatedBy;
     UUID pokerIdSecure =  PokerFakeBuilder.defaultIdSecure1;
     long ticketId = VoteFakeBuilder.defaultTicketId;
-    short voteUncertainty = VoteFakeBuilder.defaultUncertainty;
-    short voteComplexity = VoteFakeBuilder.defaultComplexity;
-    short voteEffort = VoteFakeBuilder.defaultEffort;
-    short voteRisk = VoteFakeBuilder.defaultRisk;
+    Map<String, String> dimensionValues = new HashMap<>();
+
+    public VoteRequestFakeBuilder() {
+        // Default values for backward compatibility
+        dimensionValues.put("uncertainty", "M");
+        dimensionValues.put("complexity", "M");
+        dimensionValues.put("effort", "M");
+        dimensionValues.put("risk", "M");
+    }
 
     public VoteRequest build()
     {
@@ -29,10 +36,7 @@ public class VoteRequestFakeBuilder
             userIdSecure,
             pokerIdSecure,
             ticketId,
-            voteUncertainty,
-            voteComplexity,
-            voteEffort,
-            voteRisk
+            dimensionValues
         );
     }
 }
