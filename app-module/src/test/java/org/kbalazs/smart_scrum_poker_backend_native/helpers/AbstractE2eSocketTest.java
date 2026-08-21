@@ -30,7 +30,7 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
     @AfterEach
     public void e2eAfter()
     {
-        if (null != stompSession)
+        if (null != stompSession && stompSession.isConnected())
         {
             stompSession.disconnect();
         }

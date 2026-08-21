@@ -26,7 +26,7 @@ public class StoryPointConfigFakeBuilder
     public static final String defaultName2 = "T-Shirt Sizes";
     public static final String defaultName3 = "Custom Scale";
     public static final String defaultSizesConfig = "[{\"name\":\"XS\",\"value\":1},{\"name\":\"S\",\"value\":2},{\"name\":\"M\",\"value\":3},{\"name\":\"L\",\"value\":5},{\"name\":\"XL\",\"value\":8}]";
-    public static final String defaultDimensionsConfig = "[{\"name\":\"Complexity\",\"sizeValues\":{\"XS\":1,\"S\":2,\"M\":3,\"L\":5,\"XL\":8}},{\"name\":\"Risk\",\"sizeValues\":{\"XS\":1,\"S\":2,\"M\":3,\"L\":5,\"XL\":8}}]";
+    public static final String defaultDimensionsConfig = "[{\"name\":\"complexity\",\"sizeValues\":{\"XS\":1,\"S\":2,\"M\":3,\"L\":5,\"XL\":8}},{\"name\":\"risk\",\"sizeValues\":{\"XS\":1,\"S\":2,\"M\":3,\"L\":5,\"XL\":8}}]";
     public static final String defaultPointsMapping = "[{\"totalRange\":[1,2],\"points\":1},{\"totalRange\":[3,5],\"points\":2},{\"totalRange\":[6,8],\"points\":3}]";
 
     Long id = defaultId1;

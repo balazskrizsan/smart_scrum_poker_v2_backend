@@ -15,6 +15,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.v
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 public class RequestMapperService {
@@ -37,13 +38,20 @@ public class RequestMapperService {
     }
 
     public static Vote mapToEntity(@NonNull final VoteRequest voteRequest) {
-        String voteValuesJson = String.format(
-            "{\"uncertainty\":%d,\"complexity\":%d,\"effort\":%d,\"risk\":%d}",
-            voteRequest.voteUncertainty(),
-            voteRequest.voteComplexity(),
-            voteRequest.voteEffort(),
-            voteRequest.voteRisk()
-        );
+        // Convert Map to JSON dynamically
+        StringBuilder jsonBuilder = new StringBuilder("{");
+        boolean first = true;
+        for (Map.Entry<String, String> entry : voteRequest.dimensionValues().entrySet()) {
+            if (!first) {
+                jsonBuilder.append(",");
+            }
+            jsonBuilder.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
+            first = false;
+        }
+        jsonBuilder.append("}");
+        
+        String voteValuesJson = jsonBuilder.toString();
+        
         return new Vote(
             null,
             voteRequest.ticketId(),
