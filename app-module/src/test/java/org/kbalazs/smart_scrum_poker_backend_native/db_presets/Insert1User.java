@@ -7,7 +7,7 @@ import org.jooq.DSLContext;
 
 import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IDS_USER;
 
-public class Insert1InsecureUser implements IInsert
+public class Insert1User implements IInsert
 {
     @Override
     public void runParent()

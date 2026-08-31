@@ -72,6 +72,11 @@ public class Vote extends TableImpl<VoteRecord> {
     public final TableField<VoteRecord, Long> TICKET_ID = createField(DSL.name("ticket_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
+     * The column <code>public.vote.calculated_point</code>.
+     */
+    public final TableField<VoteRecord, Short> CALCULATED_POINT = createField(DSL.name("calculated_point"), SQLDataType.SMALLINT.nullable(false), this, "");
+
+    /**
      * The column <code>public.vote.created_at</code>.
      */
     public final TableField<VoteRecord, LocalDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");

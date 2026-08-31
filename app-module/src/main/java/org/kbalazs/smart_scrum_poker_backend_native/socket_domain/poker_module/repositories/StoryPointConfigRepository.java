@@ -2,6 +2,8 @@ package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.
 
 import lombok.NonNull;
 import org.jooq.impl.DSL;
+import org.kbalazs.smart_scrum_poker_backend_native.db.Tables;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.StoryPointConfigRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.domain_common.repositories.AbstractRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig;
 import org.springframework.stereotype.Repository;
@@ -13,10 +15,10 @@ public class StoryPointConfigRepository extends AbstractRepository
 {
     public StoryPointConfig create(@NonNull StoryPointConfig storyPointConfig)
     {
-        getDSLContext().insertInto(DSL.table("story_point_config"))
-            .set(getDSLContext().newRecord(DSL.table("story_point_config"), storyPointConfig))
-            .execute();
-        return storyPointConfig;
+        StoryPointConfigRecord newRecord = getDSLContext().newRecord(Tables.STORY_POINT_CONFIG, storyPointConfig);
+        newRecord.store();
+
+        return newRecord.into(StoryPointConfig.class);
     }
 
     public Optional<StoryPointConfig> findById(@NonNull Long id)

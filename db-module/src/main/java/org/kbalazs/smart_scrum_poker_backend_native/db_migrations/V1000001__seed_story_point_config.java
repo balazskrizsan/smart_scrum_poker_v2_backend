@@ -12,45 +12,62 @@ public class V1000001__seed_story_point_config extends AbstractBaseJooqMigration
 
         String defaultSizesConfig = """
             [
-                {"name": "S", "value": 1},
-                {"name": "M", "value": 2},
-                {"name": "L", "value": 3},
-                {"name": "XXL", "value": 10}
+                {"name": "Size S"},
+                {"name": "Size M"},
+                {"name": "Size L"},
+                {"name": "Size XXL"}
             ]
             """;
 
         String defaultDimensionsConfig = """
             [
                 {
-                    "name": "uncertainty",
-                    "sizeValues": {"S": 1, "M": 2, "L": 3, "XXL": 10}
+                    "name": "Uncertainty",
+                    "sizeValues": [
+                        {"name": "Size S", "value": 1},
+                        {"name": "Size M", "value": 2},
+                        {"name": "Size L", "value": 3},
+                        {"name": "Size XXL", "value": 10}
+                    ]
                 },
                 {
-                    "name": "complexity",
-                    "sizeValues": {"S": 1, "M": 2, "L": 3, "XXL": 10}
+                    "name": "Complexity",
+                    "sizeValues": [
+                        {"name": "Size S", "value": 1},
+                        {"name": "Size M", "value": 2},
+                        {"name": "Size L", "value": 3},
+                        {"name": "Size XXL", "value": 10}
+                    ]
                 },
                 {
-                    "name": "effort",
-                    "sizeValues": {"S": 1, "M": 2, "L": 3, "XXL": 10}
+                    "name": "Effort",
+                    "sizeValues": [
+                        {"name": "Size S", "value": 1},
+                        {"name": "Size M", "value": 2},
+                        {"name": "Size L", "value": 3},
+                        {"name": "Size XXL", "value": 10}
+                    ]
                 },
                 {
-                    "name": "risk",
-                    "sizeValues": {"S": 1, "M": 2, "L": 3, "XXL": 10}
+                    "name": "Risk",
+                    "sizeValues": [
+                        {"name": "Size S", "value": 1},
+                        {"name": "Size M", "value": 2},
+                        {"name": "Size L", "value": 3},
+                        {"name": "Size XXL", "value": 10}
+                    ]
                 }
             ]
             """;
 
         String defaultPointsMapping = """
             [
-                {"totalRange": [4, 4], "points": 1},
-                {"totalRange": [5, 5], "points": 2},
-                {"totalRange": [6, 7], "points": 3},
-                {"totalRange": [8, 9], "points": 5},
-                {"totalRange": [10, 11], "points": 8},
-                {"totalRange": [12, 12], "points": 13},
-                {"totalRange": [13, 20], "points": 20},
-                {"totalRange": [21, 30], "points": 50},
-                {"totalRange": [31, 2147483647], "points": 100}
+                {"totalRange": [0, 3], "points": 1},
+                {"totalRange": [4, 6], "points": 2},
+                {"totalRange": [6, 8], "points": 3},
+                {"totalRange": [9, 10], "points": 5},
+                {"totalRange": [10, 12], "points": 8},
+                {"totalRange": [13, 100], "points": 13}
             ]
             """;
 

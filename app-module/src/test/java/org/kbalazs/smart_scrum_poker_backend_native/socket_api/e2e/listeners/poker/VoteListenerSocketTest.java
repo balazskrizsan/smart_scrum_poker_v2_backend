@@ -31,7 +31,7 @@ public class VoteListenerSocketTest extends AbstractE2eSocketTest
 
     @Test
     @SqlPreset(presets = {
-        Insert1InsecureUser.class,
+        Insert1User.class,
         Insert1StoryPointConfig.class,
         Insert1Poker.class,
         Insert1Ticket.class,
@@ -72,7 +72,7 @@ public class VoteListenerSocketTest extends AbstractE2eSocketTest
 
     @Test
     @SqlPreset(presets = {
-        Insert1InsecureUser.class,
+        Insert1User.class,
         Insert1StoryPointConfig.class,
         Insert1Poker.class,
         Insert1Ticket.class,
@@ -86,33 +86,21 @@ public class VoteListenerSocketTest extends AbstractE2eSocketTest
 
         // Test data: complexity, risk -> expected calculated point
         // Based on config: complexity + risk determine points
-        // Size values: XS=1, S=2, M=3, L=5, XL=8
-        // pointsMapping: [1,2] -> 1, [3,5] -> 2, [6,8] -> 3, else -> 100
+        // Size values: Size S=1, Size M=2, Size L=3
+        // pointsMapping: [0,3] -> 1, [4,6] -> 2, [6,8] -> 3, [9,10] -> 5, [10,12] -> 8, [13,100] -> 13
         VoteTestCase[] testCases = {
-            // Total 1-2 range -> 1 point (complexity + risk)
-            new VoteTestCase("XS", "XS", (short) 1),  // XS+XS = 1+1 = 2 -> 1
+            // Total 0-3 range -> 1 point (complexity + risk)
+            new VoteTestCase("Size S", "Size S", (short) 1),  // Size S+Size S = 1+1 = 2 -> 1
 
-            // Total 3-5 range -> 2 points
-            new VoteTestCase("S", "S", (short) 2),  // S+S = 2+2 = 4 -> 2
-            new VoteTestCase("S", "M", (short) 2),  // S+M = 2+3 = 5 -> 2
-            new VoteTestCase("M", "S", (short) 2),  // M+S = 3+2 = 5 -> 2
-            new VoteTestCase("XS", "M", (short) 2),  // XS+M = 1+3 = 4 -> 2
-            new VoteTestCase("M", "XS", (short) 2),  // M+XS = 3+1 = 4 -> 2
-            new VoteTestCase("S", "XS", (short) 2),  // S+XS = 2+1 = 3 -> 2
-            new VoteTestCase("XS", "S", (short) 2),  // XS+S = 1+2 = 3 -> 2
+            // Total 4-6 range -> 2 points
+            new VoteTestCase("Size M", "Size M", (short) 2),  // Size M+Size M = 2+2 = 4 -> 2
+            new VoteTestCase("Size S", "Size L", (short) 2),  // Size S+Size L = 1+3 = 4 -> 2
+            new VoteTestCase("Size L", "Size S", (short) 2),  // Size L+Size S = 3+1 = 4 -> 2
+            new VoteTestCase("Size M", "Size L", (short) 2),  // Size M+Size L = 2+3 = 5 -> 2
+            new VoteTestCase("Size L", "Size M", (short) 2),  // Size L+Size M = 3+2 = 5 -> 2
 
             // Total 6-8 range -> 3 points
-            new VoteTestCase("M", "M", (short) 3),  // M+M = 3+3 = 6 -> 3
-            new VoteTestCase("M", "L", (short) 3),  // M+L = 3+5 = 8 -> 3
-            new VoteTestCase("L", "M", (short) 3),  // L+M = 5+3 = 8 -> 3
-            new VoteTestCase("S", "L", (short) 3),  // S+L = 2+5 = 7 -> 3
-            new VoteTestCase("L", "S", (short) 3),  // L+S = 5+2 = 7 -> 3
-
-            // Out of range -> 100 points
-            new VoteTestCase("L", "L", (short) 100), // L+L = 5+5 = 10 -> 100
-            new VoteTestCase("L", "XL", (short) 100), // L+XL = 5+8 = 13 -> 100
-            new VoteTestCase("XL", "L", (short) 100), // XL+L = 8+5 = 13 -> 100
-            new VoteTestCase("XL", "XL", (short) 100), // XL+XL = 8+8 = 16 -> 100
+            new VoteTestCase("Size L", "Size L", (short) 3),  // Size L+Size L = 3+3 = 6 -> 3
         };
 
         for (VoteTestCase testCase : testCases)
@@ -123,10 +111,10 @@ public class VoteListenerSocketTest extends AbstractE2eSocketTest
             StompSession stompSession = getStompSession();
 
             Map<String, String> dimensionValues = new HashMap<>();
-            dimensionValues.put("uncertainty", "M");  // ignored in calculation
-            dimensionValues.put("complexity", testCase.complexity());
-            dimensionValues.put("effort", "M");  // ignored in calculation
-            dimensionValues.put("risk", testCase.risk());
+            dimensionValues.put("Uncertainty", "Size M");  // ignored in calculation
+            dimensionValues.put("Complexity", testCase.complexity());
+            dimensionValues.put("Effort", "Size M");  // ignored in calculation
+            dimensionValues.put("Risk", testCase.risk());
 
             VoteRequest testedVoteRequest = new VoteRequest(
                 IdsUserFakeBuilder.defaultId1,

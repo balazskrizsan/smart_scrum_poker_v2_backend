@@ -16,7 +16,8 @@ public enum SocketDestination
     SEND__POKER__NEW_TICKET_CREATE("/app/poker/new.ticket.create"),
     SEND__POKER__MY_POKERS("/app/poker/my.pokers"),
     SEND_POKER_VOTE_NEW_JOINER("/app/poker/vote.new_joiner"),
-    SEND_ACCOUNT_INSECURE_USER_CREATE("/app/account/insecure.user.create");
+    SEND_ACCOUNT_INSECURE_USER_CREATE("/app/account/insecure.user.create"),
+    POKER_CONFIG_CREATE("/app/poker/config/create");
 
     private final String destination;
 
