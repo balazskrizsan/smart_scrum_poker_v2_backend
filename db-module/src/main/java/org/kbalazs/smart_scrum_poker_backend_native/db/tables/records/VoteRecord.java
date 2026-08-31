@@ -50,59 +50,73 @@ public class VoteRecord extends UpdatableRecordImpl<VoteRecord> {
     }
 
     /**
+     * Setter for <code>public.vote.calculated_point</code>.
+     */
+    public void setCalculatedPoint(Short value) {
+        set(2, value);
+    }
+
+    /**
+     * Getter for <code>public.vote.calculated_point</code>.
+     */
+    public Short getCalculatedPoint() {
+        return (Short) get(2);
+    }
+
+    /**
      * Setter for <code>public.vote.created_at</code>.
      */
     public void setCreatedAt(LocalDateTime value) {
-        set(2, value);
+        set(3, value);
     }
 
     /**
      * Getter for <code>public.vote.created_at</code>.
      */
     public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(2);
+        return (LocalDateTime) get(3);
     }
 
     /**
      * Setter for <code>public.vote.created_by</code>.
      */
     public void setCreatedBy(UUID value) {
-        set(3, value);
+        set(4, value);
     }
 
     /**
      * Getter for <code>public.vote.created_by</code>.
      */
     public UUID getCreatedBy() {
-        return (UUID) get(3);
+        return (UUID) get(4);
     }
 
     /**
      * Setter for <code>public.vote.story_point_config_id</code>.
      */
     public void setStoryPointConfigId(Long value) {
-        set(4, value);
+        set(5, value);
     }
 
     /**
      * Getter for <code>public.vote.story_point_config_id</code>.
      */
     public Long getStoryPointConfigId() {
-        return (Long) get(4);
+        return (Long) get(5);
     }
 
     /**
      * Setter for <code>public.vote.vote_values</code>.
      */
     public void setVoteValues(JSONB value) {
-        set(5, value);
+        set(6, value);
     }
 
     /**
      * Getter for <code>public.vote.vote_values</code>.
      */
     public JSONB getVoteValues() {
-        return (JSONB) get(5);
+        return (JSONB) get(6);
     }
 
     // -------------------------------------------------------------------------
@@ -128,11 +142,12 @@ public class VoteRecord extends UpdatableRecordImpl<VoteRecord> {
     /**
      * Create a detached, initialised VoteRecord
      */
-    public VoteRecord(Long id, Long ticketId, LocalDateTime createdAt, UUID createdBy, Long storyPointConfigId, JSONB voteValues) {
+    public VoteRecord(Long id, Long ticketId, Short calculatedPoint, LocalDateTime createdAt, UUID createdBy, Long storyPointConfigId, JSONB voteValues) {
         super(Vote.VOTE);
 
         setId(id);
         setTicketId(ticketId);
+        setCalculatedPoint(calculatedPoint);
         setCreatedAt(createdAt);
         setCreatedBy(createdBy);
         setStoryPointConfigId(storyPointConfigId);

@@ -47,7 +47,7 @@ public class VoteFakeBuilder
     Long ticketId4 = TicketFakeBuilder.defaultId2;
     Long ticketId5 = TicketFakeBuilder.defaultId3;
     Long storyPointConfigId = null;
-    String voteValues = "{\"uncertainty\": \"S\", \"complexity\": \"M\", \"effort\": \"L\", \"risk\": \"S\"}";
+    String voteValues = "{\"Uncertainty\": \"Size S\", \"Complexity\": \"Size M\", \"Effort\": \"Size L\", \"Risk\": \"Size S\"}";
     short uncertainty = defaultUncertainty;
     short complexity = defaultComplexity;
     short effort = defaultEffort;

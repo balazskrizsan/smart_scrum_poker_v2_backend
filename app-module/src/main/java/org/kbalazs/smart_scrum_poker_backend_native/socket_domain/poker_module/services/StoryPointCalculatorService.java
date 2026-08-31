@@ -33,26 +33,11 @@ public class StoryPointCalculatorService
 
         try
         {
-            // Parse dimensions config
+            // Parse dimensions config - new format: array of objects with sizeValues as array
             List<Map<String, Object>> dimensionsConfig = objectMapper.readValue(
                 config.dimensionsConfig(),
                 new TypeReference<List<Map<String, Object>>>() {}
             );
-
-            // Parse sizes config
-            List<Map<String, Object>> sizesConfig = objectMapper.readValue(
-                config.sizesConfig(),
-                new TypeReference<List<Map<String, Object>>>() {}
-            );
-
-            // Create size name to value mapping
-            Map<String, Integer> sizeNameToValue = sizesConfig.stream()
-                .collect(
-                    java.util.stream.Collectors.toMap(
-                        dim -> (String) dim.get("name"),
-                        dim -> ((Number) dim.get("value")).intValue()
-                    )
-                );
 
             // Calculate total based on dimension values
             int total = 0;
@@ -60,12 +45,20 @@ public class StoryPointCalculatorService
             {
                 String dimensionName = (String) dimension.get("name");
                 @SuppressWarnings("unchecked")
-                Map<String, Integer> sizeValues = (Map<String, Integer>) dimension.get("sizeValues");
+                List<Map<String, Object>> sizeValues = (List<Map<String, Object>>) dimension.get("sizeValues");
 
                 String selectedSize = voteValues.dimensionValues().get(dimensionName);
                 if (selectedSize != null && sizeValues != null)
                 {
-                    total += sizeValues.getOrDefault(selectedSize, 0);
+                    // Find the value for the selected size in the sizeValues array
+                    for (Map<String, Object> sizeValue : sizeValues)
+                    {
+                        if (selectedSize.equals(sizeValue.get("name")))
+                        {
+                            total += ((Number) sizeValue.get("value")).intValue();
+                            break;
+                        }
+                    }
                 }
             }
 

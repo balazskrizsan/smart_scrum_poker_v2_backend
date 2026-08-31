@@ -25,9 +25,9 @@ public class StoryPointConfigFakeBuilder
     public static final String defaultName = "Fibonacci";
     public static final String defaultName2 = "T-Shirt Sizes";
     public static final String defaultName3 = "Custom Scale";
-    public static final String defaultSizesConfig = "[{\"name\":\"XS\",\"value\":1},{\"name\":\"S\",\"value\":2},{\"name\":\"M\",\"value\":3},{\"name\":\"L\",\"value\":5},{\"name\":\"XL\",\"value\":8}]";
-    public static final String defaultDimensionsConfig = "[{\"name\":\"complexity\",\"sizeValues\":{\"XS\":1,\"S\":2,\"M\":3,\"L\":5,\"XL\":8}},{\"name\":\"risk\",\"sizeValues\":{\"XS\":1,\"S\":2,\"M\":3,\"L\":5,\"XL\":8}}]";
-    public static final String defaultPointsMapping = "[{\"totalRange\":[1,2],\"points\":1},{\"totalRange\":[3,5],\"points\":2},{\"totalRange\":[6,8],\"points\":3}]";
+    public static final String defaultSizesConfig = "[{\"name\":\"Size S\"},{\"name\":\"Size M\"},{\"name\":\"Size L\"}]";
+    public static final String defaultDimensionsConfig = "[{\"name\":\"Uncertainty\",\"sizeValues\":[{\"name\":\"Size S\",\"value\":1},{\"name\":\"Size M\",\"value\":2},{\"name\":\"Size L\",\"value\":3}]},{\"name\":\"Complexity\",\"sizeValues\":[{\"name\":\"Size S\",\"value\":1},{\"name\":\"Size M\",\"value\":2},{\"name\":\"Size L\",\"value\":3}]},{\"name\":\"Effort\",\"sizeValues\":[{\"name\":\"Size S\",\"value\":1},{\"name\":\"Size M\",\"value\":2},{\"name\":\"Size L\",\"value\":3}]},{\"name\":\"Risk\",\"sizeValues\":[{\"name\":\"Size S\",\"value\":1},{\"name\":\"Size M\",\"value\":4},{\"name\":\"Size L\",\"value\":5}]}]";
+    public static final String defaultPointsMapping = "[{\"totalRange\":[0,3],\"points\":1},{\"totalRange\":[4,6],\"points\":2},{\"totalRange\":[6,8],\"points\":3},{\"totalRange\":[9,10],\"points\":5},{\"totalRange\":[10,12],\"points\":8},{\"totalRange\":[13,100],\"points\":13}]";
 
     Long id = defaultId1;
     Long id2 = defaultId2;
