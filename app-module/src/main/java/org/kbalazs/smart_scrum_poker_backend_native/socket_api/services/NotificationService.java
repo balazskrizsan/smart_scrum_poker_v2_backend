@@ -17,14 +17,14 @@ public class NotificationService
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public <T> void notifyPokerGame(
-        @NonNull UUID pokerIdSecure,
+        @NonNull UUID pokerPublicId,
         @NonNull T data,
         @NonNull SocketDestination socketDestination
     )
         throws ApiException
     {
         simpMessagingTemplate.convertAndSend(
-            "/queue/reply-" + pokerIdSecure,
+            "/queue/reply-" + pokerPublicId,
             new ResponseEntityBuilder<T>().socketDestination(socketDestination).data(data).build()
         );
     }

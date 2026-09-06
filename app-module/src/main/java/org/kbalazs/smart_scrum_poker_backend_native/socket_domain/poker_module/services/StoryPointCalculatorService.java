@@ -1,7 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -33,51 +32,67 @@ public class StoryPointCalculatorService
 
         try
         {
-            // Parse dimensions config - new format: array of objects with sizeValues as array
-            List<Map<String, Object>> dimensionsConfig = objectMapper.readValue(
+            // Parse dimensions config - array format: [{"name": "Uncertainty", "sizeValues": [{"name": "Size S", "value": 1}, ...]}, ...]
+            List<Map<String, Object>> dimensionsConfigArray = objectMapper.readValue(
                 config.dimensionsConfig(),
                 new TypeReference<List<Map<String, Object>>>() {}
             );
 
-            // Calculate total based on dimension values
-            int total = 0;
-            for (Map<String, Object> dimension : dimensionsConfig)
+            // Convert array format to map for easier lookup: {"Uncertainty": {"Size S": 1, "Size M": 2, ...}, ...}
+            Map<String, Map<String, Integer>> dimensionsConfig = new java.util.HashMap<>();
+            for (Map<String, Object> dimension : dimensionsConfigArray)
             {
                 String dimensionName = (String) dimension.get("name");
-                @SuppressWarnings("unchecked")
                 List<Map<String, Object>> sizeValues = (List<Map<String, Object>>) dimension.get("sizeValues");
-
-                String selectedSize = voteValues.dimensionValues().get(dimensionName);
-                if (selectedSize != null && sizeValues != null)
+                
+                Map<String, Integer> sizeValueMap = new java.util.HashMap<>();
+                for (Map<String, Object> sizeValue : sizeValues)
                 {
-                    // Find the value for the selected size in the sizeValues array
-                    for (Map<String, Object> sizeValue : sizeValues)
+                    String sizeName = (String) sizeValue.get("name");
+                    Integer value = (Integer) sizeValue.get("value");
+                    sizeValueMap.put(sizeName.toLowerCase(), value);
+                }
+                
+                dimensionsConfig.put(dimensionName.toLowerCase(), sizeValueMap);
+            }
+
+            // Calculate total based on dimension values
+            int total = 0;
+            for (Map.Entry<String, String> entry : voteValues.dimensionValues().entrySet())
+            {
+                String dimensionName = entry.getKey().toLowerCase();
+                String selectedSize = entry.getValue().toLowerCase();
+                
+                Map<String, Integer> sizeValues = dimensionsConfig.get(dimensionName);
+                if (sizeValues != null)
+                {
+                    Integer value = sizeValues.get(selectedSize);
+                    if (value != null)
                     {
-                        if (selectedSize.equals(sizeValue.get("name")))
-                        {
-                            total += ((Number) sizeValue.get("value")).intValue();
-                            break;
-                        }
+                        total += value;
                     }
                 }
             }
 
-            // Parse points mapping and find matching range
-            List<Map<String, Object>> pointsMapping = objectMapper.readValue(
+            // Parse points mapping - array format: [{"totalRange": [0, 3], "points": 1}, ...]
+            List<Map<String, Object>> pointsMappingArray = objectMapper.readValue(
                 config.pointsMapping(),
-                new TypeReference<List<Map<String, Object>>>() {}
+                new TypeReference<>()
+                {
+                }
             );
 
-            for (Map<String, Object> mapping : pointsMapping)
+            for (Map<String, Object> mapping : pointsMappingArray)
             {
-                @SuppressWarnings("unchecked")
-                List<Integer> range = (List<Integer>) mapping.get("totalRange");
-                int minRange = range.get(0);
-                int maxRange = range.get(1);
+                List<Integer> totalRange = (List<Integer>) mapping.get("totalRange");
+                Integer points = (Integer) mapping.get("points");
+                
+                int minRange = totalRange.get(0);
+                int maxRange = totalRange.get(1);
 
                 if (total >= minRange && total <= maxRange)
                 {
-                    return ((Number) mapping.get("points")).shortValue();
+                    return points.shortValue();
                 }
             }
 

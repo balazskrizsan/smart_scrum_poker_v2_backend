@@ -37,7 +37,7 @@ public class RequestMapperService {
         );
     }
 
-    public static Vote mapToEntity(@NonNull final VoteRequest voteRequest) {
+    public static Vote mapToEntity(@NonNull final VoteRequest voteRequest, UUID idsUserId) {
         // Convert Map to JSON dynamically
         StringBuilder jsonBuilder = new StringBuilder("{");
         boolean first = true;
@@ -59,7 +59,7 @@ public class RequestMapperService {
             voteValuesJson,
             null,
             getNow(),
-            voteRequest.userIdSecure()
+            idsUserId
         );
     }
 

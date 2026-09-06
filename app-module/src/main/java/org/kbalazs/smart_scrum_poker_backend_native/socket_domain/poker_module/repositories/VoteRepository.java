@@ -25,7 +25,6 @@ public class VoteRepository extends AbstractRepository {
 
         ctx.insertInto(VOTE)
             .set(ctx.newRecord(VOTE, vote))
-            .set(field("calculated_point"), vote.calculatedPoint())
             .onDuplicateKeyUpdate()
             .set(field("story_point_config_id"), vote.storyPointConfigId())
             .set(field("vote_values"), JSON.valueOf(vote.voteValues()))
@@ -53,5 +52,26 @@ public class VoteRepository extends AbstractRepository {
             .deleteFrom(VOTE)
             .where(VOTE.TICKET_ID.eq(ticketId))
             .execute();
+    }
+
+    public Vote findById(@NonNull Long id) {
+        VoteRecord record = getDSLContext()
+            .selectFrom(VOTE)
+            .where(VOTE.ID.eq(id))
+            .fetchOne();
+
+        if (record == null) {
+            return null;
+        }
+
+        return new Vote(
+            record.getId(),
+            record.getTicketId(),
+            record.getStoryPointConfigId(),
+            record.getVoteValues() != null ? record.getVoteValues().data() : null,
+            record.getCalculatedPoint(),
+            record.getCreatedAt(),
+            record.getCreatedBy()
+        );
     }
 }

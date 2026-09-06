@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public record VoteRequest(
-    @NonNull UUID userIdSecure,
-    @NonNull UUID pokerIdSecure,
+    @NonNull UUID pokerPubicId,
     long ticketId,
     @NonNull Map<String, String> dimensionValues  // {"uncertainty": "S", "complexity": "M", ...}
 )
