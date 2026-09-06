@@ -65,7 +65,9 @@ public class VoteService
             // Parse vote values JSON
             Map<String, String> dimensionValues = objectMapper.readValue(
                 vote.voteValues(),
-                new TypeReference<Map<String, String>>() {}
+                new TypeReference<>()
+                {
+                }
             );
 
             short calculatedPoint = storyPointCalculatorService.calculate(
@@ -146,6 +148,11 @@ public class VoteService
         short max = calculatedPointStreamSupplier.get().max(Short::compare).orElseThrow();
 
         return new VotesWithVoteStat(votes, new VoteStat(avg, min, max));
+    }
+
+    public Vote findById(@NonNull Long id)
+    {
+        return voteRepository.findById(id);
     }
 
     public record VoteWithCalculatedPoint(UserProfile userProfile, short calculatedPoint)
