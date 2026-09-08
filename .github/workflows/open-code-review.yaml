@@ -22,3 +22,15 @@ jobs:
           llm_model: gemini-2.5-pro
           llm_use_anthropic: 'false'
           llm_extra_body: '{"thinking":{"type":"disabled"}}'
+
+      - name: Dump OCR artifacts
+        if: always()
+        run: |
+          echo "=== Files ==="
+          find . -type f -print
+          
+          echo
+          echo "=== OCR logs ==="
+          find . -type f \
+            \( -iname '*ocr*' -o -iname '*review*' -o -iname '*.log' \) \
+            -print -exec sh -c 'echo "===== $1 ====="; cat "$1"' _ {} \;
