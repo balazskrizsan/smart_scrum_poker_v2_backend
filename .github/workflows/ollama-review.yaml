@@ -1,90 +1,49 @@
-name: Ollama PR Code Review
+name: "🔎 Dazbo's Gemini Code Review"
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-
-permissions:
-   contents: read
-   pull-requests: write
-   checks: write
+#    branches:
+#      - main
+    # Optional: restrict trigger paths (supports inclusions & exclusions)
+    # paths:
+    #   - 'src/**'
+    #   - '!src/generated/**'  # Exclude generated files
+    #   - 'pyproject.toml'
+  issue_comment:
+    types: [created]
 
 jobs:
-  code-review:
+  review:
+    # Run on PR updates, OR on issue comment starting with /gemini-review by repo owners/members
+    if: |
+      github.event_name == 'pull_request' ||
+      (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request &&
+        startsWith(github.event.comment.body, '/gemini-review') &&
+        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
+      )
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
 
     steps:
-      - name: Checkout PR
-        uses: actions/checkout@v6.0.2
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
-          fetch-depth: 0
-    
-      - name: Debug PR information
-        run: |
-          echo "=== PR INFORMATION ==="
-          echo "Event: ${{ github.event_name }}"
-          echo "PR number: ${{ github.event.pull_request.number }}"
-          echo "Base ref: ${{ github.event.pull_request.base.ref }}"
-          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
-          echo "Head ref: ${{ github.event.pull_request.head.ref }}"
-          echo "Head SHA: ${{ github.event.pull_request.head.sha }}"
-          echo
-    
-          echo "=== CHANGED FILES ==="
-          git diff --name-status \
-            "${{ github.event.pull_request.base.sha }}" \
-            "${{ github.event.pull_request.head.sha }}"
-          echo
-    
-          echo "=== DIFF STAT ==="
-          git diff --stat \
-            "${{ github.event.pull_request.base.sha }}" \
-            "${{ github.event.pull_request.head.sha }}"
-          echo
-    
-          echo "=== DIFF ==="
-          git diff \
-            "${{ github.event.pull_request.base.sha }}" \
-            "${{ github.event.pull_request.head.sha }}"
-    
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2.1.3
+          # Automatically checks out the head ref for PR events,
+          # and pulls the PR head branch for comment-based triggers
+          ref: ${{ github.event.pull_request.head.sha || format('refs/pull/{0}/head', github.event.issue.number) }}
+
+      - name: Run Gemini Review Action
+        uses: derailed-dash/gemini-review-action@v1
         with:
-          bun-version: 1.3.10
-
-      - name: Install Ollama
-        run: curl -fsSL https://ollama.com/install.sh | sh
-
-      - name: Start Ollama Server
-        run: ollama serve &
-
-      - name: Pull and Run Model
-        run: |
-          ollama pull qwen3.5:9b
-
-      - name: Check Ollama
-        run: |
-          ollama list
-    
-      - name: Debug Ollama
-        run: |
-          echo "=== OLLAMA VERSION ==="
-          ollama --version
-          echo
-    
-          echo "=== OLLAMA MODELS ==="
-          ollama list
-          echo
-    
-          echo "=== OLLAMA API ==="
-          curl -s http://localhost:11434/api/tags
-          echo
-    
-      - name: Run Ollama code review
-        uses: SingulioDev/ollama-code-review-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          ollama-api-url: http://localhost:11434
-          ollama-api-key: local
-          config-path: .github/code-review-config.yml
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gemini_model: 'gemini-3.6-flash'
+          language: 'English (UK)'
+          # Optional: straight (default), dazbo, palpatine
+          # persona: 'straight'
