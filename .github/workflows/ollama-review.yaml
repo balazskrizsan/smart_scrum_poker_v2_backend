@@ -67,7 +67,7 @@ jobs:
       - name: Check Ollama
         run: |
           ollama list
-          ollama run qwen3.5:9b "Say OK"
+          ollama run qwen2:0.5b "Say OK"
     
       - name: Debug Ollama
         run: |
@@ -89,5 +89,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ollama-api-url: http://localhost:11434
           ollama-api-key: local
-          model: qwen2:0.5b
           config-path: .github/code-review-config.yml
