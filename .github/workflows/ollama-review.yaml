@@ -56,9 +56,16 @@ jobs:
         uses: ai-action/setup-ollama@v2.0.14
         with:
           version: latest
-    
-      - name: Pull Ollama model
-        run: ollama pull qwen3.5:9b
+          name: ollama
+
+      - name: Pull Qwen3.5
+        run: |
+          ollama pull qwen3.5:9b
+
+      - name: Check Ollama
+        run: |
+          ollama list
+          ollama run qwen3.5:9b "Say OK"
     
       - name: Debug Ollama
         run: |
