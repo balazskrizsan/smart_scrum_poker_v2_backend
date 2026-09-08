@@ -81,8 +81,10 @@ jobs:
           curl -s http://localhost:11434/api/tags
           echo
     
-      - uses: carofi-auto/ollama-code-review@v2
+      - name: Run Ollama code review
+        uses: SingulioDev/ollama-code-review-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          file-pattern: "**/*.{java}"
-          model: "qwen3.5:9b"
+          ollama-api-url: http://localhost:11434
+          ollama-api-key: local
+          config-path: .github/code-review-config.yml
