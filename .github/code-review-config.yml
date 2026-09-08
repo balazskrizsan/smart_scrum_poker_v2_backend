@@ -1,7 +1,7 @@
 # Ollama Code Review Configuration
 
 # Model to use for code review
-model: qwen2:0.5b
+model: qwen3.5:9b
 
 # Scope of the review
 scope: changed-files
