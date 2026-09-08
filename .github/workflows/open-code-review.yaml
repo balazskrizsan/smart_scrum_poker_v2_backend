@@ -15,6 +15,7 @@ jobs:
 
     steps:
       - name: Run OpenCodeReview
+        continue-on-error: true
         uses: alibaba/open-code-review@main
         with:
           llm_url: https://generativelanguage.googleapis.com/v1beta/openai
@@ -22,15 +23,20 @@ jobs:
           llm_model: gemini-2.5-pro
           llm_use_anthropic: 'false'
           llm_extra_body: '{"thinking":{"type":"disabled"}}'
-
-      - name: Dump OCR artifacts
+      
+      - name: Dump OCR logs
         if: always()
         run: |
-          echo "=== Files ==="
-          find . -type f -print
-          
+          echo "=== OCR STDERR ==="
+          if [ -f /tmp/ocr-stderr.log ]; then
+            cat /tmp/ocr-stderr.log
+          else
+            echo "No /tmp/ocr-stderr.log"
+          fi
           echo
-          echo "=== OCR logs ==="
-          find . -type f \
-            \( -iname '*ocr*' -o -iname '*review*' -o -iname '*.log' \) \
-            -print -exec sh -c 'echo "===== $1 ====="; cat "$1"' _ {} \;
+          echo "=== OCR RESULT ==="
+          if [ -f /tmp/ocr-result.json ]; then
+            cat /tmp/ocr-result.json
+          else
+            echo "No /tmp/ocr-result.json"
+          fi
