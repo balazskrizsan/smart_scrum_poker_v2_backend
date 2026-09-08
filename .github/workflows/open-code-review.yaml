@@ -21,3 +21,4 @@ jobs:
           llm_auth_token: ${{ secrets.GEMINI_API_KEY || secrets.OCR_LLM_AUTH_TOKEN }}
           llm_model: ${{ vars.GEMINI_MODEL || vars.OCR_LLM_MODEL || 'gemini-2.5-pro' }}
           llm_use_anthropic: 'false'
+#pr test
