@@ -35,6 +35,8 @@ public class AddTicketListener
 
         Ticket ticket = ticketService.addOne(mappedRequest);
 
+        Ticket t2 = ticket;
+
         notificationService.notifyPokerGame(
             mappedRequest.pokerIdSecure(),
             new AddTicketResponse(ticket),
