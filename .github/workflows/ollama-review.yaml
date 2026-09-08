@@ -54,6 +54,8 @@ jobs:
     
       - name: Setup Ollama
         uses: ai-action/setup-ollama@v2.0.14
+        with:
+          version: latest
     
       - name: Pull Ollama model
         run: ollama pull qwen3.5:9b
