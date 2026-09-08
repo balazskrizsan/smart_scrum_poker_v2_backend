@@ -62,12 +62,10 @@ jobs:
       - name: Pull and Run Model
         run: |
           ollama pull qwen3.5:9b
-          ollama run qwen3.5:9b "Írj egy üdvözlést!"
 
       - name: Check Ollama
         run: |
           ollama list
-          ollama run qwen3.5:9b "Say OK"
     
       - name: Debug Ollama
         run: |
