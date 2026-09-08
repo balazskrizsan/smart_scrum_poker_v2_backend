@@ -89,4 +89,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ollama-api-url: http://localhost:11434
           ollama-api-key: local
+          model: qwen2:0.5b
           config-path: .github/code-review-config.yml
