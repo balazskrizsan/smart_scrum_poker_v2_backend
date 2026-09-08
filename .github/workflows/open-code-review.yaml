@@ -1,12 +1,14 @@
-name: OpenCodeReview PR Review
+name: Ollama PR Code Review
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
+  checks: write
+  issues: write
 
 jobs:
   code-review:
@@ -14,29 +16,25 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Run OpenCodeReview
-        continue-on-error: true
-        uses: alibaba/open-code-review@main
+      - name: Checkout PR
+        uses: actions/checkout@v6.0.2
         with:
-          llm_url: https://generativelanguage.googleapis.com/v1beta/openai
-          llm_auth_token: ${{ secrets.GEMINI_API_KEY }}
-          llm_model: gemini-2.5-pro
-          llm_use_anthropic: 'false'
-          llm_extra_body: '{"thinking":{"type":"disabled"}}'
-      
-      - name: Dump OCR logs
-        if: always()
-        run: |
-          echo "=== OCR STDERR ==="
-          if [ -f /tmp/ocr-stderr.log ]; then
-            cat /tmp/ocr-stderr.log
-          else
-            echo "No /tmp/ocr-stderr.log"
-          fi
-          echo
-          echo "=== OCR RESULT ==="
-          if [ -f /tmp/ocr-result.json ]; then
-            cat /tmp/ocr-result.json
-          else
-            echo "No /tmp/ocr-result.json"
-          fi
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2.1.3
+        with:
+          bun-version: 1.3.10
+
+      - name: Setup Ollama
+        uses: ai-action/setup-ollama@v2.0.14
+        with:
+          model: kimi-2.5
+
+      - name: Run Ollama code review
+        uses: SingulioDev/ollama-code-review-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          ollama-api-url: http://localhost:11434
+          ollama-api-key: local
+          config-path: .github/code-review-config.yml
