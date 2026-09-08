@@ -56,7 +56,7 @@ jobs:
         uses: ai-action/setup-ollama@v2.0.14
     
       - name: Pull Ollama model
-        run: ollama pull llama3.3
+        run: ollama pull qwen3.5:9b
     
       - name: Debug Ollama
         run: |
