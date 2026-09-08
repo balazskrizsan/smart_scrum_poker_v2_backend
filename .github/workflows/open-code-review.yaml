@@ -12,13 +12,13 @@ jobs:
   code-review:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
     steps:
       - name: Run OpenCodeReview
         uses: alibaba/open-code-review@main
         with:
-          # Gemini OpenAI-compatible endpoint
-          llm_url: ${{ vars.OCR_LLM_URL || 'https://generativelanguage.googleapis.com/v1beta/openai' }}
-          llm_auth_token: ${{ secrets.GEMINI_API_KEY || secrets.OCR_LLM_AUTH_TOKEN }}
-          llm_model: ${{ vars.GEMINI_MODEL || vars.OCR_LLM_MODEL || 'gemini-2.5-pro' }}
+          llm_url: https://generativelanguage.googleapis.com/v1beta/openai
+          llm_auth_token: ${{ secrets.GEMINI_API_KEY }}
+          llm_model: gemini-2.5-pro
           llm_use_anthropic: 'false'
-#pr test
+          llm_extra_body: '{"thinking":{"type":"disabled"}}'
