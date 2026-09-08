@@ -4,7 +4,7 @@
 model: qwen3.5:9b
 
 # Scope of the review
-scope: changed-files
+scope: changed-only
 
 # Language of the review comments
 language: english
