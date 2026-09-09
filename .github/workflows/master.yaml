@@ -75,7 +75,7 @@ jobs:
         run: mvn clean install -Djooq.codegen.skip=true
 
       - name: Build native image
-        run: mvn native:compile -Pnative -Dspring.profiles.active=native
+        run: mvn -pl app-module -am native:compile -Pnative -Dspring.profiles.active=native
 
       - uses: scacap/action-surefire-report@v1
         if: success() || failure()
