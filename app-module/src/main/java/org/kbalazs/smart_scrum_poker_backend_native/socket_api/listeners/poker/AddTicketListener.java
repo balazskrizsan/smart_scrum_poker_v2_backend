@@ -31,12 +31,6 @@ public class AddTicketListener
     {
         AddTicket mappedRequest = RequestMapperService.mapToEntity(request);
 
-        var t = ticketService.addOne(mappedRequest);
-
-        // @todo: remove this
-
-        var c = "asd";
-
         notificationService.notifyPokerGame(
             mappedRequest.pokerIdSecure(),
             new AddTicketResponse(ticketService.addOne(mappedRequest)),
