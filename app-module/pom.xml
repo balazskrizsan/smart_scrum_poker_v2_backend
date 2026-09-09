@@ -172,6 +172,12 @@
                             <goal>compile</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>aspectj-test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
                 </executions>
                 <dependencies>
                     <dependency>
@@ -199,6 +205,14 @@
                             </includes>
                         </source>
                     </sources>
+                    <testSources>
+                        <source>
+                            <basedir>${project.build.testSourceDirectory}</basedir>
+                            <includes>
+                                <include>**/*.java</include>
+                            </includes>
+                        </source>
+                    </testSources>
                 </configuration>
             </plugin>
             <plugin>
