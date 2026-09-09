@@ -73,6 +73,7 @@ jobs:
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
           LOGBACK_LOGSTASH_ENABLED: false
+          LOGBACK_LOG_TYPE: TEXT
         run: mvn clean install -Djooq.codegen.skip=true
 
 #      - name: Build native image
