@@ -3,27 +3,9 @@ name: "🔎 Dazbo's Gemini Code Review"
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-#    branches:
-#      - main
-    # Optional: restrict trigger paths (supports inclusions & exclusions)
-    # paths:
-    #   - 'src/**'
-    #   - '!src/generated/**'  # Exclude generated files
-    #   - 'pyproject.toml'
-  issue_comment:
-    types: [created]
 
 jobs:
   review:
-    # Run on PR updates, OR on issue comment starting with /gemini-review by repo owners/members
-#    if: |
-#      github.event_name == 'pull_request' ||
-#      (
-#        github.event_name == 'issue_comment' &&
-#        github.event.issue.pull_request &&
-#        startsWith(github.event.comment.body, '/gemini-review') &&
-#        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
-#      )
     runs-on: ubuntu-latest
     permissions:
       contents: read
