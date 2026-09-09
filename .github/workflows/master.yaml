@@ -54,7 +54,7 @@ jobs:
       - name: Build
         env:
           SERVER_ENV: DEV
-          SERVER_PORT: 0
+          SERVER_PORT: 9999
           SERVER_SOCKET_FULL_HOST: wss://app.localhost.balazskrizsan.com:9999/ws
           SERVER_SSL_ENABLED: true
           SERVER_SSL_KEY_STORE: classpath:keystore/certificate.p12
@@ -74,35 +74,35 @@ jobs:
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
         run: mvn clean install -Djooq.codegen.skip=true
 
-      - name: Build native image
-        run: mvn -pl app-module -am native:compile -Pnative -Dspring.profiles.active=native
-
-      - uses: scacap/action-surefire-report@v1
-        if: success() || failure()
-        # if: github.ref != 'refs/heads/master'
-        with:
-          check_name: Surefire test report
-          report_paths: '**/surefire-reports/*.xml'
-
-      - name: File system info
-        run: |
-          echo "===========> github.workspace var: ${{ github.workspace }}"
-          echo "===========> pwd:"
-          pwd
-          echo "===========> ls -hal:"
-          ls -hal
-          echo "===========> ls -hal app-module/src:"
-          ls -hal ./app-module/src
-          echo "===========> ls -hal app-module/target:"
-          ls -hal ./app-module/target
-          echo "===========> ls -hal db-module/src:"
-          ls -hal ./db-module/src
-          echo "===========> ls -hal db-module/target:"
-          ls -hal ./db-module/target
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          tags: kbalazsworks/smart_scrum_poker_v2_backend:${{ env.RELEASE_VERSION }}, kbalazsworks/smart_scrum_poker_v2_backend:latest, kbalazsworks/smart_scrum_poker_v2_backend:commit_sha_short_${{ env.COMMIT_SHA_SHORT }}
+#      - name: Build native image
+#        run: mvn native:compile -Pnative -Dspring.profiles.active=native
+#
+#      - uses: scacap/action-surefire-report@v1
+#        if: success() || failure()
+#        # if: github.ref != 'refs/heads/master'
+#        with:
+#          check_name: Surefire test report
+#          report_paths: '**/surefire-reports/*.xml'
+#
+#      - name: File system info
+#        run: |
+#          echo "===========> github.workspace var: ${{ github.workspace }}"
+#          echo "===========> pwd:"
+#          pwd
+#          echo "===========> ls -hal:"
+#          ls -hal
+#          echo "===========> ls -hal app-module/src:"
+#          ls -hal ./app-module/src
+#          echo "===========> ls -hal app-module/target:"
+#          ls -hal ./app-module/target
+#          echo "===========> ls -hal db-module/src:"
+#          ls -hal ./db-module/src
+#          echo "===========> ls -hal db-module/target:"
+#          ls -hal ./db-module/target
+#
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+#        with:
+#          context: .
+#          push: true
+#          tags: kbalazsworks/smart_scrum_poker_v2_backend:${{ env.RELEASE_VERSION }}, kbalazsworks/smart_scrum_poker_v2_backend:latest, kbalazsworks/smart_scrum_poker_v2_backend:commit_sha_short_${{ env.COMMIT_SHA_SHORT }}
