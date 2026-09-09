@@ -17,8 +17,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          # Automatically checks out the head ref for PR events,
-          # and pulls the PR head branch for comment-based triggers
           ref: ${{ github.event.pull_request.head.sha || format('refs/pull/{0}/head', github.event.issue.number) }}
 
       - name: Run Gemini Review - Attempt 1
@@ -31,9 +29,9 @@ jobs:
           gemini_model: 'gemini-3.6-flash'
           language: 'English (US)'
 
-      - name: Wait 30 seconds before retry
+      - name: Wait 2 minutes before retry
         if: steps.gemini_review_1.outcome == 'failure'
-        run: sleep 30
+        run: sleep 120
 
       - name: Run Gemini Review - Attempt 2
         id: gemini_review_2
@@ -46,9 +44,9 @@ jobs:
           gemini_model: 'gemini-3.6-flash'
           language: 'English (US)'
 
-      - name: Wait 30 seconds before retry
+      - name: Wait 2 minutes before retry
         if: steps.gemini_review_2.outcome == 'failure'
-        run: sleep 30
+        run: sleep 120
 
       - name: Run Gemini Review - Attempt 3
         id: gemini_review_3
