@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.rednoise</groupId>
@@ -160,19 +160,6 @@
                             <encoding>UTF-8</encoding>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>2</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>delombok</goal>
-                        </goals>
-                        <configuration>
-                            <addOutputDirectory>false</addOutputDirectory>
-                            <sourceDirectory>src/test/java</sourceDirectory>
-                            <outputDirectory>target/test-generated-sources-delombok</outputDirectory>
-                            <encoding>UTF-8</encoding>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -183,7 +170,6 @@
                     <execution>
                         <goals>
                             <goal>compile</goal>
-                            <goal>test-compile</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -207,20 +193,12 @@
                     <showWeaveInfo>true</showWeaveInfo>
                     <sources>
                         <source>
-                            <basedir>target/generated-sources-delombok</basedir>
+                            <basedir>${project.build.directory}/generated-sources-delombok</basedir>
                             <includes>
                                 <include>**/*.java</include>
                             </includes>
                         </source>
                     </sources>
-                    <testSources>
-                        <source>
-                            <basedir>target/test-generated-sources-delombok</basedir>
-                            <includes>
-                                <include>**/*.java</include>
-                            </includes>
-                        </source>
-                    </testSources>
                 </configuration>
             </plugin>
             <plugin>
