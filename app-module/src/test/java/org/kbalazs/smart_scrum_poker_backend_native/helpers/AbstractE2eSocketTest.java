@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.kbalazs.smart_scrum_poker_backend_native.helpers.account_module.fake_builders.IdsUserFakeBuilder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
@@ -26,6 +27,9 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
 {
     @Autowired
     private InsecureKeyStoreService insecureKeyStoreService;
+
+    @Value("${local.server.port}")
+    private int localServerPort;
 
     @MockBean
     protected org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory securityContextFactory;
@@ -97,8 +101,10 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
         StompHeaders connectHeaders = new StompHeaders();
         connectHeaders.add("Authorization", "Bearer mock-token");
 
+        String socketUrl = "wss://app.localhost.balazskrizsan.com:" + localServerPort + "/ws";
+        
         stompSession = stompClient.connectAsync(
-            applicationProperties.getServerSocketFullHost(),
+            socketUrl,
             (org.springframework.web.socket.WebSocketHttpHeaders) null,
             connectHeaders,
             new StompSessionHandlerAdapter()

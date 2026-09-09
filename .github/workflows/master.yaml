@@ -54,7 +54,7 @@ jobs:
       - name: Build
         env:
           SERVER_ENV: DEV
-          SERVER_PORT: 9999
+          SERVER_PORT: 0
           SERVER_SOCKET_FULL_HOST: wss://app.localhost.balazskrizsan.com:9999/ws
           SERVER_SSL_ENABLED: true
           SERVER_SSL_KEY_STORE: classpath:keystore/certificate.p12
