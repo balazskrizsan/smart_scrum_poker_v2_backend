@@ -14,7 +14,7 @@ import java.util.UUID;
 @Slf4j
 public class IdsUserApiRepository extends AbstractIdsApiRepository
 {
-    private static final String USER_INFO_BATCH_ENDPOINT = "/org/kbalazs/smart_scrum_poker_backend_native/api/userinfo/batch";
+    private static final String USER_INFO_BATCH_ENDPOINT = "/api/userinfo/batch";
 
     public @NonNull List<UserProfile> findProfileByIdsUserIdList(@NonNull List<UUID> userIdList)
     {

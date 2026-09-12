@@ -35,9 +35,18 @@ public class ReflectionConfigurationGenerator
             return;
         }
 
+        String destinationFile = "app-module/src/main/java/org/kbalazs/smart_scrum_poker_backend_native/config/ReflectionConfiguration.java";
+        
+        // Skip if destination file doesn't exist (e.g., during tests with different working directory)
+        if (!java.nio.file.Files.exists(java.nio.file.Paths.get(destinationFile)))
+        {
+            log.info("ReflectionConfigurationGenerator skipped: destination file not found at {}", destinationFile);
+            return;
+        }
+
         new RuntimeHintsReflectionGenerator(new MustacheService(), new FileService())
             .generate(
-                "app-module/src/main/java/org/kbalazs/smart_scrum_poker_backend_native/config/ReflectionConfiguration.java",
+                destinationFile,
                 List.of(
                     "org.kbalazs.smart_scrum_poker_backend_native.api.value_objects",
                     "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities",
