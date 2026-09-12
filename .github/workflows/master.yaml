@@ -51,7 +51,7 @@ jobs:
         run: |
           sudo echo "127.0.0.1 app.localhost.balazskrizsan.com" | sudo tee -a /etc/hosts
 
-      - name: Build
+      - name: Build and install db-module
         env:
           SERVER_ENV: DEV
           SERVER_PORT: 9999
@@ -72,7 +72,30 @@ jobs:
           IDS_API_BASE_URL: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
-        run: mvn clean install -DskipTests -Djooq.codegen.skip=true
+        run: mvn clean install -pl db-module -am -DskipTests
+
+      - name: Build and test app-module
+        env:
+          SERVER_ENV: DEV
+          SERVER_PORT: 9999
+          SERVER_SOCKET_FULL_HOST: wss://app.localhost.balazskrizsan.com:9999/ws
+          SERVER_SSL_ENABLED: true
+          SERVER_SSL_KEY_STORE: classpath:keystore/certificate.p12
+          SERVER_SSL_KEY_STORE_PASSWORD: password
+          SITE_DOMAIN: not.yet
+          SITE_FRONTEND_HOST: https://localhost:4200
+          SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 10
+          SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 10
+          SPRING_DATASOURCE_PASSWORD: admin_pass
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/smartscrumpoker
+          SPRING_DATASOURCE_USERNAME: admin
+          SOCKET_IS_ENABLED_SOCKET_CONNECT_AND_DISCONNECT_LISTENERS: false
+          NATIVE_REFLECTION_CONFIGURATION_GENERATOR_ENABLED: false
+          SOCKET_MESSAGE_BROKER_STATS_LOGGING_PERIOD_SECONDS: 6000
+          IDS_API_BASE_URL: https://localhost:4040
+          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
+          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
+        run: mvn clean install -pl app-module -am
 
       - name: Build native image
         run: mvn native:compile -Pnative -Dspring.profiles.active=native
