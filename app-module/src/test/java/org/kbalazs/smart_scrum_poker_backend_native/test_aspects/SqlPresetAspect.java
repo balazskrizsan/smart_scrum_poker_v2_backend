@@ -7,12 +7,10 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.kbalazs.smart_scrum_poker_backend_native.db_presets.IInsert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
 @Aspect
-@Component
 public class SqlPresetAspect
 {
     @Autowired
