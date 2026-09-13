@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IDS_USER;
+import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IDS_USER_SESSIONS;
 
 public class TestListenerSocketTest extends AbstractE2eSocketTest
 {
@@ -61,7 +63,11 @@ public class TestListenerSocketTest extends AbstractE2eSocketTest
         TestResponse actual = simpleResponseFuture.get(3, TimeUnit.SECONDS);
 
         // Assert
-        assertThat(actual.message()).isEqualTo(testedMessage);
+        assertAll(
+            () -> assertThat(actual.message()).isEqualTo(testedMessage),
+            () -> assertThat(getDslContext().selectFrom(IDS_USER).fetchOne()).isNotNull(),
+            () -> assertThat(getDslContext().selectFrom(IDS_USER_SESSIONS).fetchOne()).isNotNull()
+        );
     }
 
     @Test
@@ -98,7 +104,9 @@ public class TestListenerSocketTest extends AbstractE2eSocketTest
         assertAll(
             () -> assertThat(actual.statusCode).isEqualTo(expectedHttpStatus),
             () -> assertThat(actual.body().data()).isNotNull(),
-            () -> assertThat(actual.body().data().message()).isEqualTo(testedMessage)
+            () -> assertThat(actual.body().data().message()).isEqualTo(testedMessage),
+            () -> assertThat(getDslContext().selectFrom(IDS_USER).fetchOne()).isNotNull(),
+            () -> assertThat(getDslContext().selectFrom(IDS_USER_SESSIONS).fetchOne()).isNotNull()
         );
     }
 
@@ -147,7 +155,9 @@ public class TestListenerSocketTest extends AbstractE2eSocketTest
             () -> assertThat(broadcastActual.body().data().message()).isEqualTo(testedMessage),
             () -> assertThat(userActual.statusCode).isEqualTo(expectedHttpStatus),
             () -> assertThat(userActual.body().data()).isNotNull(),
-            () -> assertThat(userActual.body().data().message()).isEqualTo(testedMessage)
+            () -> assertThat(userActual.body().data().message()).isEqualTo(testedMessage),
+            () -> assertThat(getDslContext().selectFrom(IDS_USER).fetchOne()).isNotNull(),
+            () -> assertThat(getDslContext().selectFrom(IDS_USER_SESSIONS).fetchOne()).isNotNull()
         );
     }
 
@@ -198,7 +208,9 @@ public class TestListenerSocketTest extends AbstractE2eSocketTest
             () -> assertThat(broadcastActual.body().data().message()).isEqualTo(expectedBroadcastMessage),
             () -> assertThat(userActual.statusCode).isEqualTo(expectedHttpStatus),
             () -> assertThat(userActual.body().data()).isNotNull(),
-            () -> assertThat(userActual.body().data().message()).isEqualTo(expectedUserMessage)
+            () -> assertThat(userActual.body().data().message()).isEqualTo(expectedUserMessage),
+            () -> assertThat(getDslContext().selectFrom(IDS_USER).fetchOne()).isNotNull(),
+            () -> assertThat(getDslContext().selectFrom(IDS_USER_SESSIONS).fetchOne()).isNotNull()
         );
     }
 
