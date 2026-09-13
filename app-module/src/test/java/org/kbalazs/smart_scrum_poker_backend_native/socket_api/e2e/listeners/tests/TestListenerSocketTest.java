@@ -201,6 +201,9 @@ public class TestListenerSocketTest extends AbstractE2eSocketTest
         ResponseEntity_ResponseData_TestResponse broadcastActual = broadcastDifferentFuture.get(3, TimeUnit.SECONDS);
         ResponseEntity_ResponseData_TestResponse userActual = userDifferentFuture.get(3, TimeUnit.SECONDS);
 
+        System.out.println(getDslContext().selectFrom(IDS_USER).fetch());
+        System.out.println(getDslContext().selectFrom(IDS_USER_SESSIONS).fetch());
+
         // Assert
         assertAll(
             () -> assertThat(broadcastActual.statusCode).isEqualTo(expectedHttpStatus),
