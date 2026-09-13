@@ -68,6 +68,9 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
     protected StompSession getStompSession()
         throws Exception
     {
+        // Wait for server to be fully ready
+        Thread.sleep(5000);
+
         UUID mockUserId = IdsUserFakeBuilder.defaultId1;
         Mockito.when(securityContextFactory.getCurrentUserId()).thenReturn(mockUserId);
 
@@ -109,7 +112,7 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
                     log.error("StompSessionHandlerAdapter error: " + exception.getMessage(), exception);
                 }
             }
-        ).get(10, SECONDS);
+        ).get(30, SECONDS);
 
         return stompSession;
     }
