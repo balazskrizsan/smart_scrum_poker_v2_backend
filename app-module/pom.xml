@@ -162,7 +162,7 @@
                     </execution>
                     <execution>
                         <id>2</id>
-                        <phase>generate-sources</phase>
+                        <phase>generate-test-sources</phase>
                         <goals>
                             <goal>delombok</goal>
                         </goals>
@@ -171,6 +171,7 @@
                             <sourceDirectory>src/test/java</sourceDirectory>
                             <outputDirectory>target/test-generated-sources-delombok</outputDirectory>
                             <encoding>UTF-8</encoding>
+                            <skip>true</skip>
                         </configuration>
                     </execution>
                 </executions>

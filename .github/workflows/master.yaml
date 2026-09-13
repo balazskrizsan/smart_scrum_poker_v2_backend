@@ -51,7 +51,10 @@ jobs:
         run: |
           sudo echo "127.0.0.1 app.localhost.balazskrizsan.com" | sudo tee -a /etc/hosts
 
-      - name: Build
+      - name: Install db-module
+        run: mvn clean install -pl db-module -am -Djooq.codegen.skip=true
+
+      - name: Run app-module tests
         env:
           SERVER_ENV: DEV
           SERVER_PORT: 9999
@@ -72,7 +75,7 @@ jobs:
           IDS_API_BASE_URL: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
-        run: mvn clean install -Djooq.codegen.skip=true
+        run: mvn test -pl app-module
 
       - name: Build native image
         run: mvn native:compile -Pnative -Dspring.profiles.active=native
