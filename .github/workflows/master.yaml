@@ -96,7 +96,7 @@ jobs:
           IDS_API_BASE_URL: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
-        run: mvn -B test -pl app-module -Djooq.codegen.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dspring-boot.run.jvmArguments="-Djavax.net.debug=ssl"
+        run: mvn -B test -pl app-module -Djooq.codegen.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
       - name: Build native image
         run: mvn native:compile -Pnative -Dspring.profiles.active=native

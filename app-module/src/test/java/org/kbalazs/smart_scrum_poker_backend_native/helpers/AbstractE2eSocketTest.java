@@ -33,6 +33,9 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
     @MockBean
     protected org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder;
 
+    @MockBean
+    protected org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService idsUserService;
+
     private StompSession stompSession = null;
 
     @AfterEach
@@ -68,9 +71,6 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
     protected StompSession getStompSession()
         throws Exception
     {
-        // Wait for server to be fully ready
-        Thread.sleep(5000);
-
         UUID mockUserId = IdsUserFakeBuilder.defaultId1;
         Mockito.when(securityContextFactory.getCurrentUserId()).thenReturn(mockUserId);
 
@@ -112,7 +112,7 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
                     log.error("StompSessionHandlerAdapter error: " + exception.getMessage(), exception);
                 }
             }
-        ).get(30, SECONDS);
+        ).get(10, SECONDS);
 
         return stompSession;
     }
