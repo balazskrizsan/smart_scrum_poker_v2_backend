@@ -52,7 +52,7 @@ jobs:
           sudo echo "127.0.0.1 app.localhost.balazskrizsan.com" | sudo tee -a /etc/hosts
 
       - name: Install db-module
-        run: mvn clean install -pl db-module -am -Djooq.codegen.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+        run: mvn -B clean install -pl db-module -am -Djooq.codegen.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
       - name: Run app-module tests
         env:
