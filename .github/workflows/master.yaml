@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Example step
+      - name: Java/Graal info
         run: |
           echo "GRAALVM_HOME: $GRAALVM_HOME"
           echo "JAVA_HOME: $JAVA_HOME"
@@ -125,9 +125,18 @@ jobs:
           echo "===========> ls -hal db-module/target:"
           ls -hal ./db-module/target
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image (master)
+        if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
           tags: kbalazsworks/smart_scrum_poker_v2_backend:${{ env.RELEASE_VERSION }}, kbalazsworks/smart_scrum_poker_v2_backend:latest, kbalazsworks/smart_scrum_poker_v2_backend:commit_sha_short_${{ env.COMMIT_SHA_SHORT }}
+
+      - name: Build and push Docker image (PR)
+        if: github.ref != 'refs/heads/master'
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: kbalazsworks/smart_scrum_poker_v2_backend:commit_sha_short_${{ env.COMMIT_SHA_SHORT }}
