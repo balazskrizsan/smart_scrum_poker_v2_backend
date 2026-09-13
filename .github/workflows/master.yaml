@@ -51,9 +51,9 @@ jobs:
         run: |
           sudo echo "127.0.0.1 app.localhost.balazskrizsan.com" | sudo tee -a /etc/hosts
 
-      - name: Ping HTTPS endpoint
+      - name: Verify host resolution
         run: |
-          curl -k -I https://app.localhost.balazskrizsan.com:9999 || echo "Application not yet running"
+          getent hosts app.localhost.balazskrizsan.com
 
       - name: Install db-module
         run: mvn -B clean install -pl db-module -am -Djooq.codegen.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
