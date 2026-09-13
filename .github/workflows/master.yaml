@@ -55,6 +55,23 @@ jobs:
         run: |
           getent hosts app.localhost.balazskrizsan.com
 
+      - name: Validate SSL certificate
+        run: |
+          keytool -list -v -keystore app-module/src/main/resources/keystore/certificate.p12 -storepass password -storetype PKCS12
+
+      - name: Check certificate expiration
+        run: |
+          EXPIRY_DATE=$(keytool -list -v -keystore app-module/src/main/resources/keystore/certificate.p12 -storepass password -storetype PKCS12 | grep "Valid from" | awk -F'until: ' '{print $2}')
+          echo "Certificate expires on: $EXPIRY_DATE"
+          EXPIRY_EPOCH=$(date -d "$EXPIRY_DATE" +%s)
+          CURRENT_EPOCH=$(date +%s)
+          if [ $EXPIRY_EPOCH -lt $CURRENT_EPOCH ]; then
+            echo "ERROR: Certificate has expired!"
+            exit 1
+          else
+            echo "Certificate is valid"
+          fi
+
       - name: Install db-module
         run: mvn -B clean install -pl db-module -am -Djooq.codegen.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
