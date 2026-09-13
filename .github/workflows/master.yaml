@@ -52,14 +52,16 @@ jobs:
           sudo echo "127.0.0.1 app.localhost.balazskrizsan.com" | sudo tee -a /etc/hosts
 
       - name: Install db-module
-        run: mvn clean install -pl db-module -am -Djooq.codegen.skip=true
+        run: mvn clean install -pl db-module -am -Djooq.codegen.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
       - name: Run app-module tests
         env:
           SERVER_ENV: DEV
           SERVER_PORT: 9999
-          SERVER_SOCKET_FULL_HOST: ws://app.localhost.balazskrizsan.com:9999/ws
-          SERVER_SSL_ENABLED: false
+          SERVER_SOCKET_FULL_HOST: wss://app.localhost.balazskrizsan.com:9999/ws
+          SERVER_SSL_ENABLED: true
+          SERVER_SSL_KEY_STORE: classpath:keystore/certificate.p12
+          SERVER_SSL_KEY_STORE_PASSWORD: password
           SITE_DOMAIN: not.yet
           SITE_FRONTEND_HOST: https://localhost:4200
           SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 10
@@ -73,7 +75,7 @@ jobs:
           IDS_API_BASE_URL: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
-        run: mvn test -pl app-module
+        run: mvn test -pl app-module -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
       - name: Build native image
         run: mvn native:compile -Pnative -Dspring.profiles.active=native
