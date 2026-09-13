@@ -33,9 +33,6 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
     @MockBean
     protected org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder;
 
-    @MockBean
-    protected org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService idsUserService;
-
     private StompSession stompSession = null;
 
     @AfterEach

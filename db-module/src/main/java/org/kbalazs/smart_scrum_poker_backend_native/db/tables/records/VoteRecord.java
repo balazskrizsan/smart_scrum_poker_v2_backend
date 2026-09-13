@@ -7,6 +7,7 @@ package org.kbalazs.smart_scrum_poker_backend_native.db.tables.records;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.jooq.JSONB;
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Vote;
@@ -49,101 +50,73 @@ public class VoteRecord extends UpdatableRecordImpl<VoteRecord> {
     }
 
     /**
-     * Setter for <code>public.vote.uncertainty</code>.
-     */
-    public void setUncertainty(Short value) {
-        set(2, value);
-    }
-
-    /**
-     * Getter for <code>public.vote.uncertainty</code>.
-     */
-    public Short getUncertainty() {
-        return (Short) get(2);
-    }
-
-    /**
-     * Setter for <code>public.vote.complexity</code>.
-     */
-    public void setComplexity(Short value) {
-        set(3, value);
-    }
-
-    /**
-     * Getter for <code>public.vote.complexity</code>.
-     */
-    public Short getComplexity() {
-        return (Short) get(3);
-    }
-
-    /**
-     * Setter for <code>public.vote.effort</code>.
-     */
-    public void setEffort(Short value) {
-        set(4, value);
-    }
-
-    /**
-     * Getter for <code>public.vote.effort</code>.
-     */
-    public Short getEffort() {
-        return (Short) get(4);
-    }
-
-    /**
-     * Setter for <code>public.vote.risk</code>.
-     */
-    public void setRisk(Short value) {
-        set(5, value);
-    }
-
-    /**
-     * Getter for <code>public.vote.risk</code>.
-     */
-    public Short getRisk() {
-        return (Short) get(5);
-    }
-
-    /**
      * Setter for <code>public.vote.calculated_point</code>.
      */
     public void setCalculatedPoint(Short value) {
-        set(6, value);
+        set(2, value);
     }
 
     /**
      * Getter for <code>public.vote.calculated_point</code>.
      */
     public Short getCalculatedPoint() {
-        return (Short) get(6);
+        return (Short) get(2);
     }
 
     /**
      * Setter for <code>public.vote.created_at</code>.
      */
     public void setCreatedAt(LocalDateTime value) {
-        set(7, value);
+        set(3, value);
     }
 
     /**
      * Getter for <code>public.vote.created_at</code>.
      */
     public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(7);
+        return (LocalDateTime) get(3);
     }
 
     /**
      * Setter for <code>public.vote.created_by</code>.
      */
     public void setCreatedBy(UUID value) {
-        set(8, value);
+        set(4, value);
     }
 
     /**
      * Getter for <code>public.vote.created_by</code>.
      */
     public UUID getCreatedBy() {
-        return (UUID) get(8);
+        return (UUID) get(4);
+    }
+
+    /**
+     * Setter for <code>public.vote.story_point_config_id</code>.
+     */
+    public void setStoryPointConfigId(Long value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>public.vote.story_point_config_id</code>.
+     */
+    public Long getStoryPointConfigId() {
+        return (Long) get(5);
+    }
+
+    /**
+     * Setter for <code>public.vote.vote_values</code>.
+     */
+    public void setVoteValues(JSONB value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>public.vote.vote_values</code>.
+     */
+    public JSONB getVoteValues() {
+        return (JSONB) get(6);
     }
 
     // -------------------------------------------------------------------------
@@ -169,18 +142,16 @@ public class VoteRecord extends UpdatableRecordImpl<VoteRecord> {
     /**
      * Create a detached, initialised VoteRecord
      */
-    public VoteRecord(Long id, Long ticketId, Short uncertainty, Short complexity, Short effort, Short risk, Short calculatedPoint, LocalDateTime createdAt, UUID createdBy) {
+    public VoteRecord(Long id, Long ticketId, Short calculatedPoint, LocalDateTime createdAt, UUID createdBy, Long storyPointConfigId, JSONB voteValues) {
         super(Vote.VOTE);
 
         setId(id);
         setTicketId(ticketId);
-        setUncertainty(uncertainty);
-        setComplexity(complexity);
-        setEffort(effort);
-        setRisk(risk);
         setCalculatedPoint(calculatedPoint);
         setCreatedAt(createdAt);
         setCreatedBy(createdBy);
+        setStoryPointConfigId(storyPointConfigId);
+        setVoteValues(voteValues);
         resetChangedOnNotNull();
     }
 }

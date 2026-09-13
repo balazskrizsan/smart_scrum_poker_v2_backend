@@ -2,6 +2,8 @@ package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.
 
 import lombok.NonNull;
 import org.jooq.DSLContext;
+import org.jooq.JSON;
+import org.jooq.impl.DSL;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.VoteRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.domain_common.repositories.AbstractRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote;
@@ -13,6 +15,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.jooq.impl.DSL.field;
 import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.VOTE;
 
 @Repository
@@ -23,11 +26,9 @@ public class VoteRepository extends AbstractRepository {
         ctx.insertInto(VOTE)
             .set(ctx.newRecord(VOTE, vote))
             .onDuplicateKeyUpdate()
-            .set(VOTE.UNCERTAINTY, vote.uncertainty())
-            .set(VOTE.COMPLEXITY, vote.complexity())
-            .set(VOTE.EFFORT, vote.effort())
-            .set(VOTE.RISK, vote.risk())
-            .set(VOTE.CALCULATED_POINT, vote.calculatedPoint())
+            .set(field("story_point_config_id"), vote.storyPointConfigId())
+            .set(field("vote_values"), JSON.valueOf(vote.voteValues()))
+            .set(field("calculated_point"), vote.calculatedPoint())
             .execute();
     }
 
@@ -51,5 +52,26 @@ public class VoteRepository extends AbstractRepository {
             .deleteFrom(VOTE)
             .where(VOTE.TICKET_ID.eq(ticketId))
             .execute();
+    }
+
+    public Vote findById(@NonNull Long id) {
+        VoteRecord record = getDSLContext()
+            .selectFrom(VOTE)
+            .where(VOTE.ID.eq(id))
+            .fetchOne();
+
+        if (record == null) {
+            return null;
+        }
+
+        return new Vote(
+            record.getId(),
+            record.getTicketId(),
+            record.getStoryPointConfigId(),
+            record.getVoteValues() != null ? record.getVoteValues().data() : null,
+            record.getCalculatedPoint(),
+            record.getCreatedAt(),
+            record.getCreatedBy()
+        );
     }
 }
