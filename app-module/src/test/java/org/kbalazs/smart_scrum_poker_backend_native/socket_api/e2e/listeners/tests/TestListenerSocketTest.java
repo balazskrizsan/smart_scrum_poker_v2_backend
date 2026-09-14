@@ -1,5 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.e2e.listeners.tests;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.kbalazs.smart_scrum_poker_backend_native.db_presets.Insert1Session;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IDS_USER;
 import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.IDS_USER_SESSIONS;
 
+@Getter
 public class TestListenerSocketTest extends AbstractE2eSocketTest
 {
     CompletableFuture<ResponseEntity_ResponseData_TestResponse> responseFuture = new CompletableFuture<>();
@@ -34,6 +36,7 @@ public class TestListenerSocketTest extends AbstractE2eSocketTest
     CompletableFuture<ResponseEntity_ResponseData_TestResponse> broadcastNotificationFuture = new CompletableFuture<>();
     CompletableFuture<ResponseEntity_ResponseData_TestResponse> userNotificationFuture = new CompletableFuture<>();
 
+    private String testedId = "testid";
 
     @Test
     @SqlPreset(presets = {
@@ -74,7 +77,7 @@ public class TestListenerSocketTest extends AbstractE2eSocketTest
     @SqlPreset(presets = {
         Insert1User.class,
         Insert1Session.class,
-    })
+    }, truncateAfter = false)
     @SneakyThrows
     public void echo_AppTestEchoIdListener_responseToSendToUserUserQueueReplyId()
     {

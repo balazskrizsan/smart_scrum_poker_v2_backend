@@ -2,13 +2,14 @@ package org.kbalazs.smart_scrum_poker_backend_native.helpers;
 
 import org.kbalazs.smart_scrum_poker_backend_native.SmartScrumPokerBackendNativeApplication;
 import org.kbalazs.smart_scrum_poker_backend_native.config.ApplicationProperties;
+import org.kbalazs.smart_scrum_poker_backend_native.test_aspects.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(classes = SmartScrumPokerBackendNativeApplication.class)
+@ContextConfiguration(classes = {SmartScrumPokerBackendNativeApplication.class, Config.class})
 @EnableAspectJAutoProxy
 public abstract class AbstractTest
 {

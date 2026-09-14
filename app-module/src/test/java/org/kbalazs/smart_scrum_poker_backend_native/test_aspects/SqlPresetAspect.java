@@ -18,17 +18,12 @@ public class SqlPresetAspect
     @Autowired
     private PresetService presetService;
 
-    @Pointcut("execution(* org.kbalazs.smart_scrum_poker_backend_native..*(..))")
-    protected void findAllSocketDomainTestClasses()
-    {
-    }
-
     @Pointcut("@annotation(org.kbalazs.smart_scrum_poker_backend_native.test_aspects.SqlPreset)")
     protected void findSqlPresetAnnotatedTests()
     {
     }
 
-    @Around("findAllSocketDomainTestClasses() && findSqlPresetAnnotatedTests()")
+    @Around("findSqlPresetAnnotatedTests()")
     public Object setup(ProceedingJoinPoint joinPoint) throws Throwable
     {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
