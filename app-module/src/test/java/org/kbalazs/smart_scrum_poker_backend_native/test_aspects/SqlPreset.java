@@ -1,6 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.test_aspects;
 
-import org.junit.platform.commons.annotation.Testable;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kbalazs.smart_scrum_poker_backend_native.db_presets.IInsert;
 
 import java.lang.annotation.Documented;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Testable
+@ExtendWith(SqlPresetExtension.class)
 public @interface SqlPreset
 {
     Class<? extends IInsert>[] presets() default {};
