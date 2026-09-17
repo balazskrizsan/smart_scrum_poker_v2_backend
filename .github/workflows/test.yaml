@@ -6,7 +6,6 @@ on:
 
 jobs:
   hello:
-    if:  github.event.comment.body == 'review'
     runs-on: ubuntu-latest
 
     steps:
