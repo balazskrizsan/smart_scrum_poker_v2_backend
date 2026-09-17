@@ -1,5 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.account.InsecureUserCreateRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest;
@@ -38,29 +39,22 @@ public class RequestMapperService {
     }
 
     public static Vote mapToEntity(@NonNull final VoteRequest voteRequest, UUID idsUserId) {
-        // Convert Map to JSON dynamically
-        StringBuilder jsonBuilder = new StringBuilder("{");
-        boolean first = true;
-        for (Map.Entry<String, String> entry : voteRequest.dimensionValues().entrySet()) {
-            if (!first) {
-                jsonBuilder.append(",");
-            }
-            jsonBuilder.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
-            first = false;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String voteValuesJson = objectMapper.writeValueAsString(voteRequest.dimensionValues());
+
+            return new Vote(
+                null,
+                voteRequest.ticketId(),
+                null,
+                voteValuesJson,
+                null,
+                getNow(),
+                idsUserId
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to convert dimension values to JSON", e);
         }
-        jsonBuilder.append("}");
-        
-        String voteValuesJson = jsonBuilder.toString();
-        
-        return new Vote(
-            null,
-            voteRequest.ticketId(),
-            null,
-            voteValuesJson,
-            null,
-            getNow(),
-            idsUserId
-        );
     }
 
     public static IdsUser mapToEntity(@NonNull final InsecureUserCreateRequest insecureUserCreateRequest) {

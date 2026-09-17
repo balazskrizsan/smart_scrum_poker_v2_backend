@@ -15,7 +15,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.jooq.impl.DSL.field;
 import static org.kbalazs.smart_scrum_poker_backend_native.db.Tables.VOTE;
 
 @Repository
@@ -26,9 +25,9 @@ public class VoteRepository extends AbstractRepository {
         ctx.insertInto(VOTE)
             .set(ctx.newRecord(VOTE, vote))
             .onDuplicateKeyUpdate()
-            .set(field("story_point_config_id"), vote.storyPointConfigId())
-            .set(field("vote_values"), JSON.valueOf(vote.voteValues()))
-            .set(field("calculated_point"), vote.calculatedPoint())
+            .set(VOTE.STORY_POINT_CONFIG_ID, vote.storyPointConfigId())
+            .set(VOTE.VOTE_VALUES, org.jooq.JSONB.valueOf(vote.voteValues()))
+            .set(VOTE.CALCULATED_POINT, vote.calculatedPoint())
             .execute();
     }
 

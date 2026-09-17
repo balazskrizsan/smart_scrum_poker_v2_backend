@@ -24,16 +24,16 @@ public class StoryPointConfigRepository extends AbstractRepository
     public Optional<StoryPointConfig> findById(@NonNull Long id)
     {
         return getDSLContext()
-            .selectFrom(DSL.table("story_point_config"))
-            .where(DSL.field("id").eq(id))
+            .selectFrom(Tables.STORY_POINT_CONFIG)
+            .where(Tables.STORY_POINT_CONFIG.ID.eq(id))
             .fetchOptionalInto(StoryPointConfig.class);
     }
 
     public Optional<StoryPointConfig> findDefaultConfig()
     {
         return getDSLContext()
-            .selectFrom(DSL.table("story_point_config"))
-            .where(DSL.field("name").eq("Default Config"))
+            .selectFrom(Tables.STORY_POINT_CONFIG)
+            .where(Tables.STORY_POINT_CONFIG.NAME.eq("Default Config"))
             .fetchOptionalInto(StoryPointConfig.class);
     }
 }
