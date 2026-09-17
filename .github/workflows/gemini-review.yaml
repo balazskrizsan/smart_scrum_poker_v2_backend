@@ -9,7 +9,6 @@ on:
 
 jobs:
   review:
-    if: contains(github.event.comment.body, '/review')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,46 +16,51 @@ jobs:
       issues: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha || format('refs/pull/{0}/head', github.event.issue.number) }}
+      - name: Debug event
+        run: |
+          echo "Event:"
+          echo "${{ toJSON(github.event) }}"
 
-      - name: Run Gemini Review - Attempt 1
-        id: gemini_review_1
-        continue-on-error: true
-        uses: derailed-dash/gemini-review-action@v1
-        with:
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          gemini_model: 'gemini-3.6-flash'
-          language: 'English (US)'
-
-      - name: Wait 2 minutes before retry
-        if: steps.gemini_review_1.outcome == 'failure'
-        run: sleep 120
-
-      - name: Run Gemini Review - Attempt 2
-        id: gemini_review_2
-        if: steps.gemini_review_1.outcome == 'failure'
-        continue-on-error: true
-        uses: derailed-dash/gemini-review-action@v1
-        with:
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          gemini_model: 'gemini-3.6-flash'
-          language: 'English (US)'
-
-      - name: Wait 2 minutes before retry
-        if: steps.gemini_review_2.outcome == 'failure'
-        run: sleep 120
-
-      - name: Run Gemini Review - Attempt 3
-        id: gemini_review_3
-        if: steps.gemini_review_2.outcome == 'failure'
-        uses: derailed-dash/gemini-review-action@v1
-        with:
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          gemini_model: 'gemini-3.6-flash'
-          language: 'English (US)'
+#      - name: Checkout repository
+#        uses: actions/checkout@v6
+#        with:
+#          ref: ${{ github.event.pull_request.head.sha || format('refs/pull/{0}/head', github.event.issue.number) }}
+#
+#      - name: Run Gemini Review - Attempt 1
+#        id: gemini_review_1
+#        continue-on-error: true
+#        uses: derailed-dash/gemini-review-action@v1
+#        with:
+#          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          gemini_model: 'gemini-3.6-flash'
+#          language: 'English (US)'
+#
+#      - name: Wait 2 minutes before retry
+#        if: steps.gemini_review_1.outcome == 'failure'
+#        run: sleep 120
+#
+#      - name: Run Gemini Review - Attempt 2
+#        id: gemini_review_2
+#        if: steps.gemini_review_1.outcome == 'failure'
+#        continue-on-error: true
+#        uses: derailed-dash/gemini-review-action@v1
+#        with:
+#          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          gemini_model: 'gemini-3.6-flash'
+#          language: 'English (US)'
+#
+#      - name: Wait 2 minutes before retry
+#        if: steps.gemini_review_2.outcome == 'failure'
+#        run: sleep 120
+#
+#      - name: Run Gemini Review - Attempt 3
+#        id: gemini_review_3
+#        if: steps.gemini_review_2.outcome == 'failure'
+#        uses: derailed-dash/gemini-review-action@v1
+#        with:
+#          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          gemini_model: 'gemini-3.6-flash'
+#          language: 'English (US)'
