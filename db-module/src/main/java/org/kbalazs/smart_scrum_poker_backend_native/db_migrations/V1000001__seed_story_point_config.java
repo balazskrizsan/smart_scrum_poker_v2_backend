@@ -63,10 +63,10 @@ public class V1000001__seed_story_point_config extends AbstractBaseJooqMigration
         String defaultPointsMapping = """
             [
                 {"totalRange": [0, 3], "points": 1},
-                {"totalRange": [4, 6], "points": 2},
+                {"totalRange": [4, 5], "points": 2},
                 {"totalRange": [6, 8], "points": 3},
                 {"totalRange": [9, 10], "points": 5},
-                {"totalRange": [10, 12], "points": 8},
+                {"totalRange": [11, 12], "points": 8},
                 {"totalRange": [13, 100], "points": 13}
             ]
             """;

@@ -1,7 +1,7 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
+import org.kbalazs.smart_scrum_poker_backend_native.common.servies.StaticObjectMapper;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.account.InsecureUserCreateRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest;
@@ -40,8 +40,7 @@ public class RequestMapperService {
 
     public static Vote mapToEntity(@NonNull final VoteRequest voteRequest, UUID idsUserId) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String voteValuesJson = objectMapper.writeValueAsString(voteRequest.dimensionValues());
+            String voteValuesJson = StaticObjectMapper.defaultMapper.writeValueAsString(voteRequest.dimensionValues());
 
             return new Vote(
                 null,
