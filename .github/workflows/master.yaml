@@ -104,6 +104,13 @@ jobs:
       - name: Build native image
         run: mvn -B native:compile -pl app-module -Pnative -Dspring.profiles.active=native -Djooq.codegen.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
+      - name: Check native binary
+        run: |
+          echo "===========> ls -hal app-module/target:"
+          ls -hal ./app-module/target
+          echo "===========> find native binary:"
+          find ./app-module/target -name "*smart_scrum_poker_backend_native*" -type f
+
       - uses: scacap/action-surefire-report@v1
         if: success() || failure()
         # if: github.ref != 'refs/heads/master'
