@@ -1,19 +1,28 @@
-name: Review Command
+name: "🔎 Dazbo's Gemini Code Review"
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
+    branches:
+      - main
+    # Optional: restrict trigger paths (supports inclusions & exclusions)
+    # paths:
+    #   - 'src/**'
+    #   - '!src/generated/**'  # Exclude generated files
+    #   - 'pyproject.toml'
   issue_comment:
-    branches: [ master, gemini-review-with-comment ]
-  pull_request_review_comment:
-    branches: [ master, gemini-review-with-comment ]
+    types: [created]
 
 jobs:
-  hello:
-    runs-on: ubuntu-latest
-
+  review:
+    # Run on internal PR updates (same repo), OR on issue comment starting with /gemini-review by repo members
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
+      (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request &&
+        startsWith(github.event.comment.body, '/gemini-review') &&
+        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
+      )
     steps:
       - name: Hello
         run: echo "hello"
