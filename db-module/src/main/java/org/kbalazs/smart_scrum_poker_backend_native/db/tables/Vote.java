@@ -15,6 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.InverseForeignKey;
+import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Path;
 import org.jooq.PlainSQL;
@@ -34,6 +35,7 @@ import org.jooq.impl.TableImpl;
 import org.kbalazs.smart_scrum_poker_backend_native.db.Keys;
 import org.kbalazs.smart_scrum_poker_backend_native.db.Public;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUser.IdsUserPath;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.StoryPointConfig.StoryPointConfigPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Ticket.TicketPath;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.VoteRecord;
 
@@ -70,26 +72,6 @@ public class Vote extends TableImpl<VoteRecord> {
     public final TableField<VoteRecord, Long> TICKET_ID = createField(DSL.name("ticket_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
-     * The column <code>public.vote.uncertainty</code>.
-     */
-    public final TableField<VoteRecord, Short> UNCERTAINTY = createField(DSL.name("uncertainty"), SQLDataType.SMALLINT.nullable(false), this, "");
-
-    /**
-     * The column <code>public.vote.complexity</code>.
-     */
-    public final TableField<VoteRecord, Short> COMPLEXITY = createField(DSL.name("complexity"), SQLDataType.SMALLINT.nullable(false), this, "");
-
-    /**
-     * The column <code>public.vote.effort</code>.
-     */
-    public final TableField<VoteRecord, Short> EFFORT = createField(DSL.name("effort"), SQLDataType.SMALLINT.nullable(false), this, "");
-
-    /**
-     * The column <code>public.vote.risk</code>.
-     */
-    public final TableField<VoteRecord, Short> RISK = createField(DSL.name("risk"), SQLDataType.SMALLINT.nullable(false), this, "");
-
-    /**
      * The column <code>public.vote.calculated_point</code>.
      */
     public final TableField<VoteRecord, Short> CALCULATED_POINT = createField(DSL.name("calculated_point"), SQLDataType.SMALLINT.nullable(false), this, "");
@@ -103,6 +85,16 @@ public class Vote extends TableImpl<VoteRecord> {
      * The column <code>public.vote.created_by</code>.
      */
     public final TableField<VoteRecord, UUID> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.UUID.nullable(false), this, "");
+
+    /**
+     * The column <code>public.vote.story_point_config_id</code>.
+     */
+    public final TableField<VoteRecord, Long> STORY_POINT_CONFIG_ID = createField(DSL.name("story_point_config_id"), SQLDataType.BIGINT, this, "");
+
+    /**
+     * The column <code>public.vote.vote_values</code>.
+     */
+    public final TableField<VoteRecord, JSONB> VOTE_VALUES = createField(DSL.name("vote_values"), SQLDataType.JSONB, this, "");
 
     private Vote(Name alias, Table<VoteRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -188,7 +180,7 @@ public class Vote extends TableImpl<VoteRecord> {
 
     @Override
     public List<ForeignKey<VoteRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.VOTE__VOTE__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE, Keys.VOTE__VOTE__FK___TICKET_ID___TICKET__ID___ON_DELETE_CASCADE);
+        return Arrays.asList(Keys.VOTE__VOTE__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE, Keys.VOTE__VOTE__FK___STORY_POINT_CONFIG_ID___STORY_POINT_CONFIG__ID___ON_, Keys.VOTE__VOTE__FK___TICKET_ID___TICKET__ID___ON_DELETE_CASCADE);
     }
 
     private transient IdsUserPath _idsUser;
@@ -201,6 +193,19 @@ public class Vote extends TableImpl<VoteRecord> {
             _idsUser = new IdsUserPath(this, Keys.VOTE__VOTE__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE, null);
 
         return _idsUser;
+    }
+
+    private transient StoryPointConfigPath _storyPointConfig;
+
+    /**
+     * Get the implicit join path to the <code>public.story_point_config</code>
+     * table.
+     */
+    public StoryPointConfigPath storyPointConfig() {
+        if (_storyPointConfig == null)
+            _storyPointConfig = new StoryPointConfigPath(this, Keys.VOTE__VOTE__FK___STORY_POINT_CONFIG_ID___STORY_POINT_CONFIG__ID___ON_, null);
+
+        return _storyPointConfig;
     }
 
     private transient TicketPath _ticket;

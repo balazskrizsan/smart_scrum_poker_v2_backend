@@ -11,8 +11,10 @@ import org.kbalazs.smart_scrum_poker_backend_native.domain_common.services.JooqS
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.common_module.services.UuidService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.PokerException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.repositories.StoryPointConfigRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StartPokerResponse;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class StartService
     TicketService ticketService;
     JooqService jooqService;
     Slf4jLongTermLoggerService slf4jLongTermLoggerService;
+    StoryPointConfigRepository storyPointConfigRepository;
 
     public StartPokerResponse start(@NonNull Poker poker, @NonNull List<Ticket> tickets)
     {
@@ -47,12 +50,16 @@ public class StartService
     {
         try
         {
+            StoryPointConfig defaultConfig = storyPointConfigRepository.findDefaultConfig()
+                .orElseThrow(() -> new PokerException("Default story point config not found"));
+
             Poker newPoker = pokerService.create(new Poker(
                 null,
                 uuidService.getRandom(),
                 poker.name(),
                 poker.createdAt(),
-                poker.createdBy()
+                poker.createdBy(),
+                defaultConfig.id()
             ));
 
             ticketService.createAll(

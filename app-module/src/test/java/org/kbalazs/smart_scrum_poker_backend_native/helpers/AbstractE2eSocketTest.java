@@ -4,13 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.AfterEach;
+import org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory;
 import org.kbalazs.smart_scrum_poker_backend_native.helpers.account_module.fake_builders.IdsUserFakeBuilder;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
@@ -28,13 +33,13 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
     private InsecureKeyStoreService insecureKeyStoreService;
 
     @MockBean
-    protected org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory securityContextFactory;
+    protected SecurityContextFactory securityContextFactory;
 
     @MockBean
-    protected org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder;
+    protected JwtDecoder jwtDecoder;
 
     @MockBean
-    protected org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService idsUserService;
+    protected IdsUserService idsUserService;
 
     private StompSession stompSession = null;
 
@@ -75,7 +80,7 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
         Mockito.when(securityContextFactory.getCurrentUserId()).thenReturn(mockUserId);
 
         // Mock JWT decoder to return a valid JWT token
-        org.springframework.security.oauth2.jwt.Jwt mockJwt = org.springframework.security.oauth2.jwt.Jwt.withTokenValue("mock-token")
+        Jwt mockJwt = Jwt.withTokenValue("mock-token")
             .header("alg", "none")
             .claim("sub", mockUserId.toString())
             .build();
@@ -102,7 +107,7 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
 
         stompSession = stompClient.connectAsync(
             applicationProperties.getServerSocketFullHost(),
-            (org.springframework.web.socket.WebSocketHttpHeaders) null,
+            (WebSocketHttpHeaders) null,
             connectHeaders,
             new StompSessionHandlerAdapter()
             {
