@@ -6,7 +6,9 @@ on:
   pull_request:
     branches: [ master ]
   issue_comment:
+    branches: [ master, gemini-review-with-comment ]
   pull_request_review_comment:
+    branches: [ master, gemini-review-with-comment ]
 
 jobs:
   hello:
