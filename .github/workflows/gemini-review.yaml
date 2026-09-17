@@ -10,13 +10,21 @@ jobs:
     if: |
       github.event.issue.pull_request &&
       github.event.comment.body == '/review'
+
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       pull-requests: write
       issues: write
 
     steps:
+      - name: Debug
+        run: |
+          echo "event: ${{ github.event_name }}"
+          echo "comment: '${{ github.event.comment.body }}'"
+          echo "is PR: '${{ github.event.issue.pull_request }}'"
+
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
