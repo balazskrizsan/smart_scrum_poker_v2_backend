@@ -1,7 +1,7 @@
 name: Review Command
 
 on:
-  issue_comment:
+  pull_request:
     types: [created]
 
 jobs:
