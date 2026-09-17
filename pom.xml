@@ -36,4 +36,16 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.graalvm.buildtools</groupId>
+                    <artifactId>native-maven-plugin</artifactId>
+                    <version>0.10.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
 </project>
