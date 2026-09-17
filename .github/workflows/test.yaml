@@ -1,8 +1,10 @@
 name: Review Command
 
 on:
+  push:
+    branches: [ master ]
   pull_request:
-    types: [created]
+    branches: [ master ]
 
 jobs:
   hello:
