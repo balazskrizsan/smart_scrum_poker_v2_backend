@@ -9,7 +9,7 @@ jobs:
   review:
     if: |
       github.event.issue.pull_request &&
-      github.event.comment.body == '/review'
+      contains(github.event.comment.body, '/review')
 
     runs-on: ubuntu-latest
 
