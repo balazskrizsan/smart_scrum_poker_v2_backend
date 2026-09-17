@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -59,5 +60,12 @@ public class PokerRepository extends AbstractRepository {
             .selectFrom(POKER)
             .where(POKER.CREATED_BY.eq(idsUserId))
             .fetchInto(Poker.class);
+    }
+
+    public Optional<Poker> findById(@NonNull Long pokerId) {
+        return getDSLContext()
+            .selectFrom(POKER)
+            .where(POKER.ID.eq(pokerId))
+            .fetchOptionalInto(Poker.class);
     }
 }

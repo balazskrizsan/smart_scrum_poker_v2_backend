@@ -14,6 +14,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUserSessions;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InPokerIdsUsers;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Poker;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Vote;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.FlywaySchemaHistoryRecord;
@@ -21,6 +22,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserRec
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.IdsUserSessionsRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.InPokerIdsUsersRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.PokerRecord;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.StoryPointConfigRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.TicketRecord;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.records.VoteRecord;
 
@@ -43,6 +45,7 @@ public class Keys {
     public static final UniqueKey<InPokerIdsUsersRecord> IN_POKER_IDS_USERS__PK___IDS_USER_ID___POKER_ID = Internal.createUniqueKey(InPokerIdsUsers.IN_POKER_IDS_USERS, DSL.name("in_poker_ids_users__pk___ids_user_id___poker_id"), new TableField[] { InPokerIdsUsers.IN_POKER_IDS_USERS.IDS_USER_ID, InPokerIdsUsers.IN_POKER_IDS_USERS.POKER_ID }, true);
     public static final UniqueKey<PokerRecord> POKER__PK___ID = Internal.createUniqueKey(Poker.POKER, DSL.name("poker__pk___id"), new TableField[] { Poker.POKER.ID }, true);
     public static final UniqueKey<PokerRecord> POKER__UNIQUE___PUBLIC_ID = Internal.createUniqueKey(Poker.POKER, DSL.name("poker__unique___public_id"), new TableField[] { Poker.POKER.PUBLIC_ID }, true);
+    public static final UniqueKey<StoryPointConfigRecord> STORY_POINT_CONFIG__PK___ID = Internal.createUniqueKey(StoryPointConfig.STORY_POINT_CONFIG, DSL.name("story_point_config__pk___id"), new TableField[] { StoryPointConfig.STORY_POINT_CONFIG.ID }, true);
     public static final UniqueKey<TicketRecord> TICKET__PK___ID = Internal.createUniqueKey(Ticket.TICKET, DSL.name("ticket__pk___id"), new TableField[] { Ticket.TICKET.ID }, true);
     public static final UniqueKey<TicketRecord> TICKET__UNIQUE___PUBLIC_ID = Internal.createUniqueKey(Ticket.TICKET, DSL.name("ticket__unique___public_id"), new TableField[] { Ticket.TICKET.PUBLIC_ID }, true);
     public static final UniqueKey<VoteRecord> VOTE__PK___ID = Internal.createUniqueKey(Vote.VOTE, DSL.name("vote__pk___id"), new TableField[] { Vote.VOTE.ID }, true);
@@ -56,7 +59,10 @@ public class Keys {
     public static final ForeignKey<InPokerIdsUsersRecord, IdsUserRecord> IN_POKER_IDS_USERS__IN_POKER_IDS_USERS__FK___IDS_USER_ID___IDS_USER__ID___ON_DELETE = Internal.createForeignKey(InPokerIdsUsers.IN_POKER_IDS_USERS, DSL.name("in_poker_ids_users__fk___ids_user_id___ids_user__id___on_delete"), new TableField[] { InPokerIdsUsers.IN_POKER_IDS_USERS.IDS_USER_ID }, Keys.INSECURE_USER__UNIQUE___ID, new TableField[] { IdsUser.IDS_USER.ID }, true);
     public static final ForeignKey<InPokerIdsUsersRecord, PokerRecord> IN_POKER_IDS_USERS__IN_POKER_IDS_USERS__FK___POKER_ID___POKER__ID___ON_DELETE_CASCA = Internal.createForeignKey(InPokerIdsUsers.IN_POKER_IDS_USERS, DSL.name("in_poker_ids_users__fk___poker_id___poker__id___on_delete_casca"), new TableField[] { InPokerIdsUsers.IN_POKER_IDS_USERS.POKER_ID }, Keys.POKER__PK___ID, new TableField[] { Poker.POKER.ID }, true);
     public static final ForeignKey<PokerRecord, IdsUserRecord> POKER__POKER__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE = Internal.createForeignKey(Poker.POKER, DSL.name("poker__fk___created_by___ids_user__id___on_delete_cascade"), new TableField[] { Poker.POKER.CREATED_BY }, Keys.INSECURE_USER__UNIQUE___ID, new TableField[] { IdsUser.IDS_USER.ID }, true);
+    public static final ForeignKey<PokerRecord, StoryPointConfigRecord> POKER__POKER__FK___STORY_POINT_CONFIG_ID___STORY_POINT_CONFIG__ID___ON = Internal.createForeignKey(Poker.POKER, DSL.name("poker__fk___story_point_config_id___story_point_config__id___on"), new TableField[] { Poker.POKER.STORY_POINT_CONFIG_ID }, Keys.STORY_POINT_CONFIG__PK___ID, new TableField[] { StoryPointConfig.STORY_POINT_CONFIG.ID }, true);
+    public static final ForeignKey<StoryPointConfigRecord, IdsUserRecord> STORY_POINT_CONFIG__STORY_POINT_CONFIG__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_ = Internal.createForeignKey(StoryPointConfig.STORY_POINT_CONFIG, DSL.name("story_point_config__fk___created_by___ids_user__id___on_delete_"), new TableField[] { StoryPointConfig.STORY_POINT_CONFIG.CREATED_BY }, Keys.INSECURE_USER__UNIQUE___ID, new TableField[] { IdsUser.IDS_USER.ID }, true);
     public static final ForeignKey<TicketRecord, PokerRecord> TICKET__TICKET__FK___POKER_ID___POKER__ID___ON_DELETE_CASCADE = Internal.createForeignKey(Ticket.TICKET, DSL.name("ticket__fk___poker_id___poker__id___on_delete_cascade"), new TableField[] { Ticket.TICKET.POKER_ID }, Keys.POKER__PK___ID, new TableField[] { Poker.POKER.ID }, true);
     public static final ForeignKey<VoteRecord, IdsUserRecord> VOTE__VOTE__FK___CREATED_BY___IDS_USER__ID___ON_DELETE_CASCADE = Internal.createForeignKey(Vote.VOTE, DSL.name("vote__fk___created_by___ids_user__id___on_delete_cascade"), new TableField[] { Vote.VOTE.CREATED_BY }, Keys.INSECURE_USER__UNIQUE___ID, new TableField[] { IdsUser.IDS_USER.ID }, true);
+    public static final ForeignKey<VoteRecord, StoryPointConfigRecord> VOTE__VOTE__FK___STORY_POINT_CONFIG_ID___STORY_POINT_CONFIG__ID___ON_ = Internal.createForeignKey(Vote.VOTE, DSL.name("vote__fk___story_point_config_id___story_point_config__id___on_"), new TableField[] { Vote.VOTE.STORY_POINT_CONFIG_ID }, Keys.STORY_POINT_CONFIG__PK___ID, new TableField[] { StoryPointConfig.STORY_POINT_CONFIG.ID }, true);
     public static final ForeignKey<VoteRecord, TicketRecord> VOTE__VOTE__FK___TICKET_ID___TICKET__ID___ON_DELETE_CASCADE = Internal.createForeignKey(Vote.VOTE, DSL.name("vote__fk___ticket_id___ticket__id___on_delete_cascade"), new TableField[] { Vote.VOTE.TICKET_ID }, Keys.TICKET__PK___ID, new TableField[] { Ticket.TICKET.ID }, true);
 }

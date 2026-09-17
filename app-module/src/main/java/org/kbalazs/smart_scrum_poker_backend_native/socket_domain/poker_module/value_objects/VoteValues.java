@@ -1,14 +1,12 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects;
 
 import lombok.NonNull;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.enums.SizeEnum;
+
+import java.util.Map;
 
 public record VoteValues(
     boolean coffeeMug,
     boolean questionMark,
-    @NonNull SizeEnum uncertainty,
-    @NonNull SizeEnum complexity,
-    @NonNull SizeEnum effort,
-    @NonNull SizeEnum risk
+    @NonNull Map<String, String> dimensionValues  // {"uncertainty": "S", "complexity": "M", ...}
 ) {
 }

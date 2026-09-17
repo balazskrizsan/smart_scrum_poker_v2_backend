@@ -1,6 +1,7 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.services;
 
 import lombok.NonNull;
+import org.kbalazs.smart_scrum_poker_backend_native.common.servies.StaticObjectMapper;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.account.InsecureUserCreateRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest;
@@ -15,6 +16,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.v
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 public class RequestMapperService {
@@ -29,24 +31,29 @@ public class RequestMapperService {
                 null,
                 request.sprintTitle(),
                 getNow(),
-                idsUserId
+                idsUserId,
+                null
             ),
             request.ticketNames().stream().map(tn -> new Ticket(null, null, null, tn, false)).toList()
         );
     }
 
-    public static Vote mapToEntity(@NonNull final VoteRequest voteRequest) {
-        return new Vote(
-            null,
-            voteRequest.ticketId(),
-            voteRequest.voteUncertainty(),
-            voteRequest.voteComplexity(),
-            voteRequest.voteEffort(),
-            voteRequest.voteRisk(),
-            null,
-            getNow(),
-            voteRequest.userIdSecure()
-        );
+    public static Vote mapToEntity(@NonNull final VoteRequest voteRequest, UUID idsUserId) {
+        try {
+            String voteValuesJson = StaticObjectMapper.defaultMapper.writeValueAsString(voteRequest.dimensionValues());
+
+            return new Vote(
+                null,
+                voteRequest.ticketId(),
+                null,
+                voteValuesJson,
+                null,
+                getNow(),
+                idsUserId
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to convert dimension values to JSON", e);
+        }
     }
 
     public static IdsUser mapToEntity(@NonNull final InsecureUserCreateRequest insecureUserCreateRequest) {

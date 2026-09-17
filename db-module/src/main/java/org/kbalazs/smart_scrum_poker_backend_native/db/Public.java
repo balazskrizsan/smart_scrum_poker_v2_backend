@@ -15,6 +15,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.IdsUserSessions;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.InPokerIdsUsers;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Poker;
+import org.kbalazs.smart_scrum_poker_backend_native.db.tables.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.db.tables.Vote;
 
@@ -58,6 +59,11 @@ public class Public extends SchemaImpl {
     public final Poker POKER = Poker.POKER;
 
     /**
+     * The table <code>public.story_point_config</code>.
+     */
+    public final StoryPointConfig STORY_POINT_CONFIG = StoryPointConfig.STORY_POINT_CONFIG;
+
+    /**
      * The table <code>public.ticket</code>.
      */
     public final Ticket TICKET = Ticket.TICKET;
@@ -88,6 +94,7 @@ public class Public extends SchemaImpl {
             IdsUserSessions.IDS_USER_SESSIONS,
             InPokerIdsUsers.IN_POKER_IDS_USERS,
             Poker.POKER,
+            StoryPointConfig.STORY_POINT_CONFIG,
             Ticket.TICKET,
             Vote.VOTE
         );

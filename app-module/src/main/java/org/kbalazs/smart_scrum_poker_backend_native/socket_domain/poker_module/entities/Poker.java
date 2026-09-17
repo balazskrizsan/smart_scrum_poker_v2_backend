@@ -10,7 +10,8 @@ public record Poker(
     UUID publicId,
     @NonNull String name,
     @NonNull LocalDateTime createdAt,
-    @NonNull UUID createdBy
+    @NonNull UUID createdBy,
+    Long storyPointConfigId
 )
 {
 }
