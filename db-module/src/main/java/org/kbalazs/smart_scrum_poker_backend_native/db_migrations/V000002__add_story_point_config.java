@@ -40,7 +40,7 @@ public class V000002__add_story_point_config extends AbstractBaseJooqMigration
                 constraint("poker__fk___story_point_config_id___story_point_config__id___on_delete_set_null")
                     .foreignKey("story_point_config_id")
                     .references("story_point_config", "id")
-                    .onDeleteCascade()
+                    .onDeleteSetNull()
             )
             .execute();
 
