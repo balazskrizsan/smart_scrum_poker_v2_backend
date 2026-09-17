@@ -1,0 +1,16 @@
+name: Review Command
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  hello:
+    if: >
+      github.event.issue.pull_request &&
+      github.event.comment.body == 'review'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Hello
+        run: echo "hello"
