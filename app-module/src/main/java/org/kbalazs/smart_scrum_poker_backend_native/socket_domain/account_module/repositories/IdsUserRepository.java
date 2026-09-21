@@ -60,7 +60,14 @@ public class IdsUserRepository extends AbstractRepository
             throw new AccountException("User not found; id#" + id);
         }
 
-        return user.into(IdsUser.class);
+        IdsUser idsUser = user.into(IdsUser.class);
+
+        if (null == idsUser)
+        {
+            throw new AccountException("User not found; id#" + id);
+        }
+
+        return idsUser;
     }
 
     public List<IdsUser> findByIdSecureList(@NonNull List<UUID> idSecureList)

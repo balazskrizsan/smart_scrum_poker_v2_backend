@@ -1,5 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.e2e.listeners.poker;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,7 +31,6 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination.SEND_POKER_VOTE;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class VoteListenerSocketTest extends AbstractE2eSocketTest
@@ -145,7 +145,7 @@ public class VoteListenerSocketTest extends AbstractE2eSocketTest
             "Test User",
             "testuser"
         );
-        when(idsUserService.findProfileByIdsUserId(any(UUID.class))).thenReturn(mockUserProfile);
+        when(idsUserService.findProfileByIdsUserId(mockUserId)).thenReturn(mockUserProfile);
 
         StompSession stompSession = getStompSession();
 
@@ -188,31 +188,31 @@ public class VoteListenerSocketTest extends AbstractE2eSocketTest
     }
 
     public record VoteTestCase(
-        UUID userId,
-        UUID pokerPublicId,
-        VoteRequest voteRequest,
+        @NonNull UUID userId,
+        @NonNull UUID pokerPublicId,
+        @NonNull VoteRequest voteRequest,
         short expectedCalculatedPoint,
-        String expectedHttpStatus,
-        String expectedDestination
+        @NonNull String expectedHttpStatus,
+        @NonNull String expectedDestination
     )
     {
     }
 
     private record ResponseEntity_ResponseData_VoteResponse(
-        ResponseData_VoteResponse body,
-        Map<String, String> headers,
-        String statusCode,
+        @NonNull ResponseData_VoteResponse body,
+        @NonNull Map<String, String> headers,
+        @NonNull String statusCode,
         int statusCodeValue
     )
     {
     }
 
     private record ResponseData_VoteResponse(
-        VoteResponse data,
-        Boolean success,
+        @NonNull VoteResponse data,
+        boolean success,
         int errorCode,
-        String requestId,
-        String socketResponseDestination
+        @NonNull String requestId,
+        @NonNull String socketResponseDestination
     )
     {
     }

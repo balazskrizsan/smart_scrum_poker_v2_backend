@@ -1,5 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.e2e.listeners.poker;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.kbalazs.smart_scrum_poker_backend_native.db_presets.Insert1Poker;
@@ -11,6 +12,8 @@ import org.kbalazs.smart_scrum_poker_backend_native.helpers.poker_module.fake_bu
 import org.kbalazs.smart_scrum_poker_backend_native.helpers.poker_module.fake_builders.TicketFakeBuilder;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.VoteStopResponse;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VoteStat;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VotesWithVoteStat;
 import org.kbalazs.smart_scrum_poker_backend_native.test_aspects.SqlPreset;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -27,13 +30,13 @@ import static org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.Sock
 
 public class VoteStopListenerSocketTest extends AbstractE2eSocketTest
 {
-    CompletableFuture<ResponseEntity_ResponseData_VoteStopResponse> responseFuture = new CompletableFuture<>();
-
     @Test
     @SqlPreset(presets = {Insert1User.class, Insert1StoryPointConfig.class, Insert1Poker.class, Insert1Ticket.class})
     @SneakyThrows
     public void voteStop_returnsVoteStopResponse()
     {
+        CompletableFuture<ResponseEntity_ResponseData_VoteStopResponse> responseFuture = new CompletableFuture<>();
+
         // Arrange
         StompSession stompSession = getStompSession();
 
@@ -46,6 +49,11 @@ public class VoteStopListenerSocketTest extends AbstractE2eSocketTest
 
         String expectedHttpStatus = HttpStatus.OK.getReasonPhrase();
         String expectedDestination = POKER_ROUND_STOP.getValue();
+        VoteStopResponse expectedData = new VoteStopResponse(
+            testedPokerPublicId,
+            testedTicketId,
+            new VotesWithVoteStat(Map.of(), new VoteStat(null, null, null))
+        );
 
         // Act
         StompFrameHandler stompHandler = buildStompFrameHandler(
@@ -55,31 +63,33 @@ public class VoteStopListenerSocketTest extends AbstractE2eSocketTest
         stompSession.subscribe(testedSubscribeUrl, stompHandler);
         stompSession.send(testedDestination, testedRequest);
 
-        ResponseEntity_ResponseData_VoteStopResponse actual = responseFuture.get(3, TimeUnit.SECONDS);
+        ResponseEntity_ResponseData_VoteStopResponse actual = responseFuture.get(SOCKET_RESPONSE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 
         // Assert
         assertAll(
             () -> assertThat(actual.statusCode).isEqualTo(expectedHttpStatus),
-            () -> assertThat(actual.body().data()).isNotNull(),
+            () -> assertThat(actual.body().data())
+                .usingRecursiveComparison()
+                .isEqualTo(expectedData),
             () -> assertThat(actual.body().socketResponseDestination).isEqualTo(expectedDestination)
         );
     }
 
     private record ResponseEntity_ResponseData_VoteStopResponse(
-        ResponseData_VoteStopResponse body,
-        Map<String, String> headers,
-        String statusCode,
+        @NonNull ResponseData_VoteStopResponse body,
+        @NonNull Map<String, String> headers,
+        @NonNull String statusCode,
         int statusCodeValue
     )
     {
     }
 
     private record ResponseData_VoteStopResponse(
-        VoteStopResponse data,
-        Boolean success,
+        @NonNull VoteStopResponse data,
+        boolean success,
         int errorCode,
-        String requestId,
-        String socketResponseDestination
+        @NonNull String requestId,
+        @NonNull String socketResponseDestination
     )
     {
     }

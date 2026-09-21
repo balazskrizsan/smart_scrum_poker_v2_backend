@@ -1,10 +1,13 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.e2e.listeners.poker;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.kbalazs.smart_scrum_poker_backend_native.db_presets.Insert1User;
 import org.kbalazs.smart_scrum_poker_backend_native.db_presets.Insert1SessionsFor1User;
+import org.kbalazs.smart_scrum_poker_backend_native.db_presets.Insert1User;
 import org.kbalazs.smart_scrum_poker_backend_native.helpers.AbstractE2eSocketTest;
+import org.kbalazs.smart_scrum_poker_backend_native.helpers.account_module.fake_builders.IdsUserFakeBuilder;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.test_aspects.SqlPreset;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompSession;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -72,6 +76,18 @@ public class ConfigCreateListenerSocketTest extends AbstractE2eSocketTest
 
         String expectedHttpStatus = HttpStatus.OK.getReasonPhrase();
         String expectedDestination = POKER_CONFIG_CREATE.getValue();
+        ObjectMapper objectMapper = new ObjectMapper();
+        ConfigCreateResponse expectedData = new ConfigCreateResponse(
+            new StoryPointConfig(
+                null,
+                testedRequest.name(),
+                objectMapper.writeValueAsString(testedRequest.sizesConfig()),
+                objectMapper.writeValueAsString(testedRequest.dimensionsConfig()),
+                objectMapper.writeValueAsString(testedRequest.pointsMapping()),
+                LocalDateTime.now(),
+                IdsUserFakeBuilder.defaultId1
+            )
+        );
 
         // Act
         StompFrameHandler stompHandler = buildStompFrameHandler(
@@ -85,32 +101,45 @@ public class ConfigCreateListenerSocketTest extends AbstractE2eSocketTest
 
         // Assert
         assertThat(actual.statusCode).isEqualTo(expectedHttpStatus);
-        assertThat(actual.body().data()).isNotNull();
+        assertThat(actual.body().data())
+            .usingRecursiveComparison()
+            .ignoringFields(
+                "config.id",
+                "config.createdAt",
+                "config.sizesConfig",
+                "config.dimensionsConfig",
+                "config.pointsMapping"
+            )
+            .isEqualTo(expectedData);
+        assertThat(objectMapper.readTree(actual.body().data().config().sizesConfig()))
+            .isEqualTo(objectMapper.readTree(expectedData.config().sizesConfig()));
+        assertThat(objectMapper.readTree(actual.body().data().config().dimensionsConfig()))
+            .isEqualTo(objectMapper.readTree(expectedData.config().dimensionsConfig()));
+        assertThat(objectMapper.readTree(actual.body().data().config().pointsMapping()))
+            .isEqualTo(objectMapper.readTree(expectedData.config().pointsMapping()));
         assertThat(actual.body().socketResponseDestination).isEqualTo(expectedDestination);
-        assertThat(actual.body().data().config().id()).isEqualTo(1L);
-        assertThat(actual.body().data().config().name()).isEqualTo("Test Config");
     }
 
     private record ResponseEntity_ResponseData_ConfigCreateResponse(
-        ResponseData_ConfigCreateResponse body,
-        Map<String, String> headers,
-        String statusCode,
+        @NonNull ResponseData_ConfigCreateResponse body,
+        @NonNull Map<String, String> headers,
+        @NonNull String statusCode,
         int statusCodeValue
     )
     {
     }
 
     private record ResponseData_ConfigCreateResponse(
-        ConfigCreateResponse data,
-        Boolean success,
+        @NonNull ConfigCreateResponse data,
+        boolean success,
         int errorCode,
-        String requestId,
-        String socketResponseDestination
+        @NonNull String requestId,
+        @NonNull String socketResponseDestination
     )
     {
     }
 
-    private record ConfigCreateResponse(StoryPointConfig config)
+    private record ConfigCreateResponse(@NonNull StoryPointConfig config)
     {
     }
 }

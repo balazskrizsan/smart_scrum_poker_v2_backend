@@ -29,6 +29,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @TestPropertySource(properties = "socket.is-enabled-socket-connect-and-disconnect-listeners=false")
 abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
 {
+    protected static final int SOCKET_RESPONSE_TIMEOUT_SECONDS = 3;
+
     @Autowired
     private InsecureKeyStoreService insecureKeyStoreService;
 
@@ -83,9 +85,9 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
         Jwt mockJwt = Jwt.withTokenValue("mock-token")
             .header("alg", "none")
             .claim("sub", mockUserId.toString())
-            .claim("scope", "poker.start")
+            .claim("scope", "poker.start poker.my.pokers poker.new.ticket.create poker.ticket.open poker.ticket.close poker.ticket.delete poker.vote.start poker.vote.stop poker.voter_leaving")
             .build();
-        Mockito.when(jwtDecoder.decode(Mockito.anyString())).thenReturn(mockJwt);
+        Mockito.when(jwtDecoder.decode("mock-token")).thenReturn(mockJwt);
 
         var client = new StandardWebSocketClient();
         client.getUserProperties().clear();

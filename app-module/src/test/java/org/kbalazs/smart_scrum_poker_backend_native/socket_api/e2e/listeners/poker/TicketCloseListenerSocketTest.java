@@ -1,5 +1,6 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.e2e.listeners.poker;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.kbalazs.smart_scrum_poker_backend_native.db_presets.Insert1Poker;
@@ -27,13 +28,13 @@ import static org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.Sock
 
 public class TicketCloseListenerSocketTest extends AbstractE2eSocketTest
 {
-    CompletableFuture<ResponseEntity_ResponseData_TicketClosed> responseFuture = new CompletableFuture<>();
-
     @Test
     @SqlPreset(presets = {Insert1User.class, Insert1StoryPointConfig.class, Insert1Poker.class, Insert1Ticket.class})
     @SneakyThrows
     public void ticketClose_returnsTicketClosedResponse()
     {
+        CompletableFuture<ResponseEntity_ResponseData_TicketClosed> responseFuture = new CompletableFuture<>();
+
         // Arrange
         StompSession stompSession = getStompSession();
 
@@ -46,6 +47,7 @@ public class TicketCloseListenerSocketTest extends AbstractE2eSocketTest
 
         String expectedHttpStatus = HttpStatus.OK.getReasonPhrase();
         String expectedDestination = POKER_TICKET_CLOSE.getValue();
+        TicketClosed expectedData = new TicketClosed(testedTicketId);
 
         // Act
         StompFrameHandler stompHandler = buildStompFrameHandler(
@@ -55,31 +57,33 @@ public class TicketCloseListenerSocketTest extends AbstractE2eSocketTest
         stompSession.subscribe(testedSubscribeUrl, stompHandler);
         stompSession.send(testedDestination, testedRequest);
 
-        ResponseEntity_ResponseData_TicketClosed actual = responseFuture.get(3, TimeUnit.SECONDS);
+        ResponseEntity_ResponseData_TicketClosed actual = responseFuture.get(SOCKET_RESPONSE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 
         // Assert
         assertAll(
             () -> assertThat(actual.statusCode).isEqualTo(expectedHttpStatus),
-            () -> assertThat(actual.body().data()).isNotNull(),
+            () -> assertThat(actual.body().data())
+                .usingRecursiveComparison()
+                .isEqualTo(expectedData),
             () -> assertThat(actual.body().socketResponseDestination).isEqualTo(expectedDestination)
         );
     }
 
     private record ResponseEntity_ResponseData_TicketClosed(
-        ResponseData_TicketClosed body,
-        Map<String, String> headers,
-        String statusCode,
+        @NonNull ResponseData_TicketClosed body,
+        @NonNull Map<String, String> headers,
+        @NonNull String statusCode,
         int statusCodeValue
     )
     {
     }
 
     private record ResponseData_TicketClosed(
-        TicketClosed data,
-        Boolean success,
+        @NonNull TicketClosed data,
+        boolean success,
         int errorCode,
-        String requestId,
-        String socketResponseDestination
+        @NonNull String requestId,
+        @NonNull String socketResponseDestination
     )
     {
     }
