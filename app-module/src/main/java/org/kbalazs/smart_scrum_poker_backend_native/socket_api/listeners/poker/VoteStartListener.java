@@ -1,5 +1,7 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
+import io.github.springwolf.core.asyncapi.annotations.AsyncListener;
+import io.github.springwolf.core.asyncapi.annotations.AsyncOperation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -11,6 +13,7 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.e
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.VoteStartStopService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
 import java.util.UUID;
@@ -26,8 +29,13 @@ public class VoteStartListener
     VoteStartStopService voteStartStopService;
     NotificationService notificationService;
 
+    @AsyncListener(operation = @AsyncOperation(
+        channelName = "/poker/vote.start/{pokerPublicId}/{ticketId}",
+        description = "Start voting for a ticket"
+    ))
     @MessageMapping("/poker/vote.start/{pokerPublicId}/{ticketId}")
     public void voteStartListener(
+        @SuppressWarnings("unused") @Payload(required = false) Void payload,
         @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )

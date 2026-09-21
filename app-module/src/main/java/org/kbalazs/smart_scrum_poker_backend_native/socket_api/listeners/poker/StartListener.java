@@ -1,5 +1,8 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
+import io.github.springwolf.core.asyncapi.annotations.AsyncListener;
+import io.github.springwolf.core.asyncapi.annotations.AsyncOperation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,10 +34,14 @@ public class StartListener
     StartService startService;
     SecurityContextFactory securityContextFactory;
 
+    @AsyncListener(operation = @AsyncOperation(
+        channelName = "/app/poker/start",
+        description = "Start a new poker game"
+    ))
     @MessageMapping("/poker/start")
     @SendToUser("/queue/reply")
     @PreAuthorize("hasAuthority('poker.start')")
-    public ResponseEntity<ResponseData<StartResponse>> startListener(@Payload StartRequest request)
+    public ResponseEntity_ResponseData_StartResponse startListener(@Payload StartRequest request)
         throws ApiException
     {
         UUID idsUserId = securityContextFactory.getCurrentUserId();
@@ -43,9 +50,37 @@ public class StartListener
 
         StartPokerResponse startPokerResponse = startService.start(startPoker.poker(), startPoker.tickets());
 
-        return new ResponseEntityBuilder<StartResponse>()
+        ResponseData<StartResponse> responseData = new ResponseEntityBuilder<StartResponse>()
             .socketDestination(SocketDestination.POKER_START)
             .data(new StartResponse(startPokerResponse.poker()))
-            .build();
+            .build()
+            .getBody();
+
+        return new ResponseEntity_ResponseData_StartResponse(responseData);
+    }
+
+    @Schema(description = "Combined ResponseEntity and ResponseData wrapper for poker game start")
+    public record ResponseEntity_ResponseData_StartResponse(
+        @Schema(description = "Poker game start response data")
+        StartResponse data,
+        @Schema(description = "Indicates if the operation was successful")
+        Boolean success,
+        @Schema(description = "Error code, 0 if successful")
+        int errorCode,
+        @Schema(description = "Request identifier")
+        String requestId,
+        @Schema(description = "Socket response destination")
+        String socketResponseDestination
+    )
+    {
+        public ResponseEntity_ResponseData_StartResponse(ResponseData<StartResponse> responseData) {
+            this(
+                responseData.data(),
+                responseData.success(),
+                responseData.errorCode(),
+                responseData.requestId(),
+                responseData.socketResponseDestination()
+            );
+        }
     }
 }

@@ -10,10 +10,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class HttpSecurityConfig
 {
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception
+    public SecurityFilterChain configure(HttpSecurity http)
+        throws Exception
     {
-        http.authorizeHttpRequests(requests -> requests.requestMatchers(new AntPathRequestMatcher("/ws")).permitAll());
-        http.authorizeHttpRequests(requests -> requests.requestMatchers(new AntPathRequestMatcher("/health/**")).permitAll());
+        http.authorizeHttpRequests(requests ->
+            requests.requestMatchers(new AntPathRequestMatcher("/ws")).permitAll()
+        );
+        http.authorizeHttpRequests(requests ->
+            requests.requestMatchers(new AntPathRequestMatcher("/health/**")).permitAll()
+        );
+        http.authorizeHttpRequests(requests ->
+            requests.requestMatchers(new AntPathRequestMatcher("/springwolf/**")).permitAll()
+        );
 
         return http.build();
     }
