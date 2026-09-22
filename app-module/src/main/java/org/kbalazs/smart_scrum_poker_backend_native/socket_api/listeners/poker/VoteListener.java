@@ -10,13 +10,12 @@ import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData;
 import org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseFactory;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.VoteResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.RequestMapperService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.exceptions.AccountException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.StoryPointException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.VoteService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -24,7 +23,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 import java.util.Map;
-import java.util.Objects;
 
 import static lombok.AccessLevel.PRIVATE;
 import static org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination.SEND_POKER_VOTE;
@@ -50,44 +48,35 @@ public class VoteListener
 
         var voteWithCalculatedPoint = voteService.vote(RequestMapperService.mapToEntity(voteRequest, idsUserId));
 
-        ResponseEntity<ResponseData<VoteResponse>> response = new ResponseEntityBuilder<VoteResponse>()
+        ResponseEntity<ResponseData<VoteResponse>> responseEntity = new ResponseEntityBuilder<VoteResponse>()
             .socketDestination(SEND_POKER_VOTE)
             .data(new VoteResponse(voteWithCalculatedPoint.userProfile(), voteWithCalculatedPoint.calculatedPoint()))
             .build();
 
-        ResponseData<VoteResponse> responseData = response.getBody();
-
-        return new ResponseEntity_ResponseData_VoteResponse(
-            new ResponseData_VoteResponse(
-                Objects.requireNonNull(responseData).data(),
-                responseData.success(),
-                responseData.errorCode(),
-                responseData.requestId(),
-                responseData.socketResponseDestination()
-            ),
-            response.getHeaders(),
-            response.getStatusCode(),
-            response.getStatusCode().value()
+        return SocketResponseFactory.fromResponseEntity(
+            responseEntity,
+            ResponseData_VoteResponse::new,
+            ResponseEntity_ResponseData_VoteResponse::new
         );
     }
 
     @Schema(description = "Combined ResponseEntity and ResponseData wrapper for poker vote")
     public record ResponseEntity_ResponseData_VoteResponse(
-        @Schema(description = "Response data body")
+        @Schema(description = "Response data containing vote result")
         ResponseData_VoteResponse body,
         @Schema(description = "Response headers")
-        HttpHeaders headers,
-        @Schema(description = "HTTP status code")
-        HttpStatusCode statusCode,
+        Map<String, String> headers,
+        @Schema(description = "HTTP status code phrase")
+        String statusCode,
         @Schema(description = "HTTP status code value")
         int statusCodeValue
     )
     {
     }
 
-    @Schema(description = "Response data wrapper")
+    @Schema(description = "Response data wrapper for vote response")
     public record ResponseData_VoteResponse(
-        @Schema(description = "Poker vote response data")
+        @Schema(description = "Vote response data")
         VoteResponse data,
         @Schema(description = "Indicates if the operation was successful")
         Boolean success,

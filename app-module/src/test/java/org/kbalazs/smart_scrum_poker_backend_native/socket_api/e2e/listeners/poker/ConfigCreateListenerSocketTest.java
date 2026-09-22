@@ -81,7 +81,7 @@ public class ConfigCreateListenerSocketTest extends AbstractE2eSocketTest
         stompSession.subscribe(testedSubscribeUrl, stompHandler);
         stompSession.send(testedDestination, testedRequest);
 
-        ResponseEntity_ResponseData_ConfigCreateResponse actual = responseFuture.get(20, TimeUnit.SECONDS);
+        ResponseEntity_ResponseData_ConfigCreateResponse actual = responseFuture.get(3, TimeUnit.SECONDS);
 
         // Assert
         assertThat(actual.statusCode).isEqualTo(expectedHttpStatus);

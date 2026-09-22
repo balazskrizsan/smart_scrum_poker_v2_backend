@@ -11,6 +11,8 @@ import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData;
 import org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseFactory;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseWrapper;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.ConfigCreateResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.ConfigService;
@@ -49,7 +51,7 @@ public class ConfigCreateListener
             .build()
             .getBody();
 
-        return new ResponseEntity_ResponseData_ConfigCreateResponse(responseData);
+        return SocketResponseFactory.fromResponseData(responseData, ResponseEntity_ResponseData_ConfigCreateResponse::new);
     }
 
     @Schema(description = "Combined ResponseEntity and ResponseData wrapper for config creation")
@@ -64,16 +66,7 @@ public class ConfigCreateListener
         String requestId,
         @Schema(description = "Socket response destination")
         String socketResponseDestination
-    )
+    ) implements SocketResponseWrapper<ConfigCreateResponse>
     {
-        public ResponseEntity_ResponseData_ConfigCreateResponse(ResponseData<ConfigCreateResponse> responseData) {
-            this(
-                responseData.data(),
-                responseData.success(),
-                responseData.errorCode(),
-                responseData.requestId(),
-                responseData.socketResponseDestination()
-            );
-        }
     }
 }

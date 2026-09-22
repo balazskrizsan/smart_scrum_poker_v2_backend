@@ -9,6 +9,8 @@ import org.kbalazs.smart_scrum_poker_backend_native.api.builders.ResponseEntityB
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseFactory;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseWrapper;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StateResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.VoteNewJoinerResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.RequestMapperService;
@@ -66,7 +68,7 @@ public class StateListener
             .build()
             .getBody();
 
-        return new ResponseEntity_ResponseData_StateResponse(responseData);
+        return SocketResponseFactory.fromResponseData(responseData, ResponseEntity_ResponseData_StateResponse::new);
     }
 
     @Schema(description = "Combined ResponseEntity and ResponseData wrapper for poker game state")
@@ -81,16 +83,7 @@ public class StateListener
         String requestId,
         @Schema(description = "Socket response destination")
         String socketResponseDestination
-    )
+    ) implements SocketResponseWrapper<StateResponse>
     {
-        public ResponseEntity_ResponseData_StateResponse(ResponseData<StateResponse> responseData) {
-            this(
-                responseData.data(),
-                responseData.success(),
-                responseData.errorCode(),
-                responseData.requestId(),
-                responseData.socketResponseDestination()
-            );
-        }
     }
 }

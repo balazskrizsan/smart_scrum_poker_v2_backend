@@ -12,12 +12,13 @@ import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseDa
 import org.kbalazs.smart_scrum_poker_backend_native.common.factories.SecurityContextFactory;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseFactory;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseWrapper;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StartResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.RequestMapperService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.StartService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StartPoker;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StartPokerResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -56,7 +57,7 @@ public class StartListener
             .build()
             .getBody();
 
-        return new ResponseEntity_ResponseData_StartResponse(responseData);
+        return SocketResponseFactory.fromResponseData(responseData, ResponseEntity_ResponseData_StartResponse::new);
     }
 
     @Schema(description = "Combined ResponseEntity and ResponseData wrapper for poker game start")
@@ -71,16 +72,7 @@ public class StartListener
         String requestId,
         @Schema(description = "Socket response destination")
         String socketResponseDestination
-    )
+    ) implements SocketResponseWrapper<StartResponse>
     {
-        public ResponseEntity_ResponseData_StartResponse(ResponseData<StartResponse> responseData) {
-            this(
-                responseData.data(),
-                responseData.success(),
-                responseData.errorCode(),
-                responseData.requestId(),
-                responseData.socketResponseDestination()
-            );
-        }
     }
 }

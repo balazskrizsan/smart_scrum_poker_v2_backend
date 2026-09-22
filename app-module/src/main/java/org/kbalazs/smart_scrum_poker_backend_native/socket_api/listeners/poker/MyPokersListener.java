@@ -10,9 +10,10 @@ import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.MyPokersRequest;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseFactory;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseWrapper;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.MyPokersResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.PokerService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -46,7 +47,7 @@ public class MyPokersListener
             .build()
             .getBody();
 
-        return new ResponseEntity_ResponseData_MyPokersResponse(responseData);
+        return SocketResponseFactory.fromResponseData(responseData, ResponseEntity_ResponseData_MyPokersResponse::new);
     }
 
     @Schema(description = "Combined ResponseEntity and ResponseData wrapper for my pokers")
@@ -61,16 +62,7 @@ public class MyPokersListener
         String requestId,
         @Schema(description = "Socket response destination")
         String socketResponseDestination
-    )
+    ) implements SocketResponseWrapper<MyPokersResponse>
     {
-        public ResponseEntity_ResponseData_MyPokersResponse(ResponseData<MyPokersResponse> responseData) {
-            this(
-                responseData.data(),
-                responseData.success(),
-                responseData.errorCode(),
-                responseData.requestId(),
-                responseData.socketResponseDestination()
-            );
-        }
     }
 }
