@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.api.builders.ResponseEntityBuilder;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
-import org.kbalazs.smart_scrum_poker_backend_native.api.value_objects.ResponseData;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseFactory;
-import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.SocketResponseWrapper;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StateResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.VoteNewJoinerResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.RequestMapperService;
@@ -18,7 +17,6 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.PokerException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.StateService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StateRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -26,6 +24,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -45,7 +44,7 @@ public class StateListener
     @MessageMapping("/poker/state/{pokerPublicId}")
     @SendToUser(value = "/queue/reply")
     public ResponseEntity_ResponseData_StateResponse gameStateListener(
-        @SuppressWarnings("unused") @Payload(required = false) Void payload,
+        @SuppressWarnings("unused") @Payload(required = false) EmptyPayload payload,
         @DestinationVariable("pokerPublicId") UUID pokerPublicId
     )
         throws ApiException, PokerException, AccountException
@@ -62,17 +61,32 @@ public class StateListener
                 .build()
         );
 
-        ResponseData<StateResponse> responseData = new ResponseEntityBuilder<StateResponse>()
-            .socketDestination(SocketDestination.POKER_STATE)
-            .data(stateResponse)
-            .build()
-            .getBody();
-
-        return SocketResponseFactory.fromResponseData(responseData, ResponseEntity_ResponseData_StateResponse::new);
+        return SocketResponseFactory.fromResponseEntity(
+            new ResponseEntityBuilder<StateResponse>()
+                .socketDestination(SocketDestination.POKER_STATE)
+                .data(stateResponse)
+                .build(),
+            ResponseData_StateResponse::new,
+            ResponseEntity_ResponseData_StateResponse::new
+        );
     }
 
     @Schema(description = "Combined ResponseEntity and ResponseData wrapper for poker game state")
     public record ResponseEntity_ResponseData_StateResponse(
+        @Schema(description = "Response data containing poker game state")
+        ResponseData_StateResponse body,
+        @Schema(description = "Response headers")
+        Map<String, String> headers,
+        @Schema(description = "HTTP status code phrase")
+        String statusCode,
+        @Schema(description = "HTTP status code value")
+        int statusCodeValue
+    )
+    {
+    }
+
+    @Schema(description = "Response data wrapper for poker game state")
+    public record ResponseData_StateResponse(
         @Schema(description = "Poker game state response data")
         StateResponse data,
         @Schema(description = "Indicates if the operation was successful")
@@ -83,7 +97,7 @@ public class StateListener
         String requestId,
         @Schema(description = "Socket response destination")
         String socketResponseDestination
-    ) implements SocketResponseWrapper<StateResponse>
+    )
     {
     }
 }

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.api.builders.ResponseEntityBuilder;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.enums.SocketDestination;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.VoteStopResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.PokerException;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.VoteStartStopService;
@@ -36,7 +37,7 @@ public class VoteStopListener
     ))
     @MessageMapping("/poker/vote.stop/{pokerPublicId}/{ticketId}")
     public void voteStopListener(
-        @SuppressWarnings("unused") @Payload(required = false) Void payload,
+        @SuppressWarnings("unused") @Payload(required = false) EmptyPayload payload,
         @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )

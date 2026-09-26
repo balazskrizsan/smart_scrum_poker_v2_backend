@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.TicketDeleteResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.NotificationService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.services.TicketService;
@@ -32,7 +33,7 @@ public class TicketDeleteListener
     ))
     @MessageMapping("/poker/ticket.delete/{pokerPublicId}/{ticketId}")
     public void ticketCloseListener(
-        @SuppressWarnings("unused") @Payload(required = false) Void payload,
+        @SuppressWarnings("unused") @Payload(required = false) EmptyPayload payload,
         @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )

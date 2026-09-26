@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.RoundStartResponse;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.NotificationService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.PokerException;
@@ -35,7 +36,7 @@ public class VoteStartListener
     ))
     @MessageMapping("/poker/vote.start/{pokerPublicId}/{ticketId}")
     public void voteStartListener(
-        @SuppressWarnings("unused") @Payload(required = false) Void payload,
+        @SuppressWarnings("unused") @Payload(required = false) EmptyPayload payload,
         @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )

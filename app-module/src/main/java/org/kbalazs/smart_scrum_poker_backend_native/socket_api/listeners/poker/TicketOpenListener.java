@@ -5,6 +5,7 @@ import io.github.springwolf.core.asyncapi.annotations.AsyncOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.TicketOpened;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_api.services.NotificationService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -30,7 +31,7 @@ public class TicketOpenListener
     ))
     @MessageMapping("/poker/ticket.open/{pokerPublicId}/{ticketId}")
     public void ticketCloseListener(
-        @SuppressWarnings("unused") @Payload(required = false) Void payload,
+        @SuppressWarnings("unused") @Payload(required = false) EmptyPayload payload,
         @DestinationVariable("pokerPublicId") UUID pokerIdSecure,
         @DestinationVariable("ticketId") Long ticketId
     )
