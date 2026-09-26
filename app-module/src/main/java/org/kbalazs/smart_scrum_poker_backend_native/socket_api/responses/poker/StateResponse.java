@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VotesWithVoteStat;
@@ -31,7 +32,9 @@ public record StateResponse(
     @Schema(description = "The current IDS user")
     IdsUser currentIdsUser,
     @Schema(description = "The current user profile")
-    UserProfile currentUserProfile
+    UserProfile currentUserProfile,
+    @Schema(description = "Story point configuration for the poker game")
+    StoryPointConfig storyPointConfig
 )
 {
 }

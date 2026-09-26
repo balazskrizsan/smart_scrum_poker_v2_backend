@@ -12,9 +12,11 @@ import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.services.IdsUserService;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.InPokerIdsUser;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Vote;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.exceptions.PokerException;
+import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.repositories.StoryPointConfigRepository;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.StateRequest;
 import org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.VotesWithVoteStat;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ public class StateService
     TicketService ticketService;
     VoteService voteService;
     SecurityContextFactory securityContextFactory;
+    StoryPointConfigRepository storyPointConfigRepository;
 
     public StateResponse get(@NonNull StateRequest stateRequest) throws PokerException, AccountException
     {
@@ -59,6 +62,9 @@ public class StateService
         List<IdsUser> usersWithSession = idsUserService.searchUsersWithActiveSession(inPokerIdsUserIds);
         List<UserProfile> userProfiles = idsUserService.findProfileByIdsUserIdList(inPokerIdsUserIds);
 
+        StoryPointConfig storyPointConfig = storyPointConfigRepository
+            .findById(poker.storyPointConfigId()).orElse(null);
+
         return new StateResponse(
             poker,
             tickets,
@@ -68,7 +74,8 @@ public class StateService
             usersWithSession,
             votesWithVoteStatList, // @todo: select only finished votes
             currentIdsUser,
-            currentUserProfile
+            currentUserProfile,
+            storyPointConfig
         );
     }
 }
