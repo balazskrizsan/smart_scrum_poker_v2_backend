@@ -15,7 +15,7 @@ jobs:
       SERVER_SSL_KEY_STORE: classpath:keystore/certificate.p12
       SERVER_SSL_KEY_STORE_PASSWORD: password
       SITE_DOMAIN: not.yet
-      SITE_FRONTEND_HOST: https://localhost:4200
+      SERVER_FULL_HOST: https://localhost:4200
       SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 10
       SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: 10
       SPRING_DATASOURCE_PASSWORD: admin_pass
@@ -28,7 +28,9 @@ jobs:
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://localhost:4040
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://localhost:4040/.well-known/openid-configuration/jwks
       LOGBACK_LOGSTASH_ENABLED: false
+      LOGBACK_LOGSTASH_FULL_HOST: localhost:5044
       LOGBACK_LOG_TYPE: TEXT
+      SITE_FRONTEND_HOST: https://localhost:4200
 
     services:
       postgres:

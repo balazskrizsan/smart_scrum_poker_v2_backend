@@ -1,0 +1,2259 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Smart Scrum Poker Backend Native",
+    "version": "1.0.0",
+    "description": "WebSocket API for Smart Scrum Poker application using STOMP protocol",
+    "x-generator": "springwolf"
+  },
+  "defaultContentType": "application/json",
+  "servers": {
+    "websocket": {
+      "host": "wss://localhost.balazskrizsan.com:4000/ws",
+      "protocol": "wss"
+    }
+  },
+  "channels": {
+    "_app_poker_start": {
+      "address": "/app/poker/start",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest"
+        }
+      }
+    },
+    "_app_poker_state_{pokerPublicId}": {
+      "address": "/app/poker/state/{pokerPublicId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      }
+    },
+    "_app_poker_ticket.open": {
+      "address": "/app/poker/ticket.open",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      }
+    },
+    "_app_poker_vote": {
+      "address": "/app/poker/vote",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest"
+        }
+      }
+    },
+    "_poker_config_create": {
+      "address": "/poker/config/create",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest"
+        }
+      }
+    },
+    "_poker_my.pokers": {
+      "address": "/poker/my.pokers",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.MyPokersRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.MyPokersRequest"
+        }
+      }
+    },
+    "_poker_new.ticket.create": {
+      "address": "/poker/new.ticket.create",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest"
+        }
+      }
+    },
+    "_poker_start": {
+      "address": "/poker/start",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_poker_state_{pokerPublicId}": {
+      "address": "/poker/state/{pokerPublicId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_poker_ticket.close_{pokerPublicId}_{ticketId}": {
+      "address": "/poker/ticket.close/{pokerPublicId}/{ticketId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      }
+    },
+    "_poker_ticket.delete_{pokerPublicId}_{ticketId}": {
+      "address": "/poker/ticket.delete/{pokerPublicId}/{ticketId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      }
+    },
+    "_poker_ticket.open_{pokerPublicId}_{ticketId}": {
+      "address": "/poker/ticket.open/{pokerPublicId}/{ticketId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_poker_vote.start_{pokerPublicId}_{ticketId}": {
+      "address": "/poker/vote.start/{pokerPublicId}/{ticketId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      }
+    },
+    "_poker_vote.stop_{pokerPublicId}_{ticketId}": {
+      "address": "/poker/vote.stop/{pokerPublicId}/{ticketId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      }
+    },
+    "_poker_vote_{pokerPublicId}_{ticketId}": {
+      "address": "/poker/vote/{pokerPublicId}/{ticketId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_poker_voter_leaving": {
+      "address": "/poker/voter_leaving",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoterLeavingRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoterLeavingRequest"
+        }
+      }
+    },
+    "_queue_reply": {
+      "address": "/queue/reply",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseEntity_ResponseData_ConfigCreateResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseEntity_ResponseData_ConfigCreateResponse"
+        },
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseEntity_ResponseData_MyPokersResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseEntity_ResponseData_MyPokersResponse"
+        },
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseEntity_ResponseData_StartResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseEntity_ResponseData_StartResponse"
+        },
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseEntity_ResponseData_StateResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseEntity_ResponseData_StateResponse"
+        },
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_queue_reply-{pokerPublicId}": {
+      "address": "/queue/reply-{pokerPublicId}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseEntity_ResponseData_VoteResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseEntity_ResponseData_VoteResponse"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_queue_reply_{id}": {
+      "address": "/queue/reply/{id}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_queue_test_broadcast": {
+      "address": "/queue/test/broadcast",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_queue_test_echo": {
+      "address": "/queue/test/echo",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.tests.TestResponse": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.tests.TestResponse"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_test_broadcast_{id}": {
+      "address": "/test/broadcast/{id}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_test_different-notification_{id}": {
+      "address": "/test/different-notification/{id}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_test_different_{id}": {
+      "address": "/test/different/{id}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_test_echo": {
+      "address": "/test/echo",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    },
+    "_test_echo_{id}": {
+      "address": "/test/echo/{id}",
+      "messages": {
+        "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest": {
+          "$ref": "#/components/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      },
+      "bindings": {
+        "stomp": { }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HeadersNotDocumented": {
+        "type": "object",
+        "properties": { },
+        "description": "There can be headers, but they are not explicitly documented.",
+        "examples": [
+          { }
+        ]
+      },
+      "SpringStompDefaultHeaders": {
+        "type": "object",
+        "properties": { },
+        "examples": [
+          { }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseData_ConfigCreateResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.ConfigCreateResponse"
+          },
+          "errorCode": {
+            "type": "integer",
+            "description": "Error code, 0 if successful",
+            "format": "int32"
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Request identifier"
+          },
+          "socketResponseDestination": {
+            "type": "string",
+            "description": "Socket response destination"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the operation was successful"
+          }
+        },
+        "description": "Response data wrapper for config creation",
+        "examples": [
+          {
+            "data": {
+              "config": {
+                "createdAt": "2015-07-20T15:49:04-07:00",
+                "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "dimensionsConfig": "string",
+                "id": 0,
+                "name": "string",
+                "pointsMapping": "string",
+                "sizesConfig": "string"
+              }
+            },
+            "errorCode": 0,
+            "requestId": "string",
+            "socketResponseDestination": "string",
+            "success": true
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseEntity_ResponseData_ConfigCreateResponse": {
+        "title": "ResponseEntity_ResponseData_ConfigCreateResponse",
+        "type": "object",
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseData_ConfigCreateResponse"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Response headers",
+            "additionalProperties": {
+              "type": "string",
+              "description": "Response headers"
+            }
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "HTTP status code phrase"
+          },
+          "statusCodeValue": {
+            "type": "integer",
+            "description": "HTTP status code value",
+            "format": "int32"
+          }
+        },
+        "description": "Combined ResponseEntity and ResponseData wrapper for config creation",
+        "examples": [
+          {
+            "body": {
+              "data": {
+                "config": {
+                  "createdAt": "2015-07-20T15:49:04-07:00",
+                  "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "dimensionsConfig": "string",
+                  "id": 0,
+                  "name": "string",
+                  "pointsMapping": "string",
+                  "sizesConfig": "string"
+                }
+              },
+              "errorCode": 0,
+              "requestId": "string",
+              "socketResponseDestination": "string",
+              "success": true
+            },
+            "headers": {
+              "key": "string"
+            },
+            "statusCode": "string",
+            "statusCodeValue": 0
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseData_MyPokersResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.MyPokersResponse"
+          },
+          "errorCode": {
+            "type": "integer",
+            "description": "Error code, 0 if successful",
+            "format": "int32"
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Request identifier"
+          },
+          "socketResponseDestination": {
+            "type": "string",
+            "description": "Socket response destination"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the operation was successful"
+          }
+        },
+        "description": "Response data wrapper for my pokers",
+        "examples": [
+          {
+            "data": {
+              "pokers": [
+                {
+                  "createdAt": "2015-07-20T15:49:04-07:00",
+                  "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "id": 0,
+                  "name": "string",
+                  "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "storyPointConfigId": 0
+                }
+              ]
+            },
+            "errorCode": 0,
+            "requestId": "string",
+            "socketResponseDestination": "string",
+            "success": true
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseEntity_ResponseData_MyPokersResponse": {
+        "title": "ResponseEntity_ResponseData_MyPokersResponse",
+        "type": "object",
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseData_MyPokersResponse"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Response headers",
+            "additionalProperties": {
+              "type": "string",
+              "description": "Response headers"
+            }
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "HTTP status code phrase"
+          },
+          "statusCodeValue": {
+            "type": "integer",
+            "description": "HTTP status code value",
+            "format": "int32"
+          }
+        },
+        "description": "Combined ResponseEntity and ResponseData wrapper for my pokers",
+        "examples": [
+          {
+            "body": {
+              "data": {
+                "pokers": [
+                  {
+                    "createdAt": "2015-07-20T15:49:04-07:00",
+                    "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "id": 0,
+                    "name": "string",
+                    "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "storyPointConfigId": 0
+                  }
+                ]
+              },
+              "errorCode": 0,
+              "requestId": "string",
+              "socketResponseDestination": "string",
+              "success": true
+            },
+            "headers": {
+              "key": "string"
+            },
+            "statusCode": "string",
+            "statusCodeValue": 0
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseData_StartResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StartResponse"
+          },
+          "errorCode": {
+            "type": "integer",
+            "description": "Error code, 0 if successful",
+            "format": "int32"
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Request identifier"
+          },
+          "socketResponseDestination": {
+            "type": "string",
+            "description": "Socket response destination"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the operation was successful"
+          }
+        },
+        "description": "Response data wrapper for poker game start",
+        "examples": [
+          {
+            "data": {
+              "poker": {
+                "createdAt": "2015-07-20T15:49:04-07:00",
+                "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "id": 0,
+                "name": "string",
+                "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "storyPointConfigId": 0
+              }
+            },
+            "errorCode": 0,
+            "requestId": "string",
+            "socketResponseDestination": "string",
+            "success": true
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseEntity_ResponseData_StartResponse": {
+        "title": "ResponseEntity_ResponseData_StartResponse",
+        "type": "object",
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseData_StartResponse"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Response headers",
+            "additionalProperties": {
+              "type": "string",
+              "description": "Response headers"
+            }
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "HTTP status code phrase"
+          },
+          "statusCodeValue": {
+            "type": "integer",
+            "description": "HTTP status code value",
+            "format": "int32"
+          }
+        },
+        "description": "Combined ResponseEntity and ResponseData wrapper for poker game start",
+        "examples": [
+          {
+            "body": {
+              "data": {
+                "poker": {
+                  "createdAt": "2015-07-20T15:49:04-07:00",
+                  "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "id": 0,
+                  "name": "string",
+                  "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "storyPointConfigId": 0
+                }
+              },
+              "errorCode": 0,
+              "requestId": "string",
+              "socketResponseDestination": "string",
+              "success": true
+            },
+            "headers": {
+              "key": "string"
+            },
+            "statusCode": "string",
+            "statusCodeValue": 0
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseData_StateResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StateResponse"
+          },
+          "errorCode": {
+            "type": "integer",
+            "description": "Error code, 0 if successful",
+            "format": "int32"
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Request identifier"
+          },
+          "socketResponseDestination": {
+            "type": "string",
+            "description": "Socket response destination"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the operation was successful"
+          }
+        },
+        "description": "Response data wrapper for poker game state",
+        "examples": [
+          {
+            "data": {
+              "currentIdsUser": {
+                "createdAt": "2015-07-20T15:49:04-07:00",
+                "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              },
+              "currentUserProfile": {
+                "userId": "string",
+                "userName": "string",
+                "userNick": "string"
+              },
+              "idsUsersWithSession": [
+                {
+                  "createdAt": "2015-07-20T15:49:04-07:00",
+                  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+              ],
+              "owner": {
+                "createdAt": "2015-07-20T15:49:04-07:00",
+                "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              },
+              "poker": {
+                "createdAt": "2015-07-20T15:49:04-07:00",
+                "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "id": 0,
+                "name": "string",
+                "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "storyPointConfigId": 0
+              },
+              "storyPointConfig": {
+                "createdAt": "2015-07-20T15:49:04-07:00",
+                "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "dimensionsConfig": "string",
+                "id": 0,
+                "name": "string",
+                "pointsMapping": "string",
+                "sizesConfig": "string"
+              },
+              "tickets": [
+                {
+                  "id": 0,
+                  "isActive": true,
+                  "name": "string",
+                  "pokerId": 0,
+                  "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+              ],
+              "userProfiles": [
+                {
+                  "userId": "string",
+                  "userName": "string",
+                  "userNick": "string"
+                }
+              ]
+            },
+            "errorCode": 0,
+            "requestId": "string",
+            "socketResponseDestination": "string",
+            "success": true
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseEntity_ResponseData_StateResponse": {
+        "title": "ResponseEntity_ResponseData_StateResponse",
+        "type": "object",
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseData_StateResponse"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Response headers",
+            "additionalProperties": {
+              "type": "string",
+              "description": "Response headers"
+            }
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "HTTP status code phrase"
+          },
+          "statusCodeValue": {
+            "type": "integer",
+            "description": "HTTP status code value",
+            "format": "int32"
+          }
+        },
+        "description": "Combined ResponseEntity and ResponseData wrapper for poker game state",
+        "examples": [
+          {
+            "body": {
+              "data": {
+                "currentIdsUser": {
+                  "createdAt": "2015-07-20T15:49:04-07:00",
+                  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                },
+                "currentUserProfile": {
+                  "userId": "string",
+                  "userName": "string",
+                  "userNick": "string"
+                },
+                "idsUsersWithSession": [
+                  {
+                    "createdAt": "2015-07-20T15:49:04-07:00",
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                  }
+                ],
+                "owner": {
+                  "createdAt": "2015-07-20T15:49:04-07:00",
+                  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                },
+                "poker": {
+                  "createdAt": "2015-07-20T15:49:04-07:00",
+                  "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "id": 0,
+                  "name": "string",
+                  "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "storyPointConfigId": 0
+                },
+                "storyPointConfig": {
+                  "createdAt": "2015-07-20T15:49:04-07:00",
+                  "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                  "dimensionsConfig": "string",
+                  "id": 0,
+                  "name": "string",
+                  "pointsMapping": "string",
+                  "sizesConfig": "string"
+                },
+                "tickets": [
+                  {
+                    "id": 0,
+                    "isActive": true,
+                    "name": "string",
+                    "pokerId": 0,
+                    "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                  }
+                ],
+                "userProfiles": [
+                  {
+                    "userId": "string",
+                    "userName": "string",
+                    "userNick": "string"
+                  }
+                ]
+              },
+              "errorCode": 0,
+              "requestId": "string",
+              "socketResponseDestination": "string",
+              "success": true
+            },
+            "headers": {
+              "key": "string"
+            },
+            "statusCode": "string",
+            "statusCodeValue": 0
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseData_VoteResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.VoteResponse"
+          },
+          "errorCode": {
+            "type": "integer",
+            "description": "Error code, 0 if successful",
+            "format": "int32"
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Request identifier"
+          },
+          "socketResponseDestination": {
+            "type": "string",
+            "description": "Socket response destination"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the operation was successful"
+          }
+        },
+        "description": "Response data wrapper for vote response",
+        "examples": [
+          {
+            "data": {
+              "calculatedPoint": 0,
+              "userProfile": {
+                "userId": "string",
+                "userName": "string",
+                "userNick": "string"
+              }
+            },
+            "errorCode": 0,
+            "requestId": "string",
+            "socketResponseDestination": "string",
+            "success": true
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseEntity_ResponseData_VoteResponse": {
+        "title": "ResponseEntity_ResponseData_VoteResponse",
+        "type": "object",
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseData_VoteResponse"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Response headers",
+            "additionalProperties": {
+              "type": "string",
+              "description": "Response headers"
+            }
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "HTTP status code phrase"
+          },
+          "statusCodeValue": {
+            "type": "integer",
+            "description": "HTTP status code value",
+            "format": "int32"
+          }
+        },
+        "description": "Combined ResponseEntity and ResponseData wrapper for poker vote",
+        "examples": [
+          {
+            "body": {
+              "data": {
+                "calculatedPoint": 0,
+                "userProfile": {
+                  "userId": "string",
+                  "userName": "string",
+                  "userNick": "string"
+                }
+              },
+              "errorCode": 0,
+              "requestId": "string",
+              "socketResponseDestination": "string",
+              "success": true
+            },
+            "headers": {
+              "key": "string"
+            },
+            "statusCode": "string",
+            "statusCodeValue": 0
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseData_TestResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.tests.TestResponse"
+          },
+          "errorCode": {
+            "type": "integer",
+            "description": "Error code, 0 if successful",
+            "format": "int32"
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Request identifier"
+          },
+          "socketResponseDestination": {
+            "type": "string",
+            "description": "Socket response destination"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the operation was successful"
+          }
+        },
+        "description": "Response data wrapper for test response",
+        "examples": [
+          {
+            "data": {
+              "message": "string"
+            },
+            "errorCode": 0,
+            "requestId": "string",
+            "socketResponseDestination": "string",
+            "success": true
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse": {
+        "title": "ResponseEntity_ResponseData_TestResponse",
+        "type": "object",
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseData_TestResponse"
+          },
+          "headers": {
+            "type": "object",
+            "description": "Response headers",
+            "additionalProperties": {
+              "type": "string",
+              "description": "Response headers"
+            }
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "HTTP status code phrase"
+          },
+          "statusCodeValue": {
+            "type": "integer",
+            "description": "HTTP status code value",
+            "format": "int32"
+          }
+        },
+        "description": "Combined ResponseEntity and ResponseData wrapper for test response",
+        "examples": [
+          {
+            "body": {
+              "data": {
+                "message": "string"
+              },
+              "errorCode": 0,
+              "requestId": "string",
+              "socketResponseDestination": "string",
+              "success": true
+            },
+            "headers": {
+              "key": "string"
+            },
+            "statusCode": "string",
+            "statusCodeValue": 0
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+        "title": "EmptyPayload",
+        "type": "object",
+        "description": "Empty payload for operations that don't require input",
+        "examples": [
+          { }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest": {
+        "title": "AddTicketRequest",
+        "type": "object",
+        "properties": {
+          "pokerIdSecure": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketName": {
+            "type": "string"
+          },
+          "userIdSecure": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "examples": [
+          {
+            "pokerIdSecure": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "ticketName": "string",
+            "userIdSecure": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.MyPokersRequest": {
+        "title": "MyPokersRequest",
+        "type": "object",
+        "properties": {
+          "idsUserId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "examples": [
+          {
+            "idsUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest": {
+        "title": "StartRequest",
+        "type": "object",
+        "properties": {
+          "sprintTitle": {
+            "type": "string"
+          },
+          "ticketNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "examples": [
+          {
+            "sprintTitle": "string",
+            "ticketNames": [
+              "string"
+            ]
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest": {
+        "title": "VoteRequest",
+        "type": "object",
+        "properties": {
+          "dimensionValues": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "pokerPublicId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "examples": [
+          {
+            "dimensionValues": {
+              "key": "string"
+            },
+            "pokerPublicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "ticketId": 0
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoterLeavingRequest": {
+        "title": "VoterLeavingRequest",
+        "type": "object",
+        "properties": {
+          "pokerIdSecure": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userIdSecure": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "examples": [
+          {
+            "pokerIdSecure": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "userIdSecure": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest": {
+        "title": "TestRequest",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "message": "string"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.ConfigCreateResponse": {
+        "type": "object",
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig"
+          }
+        },
+        "description": "Response when a story point configuration is created",
+        "examples": [
+          {
+            "config": {
+              "createdAt": "2015-07-20T15:49:04-07:00",
+              "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              "dimensionsConfig": "string",
+              "id": 0,
+              "name": "string",
+              "pointsMapping": "string",
+              "sizesConfig": "string"
+            }
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.MyPokersResponse": {
+        "type": "object",
+        "properties": {
+          "pokers": {
+            "type": "array",
+            "description": "List of poker games",
+            "items": {
+              "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker"
+            }
+          }
+        },
+        "description": "Response containing user's poker games",
+        "examples": [
+          {
+            "pokers": [
+              {
+                "createdAt": "2015-07-20T15:49:04-07:00",
+                "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "id": 0,
+                "name": "string",
+                "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "storyPointConfigId": 0
+              }
+            ]
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StartResponse": {
+        "type": "object",
+        "properties": {
+          "poker": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker"
+          }
+        },
+        "description": "Response when a poker game is started",
+        "examples": [
+          {
+            "poker": {
+              "createdAt": "2015-07-20T15:49:04-07:00",
+              "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              "id": 0,
+              "name": "string",
+              "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              "storyPointConfigId": 0
+            }
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.StateResponse": {
+        "type": "object",
+        "properties": {
+          "currentIdsUser": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser"
+          },
+          "currentUserProfile": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile"
+          },
+          "idsUsersWithSession": {
+            "type": "array",
+            "description": "List of IDS users with active sessions",
+            "items": {
+              "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser"
+            }
+          },
+          "owner": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser"
+          },
+          "poker": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker"
+          },
+          "storyPointConfig": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig"
+          },
+          "tickets": {
+            "type": "array",
+            "description": "List of tickets in the poker game",
+            "items": {
+              "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket"
+            }
+          },
+          "userProfiles": {
+            "type": "array",
+            "description": "List of user profiles participating in the game",
+            "items": {
+              "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile"
+            }
+          }
+        },
+        "description": "Complete state of a poker game including all tickets, users, and votes",
+        "examples": [
+          {
+            "currentIdsUser": {
+              "createdAt": "2015-07-20T15:49:04-07:00",
+              "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            "currentUserProfile": {
+              "userId": "string",
+              "userName": "string",
+              "userNick": "string"
+            },
+            "idsUsersWithSession": [
+              {
+                "createdAt": "2015-07-20T15:49:04-07:00",
+                "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              }
+            ],
+            "owner": {
+              "createdAt": "2015-07-20T15:49:04-07:00",
+              "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            "poker": {
+              "createdAt": "2015-07-20T15:49:04-07:00",
+              "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              "id": 0,
+              "name": "string",
+              "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              "storyPointConfigId": 0
+            },
+            "storyPointConfig": {
+              "createdAt": "2015-07-20T15:49:04-07:00",
+              "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              "dimensionsConfig": "string",
+              "id": 0,
+              "name": "string",
+              "pointsMapping": "string",
+              "sizesConfig": "string"
+            },
+            "tickets": [
+              {
+                "id": 0,
+                "isActive": true,
+                "name": "string",
+                "pokerId": 0,
+                "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              }
+            ],
+            "userProfiles": [
+              {
+                "userId": "string",
+                "userName": "string",
+                "userNick": "string"
+              }
+            ]
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.poker.VoteResponse": {
+        "type": "object",
+        "properties": {
+          "calculatedPoint": {
+            "type": "integer",
+            "description": "Calculated point value",
+            "format": "int32"
+          },
+          "userProfile": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile"
+          }
+        },
+        "description": "Response when a vote is submitted",
+        "examples": [
+          {
+            "calculatedPoint": 0,
+            "userProfile": {
+              "userId": "string",
+              "userName": "string",
+              "userNick": "string"
+            }
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.tests.TestResponse": {
+        "title": "TestResponse",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "message": "string"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.IdsUser": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Account creation timestamp",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "description": "User UUID",
+            "format": "uuid"
+          }
+        },
+        "description": "IDS user entity",
+        "examples": [
+          {
+            "createdAt": "2015-07-20T15:49:04-07:00",
+            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.account_module.entities.UserProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "userName": {
+            "type": "string",
+            "description": "User's full name"
+          },
+          "userNick": {
+            "type": "string",
+            "description": "User's nickname"
+          }
+        },
+        "description": "User profile information",
+        "examples": [
+          {
+            "userId": "string",
+            "userName": "string",
+            "userNick": "string"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Poker": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Creation timestamp",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "ID of user who created the game",
+            "format": "uuid"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Database ID",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "description": "Poker game name"
+          },
+          "publicId": {
+            "type": "string",
+            "description": "Public UUID identifier",
+            "format": "uuid"
+          },
+          "storyPointConfigId": {
+            "type": "integer",
+            "description": "Story point configuration ID",
+            "format": "int64"
+          }
+        },
+        "description": "Poker game entity",
+        "examples": [
+          {
+            "createdAt": "2015-07-20T15:49:04-07:00",
+            "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "id": 0,
+            "name": "string",
+            "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "storyPointConfigId": 0
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.StoryPointConfig": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Creation timestamp",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "description": "ID of user who created this configuration",
+            "format": "uuid"
+          },
+          "dimensionsConfig": {
+            "type": "string",
+            "description": "JSON configuration for dimensions"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Configuration ID",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "description": "Configuration name"
+          },
+          "pointsMapping": {
+            "type": "string",
+            "description": "JSON mapping for points calculation"
+          },
+          "sizesConfig": {
+            "type": "string",
+            "description": "JSON configuration for sizes"
+          }
+        },
+        "description": "Story point configuration for poker games",
+        "examples": [
+          {
+            "createdAt": "2015-07-20T15:49:04-07:00",
+            "createdBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "dimensionsConfig": "string",
+            "id": 0,
+            "name": "string",
+            "pointsMapping": "string",
+            "sizesConfig": "string"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.entities.Ticket": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Database ID",
+            "format": "int64"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Whether the ticket is currently active"
+          },
+          "name": {
+            "type": "string",
+            "description": "Ticket name"
+          },
+          "pokerId": {
+            "type": "integer",
+            "description": "Parent poker game ID",
+            "format": "int64"
+          },
+          "publicId": {
+            "type": "string",
+            "description": "Public UUID identifier",
+            "format": "uuid"
+          }
+        },
+        "description": "Ticket entity for poker games",
+        "examples": [
+          {
+            "id": 0,
+            "isActive": true,
+            "name": "string",
+            "pokerId": 0,
+            "publicId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest": {
+        "title": "ConfigCreateRequest",
+        "type": "object",
+        "properties": {
+          "dimensionsConfig": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest$DimensionConfig"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "pointsMapping": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest$PointsMapping"
+            }
+          },
+          "sizesConfig": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest$SizeConfig"
+            }
+          }
+        },
+        "examples": [
+          {
+            "dimensionsConfig": [
+              {
+                "name": "string",
+                "sizeValues": [
+                  {
+                    "name": "string",
+                    "value": 0
+                  }
+                ]
+              }
+            ],
+            "name": "string",
+            "pointsMapping": [
+              {
+                "points": 0,
+                "totalRange": [
+                  0
+                ]
+              }
+            ],
+            "sizesConfig": [
+              {
+                "name": "string"
+              }
+            ]
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest$DimensionConfig": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sizeValues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest$SizeValue"
+            }
+          }
+        },
+        "examples": [
+          {
+            "name": "string",
+            "sizeValues": [
+              {
+                "name": "string",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest$PointsMapping": {
+        "type": "object",
+        "properties": {
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRange": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "examples": [
+          {
+            "points": 0,
+            "totalRange": [
+              0
+            ]
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest$SizeConfig": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "examples": [
+          {
+            "name": "string"
+          }
+        ]
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest$SizeValue": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "examples": [
+          {
+            "name": "string",
+            "value": 0
+          }
+        ]
+      }
+    },
+    "messages": {
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseEntity_ResponseData_ConfigCreateResponse": {
+        "headers": {
+          "$ref": "#/components/schemas/SpringStompDefaultHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseEntity_ResponseData_ConfigCreateResponse"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseEntity_ResponseData_ConfigCreateResponse",
+        "title": "ResponseEntity_ResponseData_ConfigCreateResponse",
+        "bindings": {
+          "stomp": { }
+        }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseEntity_ResponseData_MyPokersResponse": {
+        "headers": {
+          "$ref": "#/components/schemas/SpringStompDefaultHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseEntity_ResponseData_MyPokersResponse"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseEntity_ResponseData_MyPokersResponse",
+        "title": "ResponseEntity_ResponseData_MyPokersResponse",
+        "bindings": {
+          "stomp": { }
+        }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseEntity_ResponseData_StartResponse": {
+        "headers": {
+          "$ref": "#/components/schemas/SpringStompDefaultHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseEntity_ResponseData_StartResponse"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseEntity_ResponseData_StartResponse",
+        "title": "ResponseEntity_ResponseData_StartResponse",
+        "bindings": {
+          "stomp": { }
+        }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseEntity_ResponseData_StateResponse": {
+        "headers": {
+          "$ref": "#/components/schemas/SpringStompDefaultHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseEntity_ResponseData_StateResponse"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseEntity_ResponseData_StateResponse",
+        "title": "ResponseEntity_ResponseData_StateResponse",
+        "bindings": {
+          "stomp": { }
+        }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseEntity_ResponseData_VoteResponse": {
+        "headers": {
+          "$ref": "#/components/schemas/SpringStompDefaultHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseEntity_ResponseData_VoteResponse"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseEntity_ResponseData_VoteResponse",
+        "title": "ResponseEntity_ResponseData_VoteResponse",
+        "bindings": {
+          "stomp": { }
+        }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse": {
+        "headers": {
+          "$ref": "#/components/schemas/SpringStompDefaultHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse",
+        "title": "ResponseEntity_ResponseData_TestResponse",
+        "bindings": {
+          "stomp": { }
+        }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload",
+        "title": "EmptyPayload",
+        "description": "Empty payload for operations that don't require input",
+        "bindings": { }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest",
+        "title": "AddTicketRequest",
+        "bindings": { }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.MyPokersRequest": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.MyPokersRequest"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.MyPokersRequest",
+        "title": "MyPokersRequest",
+        "bindings": { }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest",
+        "title": "StartRequest",
+        "bindings": { }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest",
+        "title": "VoteRequest",
+        "bindings": { }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoterLeavingRequest": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoterLeavingRequest"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoterLeavingRequest",
+        "title": "VoterLeavingRequest",
+        "bindings": { }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest": {
+        "headers": {
+          "$ref": "#/components/schemas/SpringStompDefaultHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest",
+        "title": "TestRequest",
+        "bindings": {
+          "stomp": { }
+        }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.tests.TestResponse": {
+        "headers": {
+          "$ref": "#/components/schemas/SpringStompDefaultHeaders"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.tests.TestResponse"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.tests.TestResponse",
+        "title": "TestResponse",
+        "bindings": {
+          "stomp": { }
+        }
+      },
+      "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest": {
+        "headers": {
+          "$ref": "#/components/schemas/HeadersNotDocumented"
+        },
+        "payload": {
+          "schemaFormat": "application/vnd.aai.asyncapi+json;version=3.0.0",
+          "schema": {
+            "$ref": "#/components/schemas/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest"
+          }
+        },
+        "name": "org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest",
+        "title": "ConfigCreateRequest",
+        "bindings": { }
+      }
+    }
+  },
+  "operations": {
+    "_app_poker_start_receive_startListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_app_poker_start"
+      },
+      "title": "_app_poker_start_receive",
+      "description": "Start a new poker game",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_app_poker_start/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseEntity_ResponseData_StartResponse"
+          }
+        ]
+      }
+    },
+    "_app_poker_state_{pokerPublicId}_receive_gameStateListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_app_poker_state_{pokerPublicId}"
+      },
+      "title": "_app_poker_state_{pokerPublicId}_receive",
+      "description": "Get the current state of a poker game",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_app_poker_state_{pokerPublicId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseEntity_ResponseData_StateResponse"
+          }
+        ]
+      }
+    },
+    "_app_poker_ticket.open_receive_ticketCloseListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_app_poker_ticket.open"
+      },
+      "title": "_app_poker_ticket.open_receive",
+      "description": "Open a ticket for voting",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_app_poker_ticket.open/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      ]
+    },
+    "_app_poker_vote_receive_voteListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_app_poker_vote"
+      },
+      "title": "_app_poker_vote_receive",
+      "description": "Submit a vote for a poker ticket",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_app_poker_vote/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply-{pokerPublicId}"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply-{pokerPublicId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseEntity_ResponseData_VoteResponse"
+          }
+        ]
+      }
+    },
+    "_poker_config_create_receive_createConfig": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_config_create"
+      },
+      "title": "_poker_config_create_receive",
+      "description": "Create a new story point configuration",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_config_create/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_domain.poker_module.value_objects.ConfigCreateRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.ConfigCreateListener$ResponseEntity_ResponseData_ConfigCreateResponse"
+          }
+        ]
+      }
+    },
+    "_poker_my.pokers_receive_gameStateListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_my.pokers"
+      },
+      "title": "_poker_my.pokers_receive",
+      "description": "Get all poker games for the current user",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_my.pokers/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.MyPokersRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.MyPokersListener$ResponseEntity_ResponseData_MyPokersResponse"
+          }
+        ]
+      }
+    },
+    "_poker_new.ticket.create_receive_addTicketListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_new.ticket.create"
+      },
+      "title": "_poker_new.ticket.create_receive",
+      "description": "Add a new ticket to a poker game",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_new.ticket.create/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.AddTicketRequest"
+        }
+      ]
+    },
+    "_poker_start_receive_startListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_start"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_start/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.StartRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StartListener$ResponseEntity_ResponseData_StartResponse"
+          }
+        ]
+      }
+    },
+    "_poker_state_{pokerPublicId}_receive_gameStateListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_state_{pokerPublicId}"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_state_{pokerPublicId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.StateListener$ResponseEntity_ResponseData_StateResponse"
+          }
+        ]
+      }
+    },
+    "_poker_ticket.close_{pokerPublicId}_{ticketId}_receive_ticketCloseListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_ticket.close_{pokerPublicId}_{ticketId}"
+      },
+      "title": "_poker_ticket.close_{pokerPublicId}_{ticketId}_receive",
+      "description": "Close a ticket in a poker game",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_ticket.close_{pokerPublicId}_{ticketId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      ]
+    },
+    "_poker_ticket.delete_{pokerPublicId}_{ticketId}_receive_ticketCloseListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_ticket.delete_{pokerPublicId}_{ticketId}"
+      },
+      "title": "_poker_ticket.delete_{pokerPublicId}_{ticketId}_receive",
+      "description": "Delete a ticket from a poker game",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_ticket.delete_{pokerPublicId}_{ticketId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      ]
+    },
+    "_poker_ticket.open_{pokerPublicId}_{ticketId}_receive_ticketCloseListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_ticket.open_{pokerPublicId}_{ticketId}"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_ticket.open_{pokerPublicId}_{ticketId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      ]
+    },
+    "_poker_vote.start_{pokerPublicId}_{ticketId}_receive_voteStartListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_vote.start_{pokerPublicId}_{ticketId}"
+      },
+      "title": "_poker_vote.start_{pokerPublicId}_{ticketId}_receive",
+      "description": "Start voting for a ticket",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_vote.start_{pokerPublicId}_{ticketId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      ]
+    },
+    "_poker_vote.stop_{pokerPublicId}_{ticketId}_receive_voteStopListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_vote.stop_{pokerPublicId}_{ticketId}"
+      },
+      "title": "_poker_vote.stop_{pokerPublicId}_{ticketId}_receive",
+      "description": "Stop voting for a ticket",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_vote.stop_{pokerPublicId}_{ticketId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.EmptyPayload"
+        }
+      ]
+    },
+    "_poker_vote_{pokerPublicId}_{ticketId}_receive_voteListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_vote_{pokerPublicId}_{ticketId}"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_vote_{pokerPublicId}_{ticketId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoteRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply-{pokerPublicId}"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply-{pokerPublicId}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker.VoteListener$ResponseEntity_ResponseData_VoteResponse"
+          }
+        ]
+      }
+    },
+    "_poker_voter_leaving_receive_voteListener": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_poker_voter_leaving"
+      },
+      "title": "_poker_voter_leaving_receive",
+      "description": "Notify when a voter leaves a poker game",
+      "bindings": { },
+      "messages": [
+        {
+          "$ref": "#/channels/_poker_voter_leaving/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.poker.VoterLeavingRequest"
+        }
+      ]
+    },
+    "_test_broadcast_{id}_receive_echoBroadcastAndUser": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_test_broadcast_{id}"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_test_broadcast_{id}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply_{id}"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply_{id}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse"
+          }
+        ]
+      }
+    },
+    "_test_different-notification_{id}_receive_echoDifferentDataWithNotification": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_test_different-notification_{id}"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_test_different-notification_{id}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse"
+          }
+        ]
+      }
+    },
+    "_test_different_{id}_receive_echoDifferentData": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_test_different_{id}"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_test_different_{id}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse"
+          }
+        ]
+      }
+    },
+    "_test_echo_receive_echo": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_test_echo"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_test_echo/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_test_echo"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_test_echo/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.responses.tests.TestResponse"
+          }
+        ]
+      }
+    },
+    "_test_echo_{id}_receive_echoWithNotification": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/_test_echo_{id}"
+      },
+      "bindings": {
+        "stomp": { }
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/_test_echo_{id}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.requests.tests.TestRequest"
+        }
+      ],
+      "reply": {
+        "channel": {
+          "$ref": "#/channels/_queue_reply_{id}"
+        },
+        "messages": [
+          {
+            "$ref": "#/channels/_queue_reply_{id}/messages/org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.tests.TestListener$ResponseEntity_ResponseData_TestResponse"
+          }
+        ]
+      }
+    }
+  }
+}

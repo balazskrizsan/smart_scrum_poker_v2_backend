@@ -39,7 +39,7 @@ public class VoteRepository extends AbstractRepository {
                 Collectors.groupingBy(
                     VoteRecord::getTicketId,
                     Collectors.mapping(
-                        r -> r.into(Vote.class),
+                        this::mapRecordToVote,
                         Collectors.toMap(Vote::createdBy, Function.identity())
                     )
                 )
@@ -63,11 +63,15 @@ public class VoteRepository extends AbstractRepository {
             return null;
         }
 
+        return mapRecordToVote(record);
+    }
+
+    private Vote mapRecordToVote(@NonNull VoteRecord record) {
         return new Vote(
             record.getId(),
             record.getTicketId(),
             record.getStoryPointConfigId(),
-            record.getVoteValues() != null ? record.getVoteValues().data() : null,
+            record.getVoteValues().data(),
             record.getCalculatedPoint(),
             record.getCreatedAt(),
             record.getCreatedBy()

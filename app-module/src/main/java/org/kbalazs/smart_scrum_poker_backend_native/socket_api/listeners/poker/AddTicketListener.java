@@ -1,5 +1,7 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
+import io.github.springwolf.core.asyncapi.annotations.AsyncListener;
+import io.github.springwolf.core.asyncapi.annotations.AsyncOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.api.exceptions.ApiException;
@@ -25,6 +27,10 @@ public class AddTicketListener
     TicketService ticketService;
     NotificationService notificationService;
 
+    @AsyncListener(operation = @AsyncOperation(
+        channelName = "/poker/new.ticket.create",
+        description = "Add a new ticket to a poker game"
+    ))
     @MessageMapping("/poker/new.ticket.create")
     public void addTicketListener(@Payload AddTicketRequest request)
         throws PokerException, ApiException

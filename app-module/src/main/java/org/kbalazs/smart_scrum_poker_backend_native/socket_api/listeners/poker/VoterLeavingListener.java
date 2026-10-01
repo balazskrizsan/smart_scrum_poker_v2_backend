@@ -1,5 +1,7 @@
 package org.kbalazs.smart_scrum_poker_backend_native.socket_api.listeners.poker;
 
+import io.github.springwolf.core.asyncapi.annotations.AsyncListener;
+import io.github.springwolf.core.asyncapi.annotations.AsyncOperation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +22,10 @@ public class VoterLeavingListener
 {
     NotificationService notificationService;
 
+    @AsyncListener(operation = @AsyncOperation(
+        channelName = "/poker/voter_leaving",
+        description = "Notify when a voter leaves a poker game"
+    ))
     @MessageMapping("/poker/voter_leaving")
     public void voteListener(@Payload VoterLeavingRequest voteRequest)
         throws ApiException
