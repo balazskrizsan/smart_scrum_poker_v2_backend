@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import org.kbalazs.smart_scrum_poker_backend_native.config.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +24,7 @@ import java.nio.file.StandardOpenOption;
 public class SpringwolfConfigCopyBean implements ApplicationRunner
 {
     private static final Logger logger = LoggerFactory.getLogger(SpringwolfConfigCopyBean.class);
-    private static final String SPRINGWOLFF_PATH = "/springwolf/docs";
+    private static final String SPRINGWOLF_PATH = "/springwolf/docs";
 
     ApplicationProperties applicationProperties;
 
@@ -39,10 +38,10 @@ public class SpringwolfConfigCopyBean implements ApplicationRunner
     public void run(ApplicationArguments args) throws IOException
     {
         RestTemplate restTemplate = restTemplate();
-        Path targetDir = Paths.get("app-module/src/main/resources/springwolff").toAbsolutePath();
-        Path targetPath = targetDir.resolve("springwolff.json");
+        Path targetDir = Paths.get("app-module/src/main/resources/springwolf").toAbsolutePath();
+        Path targetPath = targetDir.resolve("springwolf.json");
 
-        String springwolfUrl = applicationProperties.getServerFullHost() + SPRINGWOLFF_PATH;
+        String springwolfUrl = applicationProperties.getServerFullHost() + SPRINGWOLF_PATH;
 
         try
         {
