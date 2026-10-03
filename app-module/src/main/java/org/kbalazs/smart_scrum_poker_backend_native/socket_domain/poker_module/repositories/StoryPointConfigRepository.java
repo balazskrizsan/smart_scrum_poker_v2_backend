@@ -31,6 +31,8 @@ public class StoryPointConfigRepository extends AbstractRepository
 
     public Optional<StoryPointConfig> findDefaultConfig()
     {
+        var x = "unsued";
+
         return getDSLContext()
             .selectFrom(Tables.STORY_POINT_CONFIG)
             .where(Tables.STORY_POINT_CONFIG.NAME.eq("Default Config"))
