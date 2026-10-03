@@ -43,7 +43,7 @@ public class Insert1StoryPointConfig implements IInsert
         
         var record = dslContext.newRecord(StoryPointConfig.STORY_POINT_CONFIG);
         record.set(StoryPointConfig.STORY_POINT_CONFIG.ID, StoryPointConfigFakeBuilder.defaultId1);
-        record.set(StoryPointConfig.STORY_POINT_CONFIG.NAME, StoryPointConfigFakeBuilder.defaultName);
+        record.set(StoryPointConfig.STORY_POINT_CONFIG.NAME, "Default Config");
         record.set(StoryPointConfig.STORY_POINT_CONFIG.SIZES_CONFIG, JSONB.valueOf(StoryPointConfigFakeBuilder.defaultSizesConfig));
         record.set(StoryPointConfig.STORY_POINT_CONFIG.DIMENSIONS_CONFIG, JSONB.valueOf(dimensionsConfig));
         record.set(StoryPointConfig.STORY_POINT_CONFIG.POINTS_MAPPING, JSONB.valueOf(pointsMapping));

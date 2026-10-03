@@ -79,10 +79,11 @@ abstract public class AbstractE2eSocketTest extends AbstractIntegrationTest
         UUID mockUserId = IdsUserFakeBuilder.defaultId1;
         Mockito.when(securityContextFactory.getCurrentUserId()).thenReturn(mockUserId);
 
-        // Mock JWT decoder to return a valid JWT token
+        // Mock JWT decoder to return a valid JWT token with authorities
         Jwt mockJwt = Jwt.withTokenValue("mock-token")
             .header("alg", "none")
             .claim("sub", mockUserId.toString())
+            .claim("scope", "poker.start")
             .build();
         Mockito.when(jwtDecoder.decode(Mockito.anyString())).thenReturn(mockJwt);
 
