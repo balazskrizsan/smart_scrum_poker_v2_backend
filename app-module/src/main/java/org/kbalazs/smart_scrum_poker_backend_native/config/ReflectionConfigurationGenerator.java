@@ -36,8 +36,7 @@ public class ReflectionConfigurationGenerator
         }
 
         String destinationFile = "app-module/src/main/java/org/kbalazs/smart_scrum_poker_backend_native/config/ReflectionConfiguration.java";
-        
-        // Skip if destination file doesn't exist (e.g., during tests with different working directory)
+
         if (!java.nio.file.Files.exists(java.nio.file.Paths.get(destinationFile)))
         {
             log.info("ReflectionConfigurationGenerator skipped: destination file not found at {}", destinationFile);
