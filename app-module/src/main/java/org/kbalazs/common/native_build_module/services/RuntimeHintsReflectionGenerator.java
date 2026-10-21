@@ -8,6 +8,7 @@ import org.kbalazs.common.native_build_module.value_objects.ReflectionClassList;
 import org.kbalazs.common.templating_module.services.MustacheService;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -63,23 +64,39 @@ public class RuntimeHintsReflectionGenerator
         return fqns;
     }
 
+    private static final List<String> SOURCE_ROOTS = List.of(
+        "app-module/src/main/java/",
+        "db-module/src/main/java/"
+    );
+
     private static List<String> getClassNamesInPackage(@NonNull String packageName)
     {
-        String path = "app-module/src/main/java/" + packageName.replace('.', '/');
         List<String> classNames = new ArrayList<>();
 
-        try (Stream<Path> paths = Files.walk(Paths.get(path)))
+        for (String sourceRoot : SOURCE_ROOTS)
         {
-            paths
-                .filter(Files::isRegularFile)
-                .filter(p -> p.toString().endsWith(".java"))
-                .forEach(p -> classNames.add(
-                    packageName + "." + p.getFileName().toString().replace(".java", ".class")
-                ));
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
+            Path path = Paths.get(sourceRoot + packageName.replace('.', '/'));
+
+            if (!Files.exists(path))
+            {
+                continue;
+            }
+
+            try (Stream<Path> paths = Files.walk(path))
+            {
+                paths
+                    .filter(Files::isRegularFile)
+                    .filter(p -> p.toString().endsWith(".java"))
+                    .forEach(p -> classNames.add(
+                        packageName + "." + path.relativize(p).toString()
+                            .replace(File.separator, ".")
+                            .replace(".java", ".class")
+                    ));
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
 
         return classNames;
